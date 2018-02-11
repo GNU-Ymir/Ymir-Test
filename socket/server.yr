@@ -1,0 +1,122 @@
+import core.io;
+import std.conv;
+
+extern (C) printf (const c : p!char, ...);
+
+extern (C) socket (addrFamily : int, socketType : int, protocol : int) -> int;
+extern (C) close (fd : int) -> int;
+extern (C) recv (s : int, buf : p!void, len : int, flags : uint) -> int;
+extern (C) listen (s : int, backlog : int) -> int;
+extern (C) bind (sockfd : int, my_addr : p!SockAddr, addrlen : uint) -> int;
+extern (C) accept (sock : int, addr : p!SockAddr, addlen : p!uint) -> int;
+extern (C) htons (host : ushort) -> ushort;
+
+struct
+| s_addr : uint
+ -> InAddr;
+
+struct
+| sin_family : short
+| sin_port : ushort
+| sin_addr : InAddr
+| sin_zero : [char ; 8u]
+ -> SockAddrIn;
+
+struct
+| sa_family : ushort
+| sa_data : [char ; 14u]
+ -> SockAddr;
+
+/* TODO : complete this enum by using socket.h */
+enum
+| AfInet : 2	/* Internet IP Protocol */
+ -> AddrFamily;
+
+/* TODO : complete this enum by using socket.h */
+enum
+| SockStream : 1 /* stream (connection) socket) */
+ -> SocketType;
+
+enum
+| InvalidSocket : -1
+ -> SockResCode;
+
+enum : uint
+| InAddrAny : 0U /* linux/in.h */
+ -> AddrType;
+
+enum
+| Error : -1
+| Success : 0
+ -> RetCode;
+
+def main(args) -> int
+{
+    let port = 8888US;
+    let retCode = RetCode::Success;
+
+    if (args.len > 1u)
+    {
+        port = to!ushort(args[1]);
+    }
+    
+    let sockServer = socket (cast!int(AddrFamily::AfInet), SocketType::SockStream, 0);
+    if (sockServer == SockResCode::InvalidSocket)
+    {
+        println("Error while creating the socket.");
+        return RetCode::Error;
+    }
+    else
+    {
+        println("Socket created !");
+    }
+
+    let serverAddr = SockAddrIn::init;
+    serverAddr.sin_family = cast!short (AddrFamily::AfInet);
+    serverAddr.sin_addr.s_addr = AddrType::InAddrAny;
+    serverAddr.sin_port = htons (port);
+
+    // printf("sin_family = %d\n".ptr, serverAddr.sin_family);
+    // printf("sin_addr.s_addr = %d\n".ptr, serverAddr.sin_addr.s_addr);
+    // printf("sin_port = %d\n".ptr, serverAddr.sin_port);
+    // printf("sock : %d\n".ptr, sockServer);
+    // printf("SockAddrIn::sizeof : %lu\n".ptr, SockAddrIn::sizeof);
+    // printf("SockAddr::sizeof : %lu\n".ptr, SockAddr::sizeof);
+    
+    let res = bind (sockServer, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof);
+    if (res < 0)
+    {
+        printf("err : %d\n".ptr, res);
+        println ("Bind error");
+        retCode = RetCode::Error;
+    }
+    else
+    {
+        if (listen (sockServer, 3) < 0)
+        {
+            println ("Listen error");
+            retCode = RetCode::Error;
+        }
+        else
+        {
+            println ("Waiting for incoming connections...");
+
+            let clientAddr = SockAddrIn::init;
+            let lenAddr = SockAddrIn::sizeof;
+            let clientSock = accept (sockServer, cast!(p!SockAddr) (&clientAddr), cast!(p!uint) (&lenAddr));
+
+            if (clientSock < 0)
+            {
+                println ("Accept error");
+                retCode = RetCode::Error;                
+            }
+            else
+            {
+                println ("Client connected !");
+            }
+        }
+    }
+    
+    close (sockServer);
+    return retCode;
+}

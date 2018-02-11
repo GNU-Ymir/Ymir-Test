@@ -1,0 +1,93 @@
+import core.io;
+import std.conv;
+
+extern (C) socket (addrFamily : int, socketType : int, protocol : int) -> int;
+extern (C) close (fd : int) -> int;
+extern (C) htons (host : ushort) -> ushort;
+extern (C) connect (socket : int, serverAddr : p!SockAddr, len : uint) -> int;
+extern (C) inet_addr (const c : p!char) -> uint;
+
+struct
+| s_addr : uint
+ -> InAddr;
+
+struct
+| sin_family : short
+| sin_port : ushort
+| sin_addr : InAddr
+| sin_zero : [char ; 8u]
+ -> SockAddrIn;
+
+struct
+| sa_family : ushort
+| sa_data : [char ; 14u]
+ -> SockAddr;
+
+/* TODO : complete this enum by using socket.h */
+enum
+| AfInet : 2	/* Internet IP Protocol */
+ -> AddrFamily;
+
+/* TODO : complete this enum by using socket.h */
+enum
+| SockStream : 1 /* stream (connection) socket) */
+ -> SocketType;
+
+enum : int
+| Error : -1
+| Success : 0
+| WrongArgs : 1
+ -> RetCode;
+
+def main(args) -> int
+{
+    let retCode = RetCode::Success;
+    let port = 8888us;
+    let serverIp = "127.0.0.1";
+
+    if (args.len > 1)
+    {
+        if (args.len != 3)
+        {
+            printUsage();
+            return RetCode::WrongArgs;
+        }
+
+        serverIp = args[1];
+        port = to!ushort (args[2]);
+    }
+    
+    let sock = socket (AddrFamily::AfInet, SocketType::SockStream, 0);
+    if (sock < 0)
+    {
+        println ("Socket error");
+        return RetCode::Error;
+    }
+    else
+    {
+        let serverAddr = SockAddrIn::init;
+        serverAddr.sin_addr.s_addr = inet_addr (serverIp.ptr);
+        serverAddr.sin_family = cast!short (AddrFamily::AfInet);
+        serverAddr.sin_port = htons (port);
+
+        if (connect (sock, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof) < 0)
+        {
+            println ("Connect error");
+            retCode = RetCode::Error;
+        }
+        else
+        {
+            println ("Connected to server !");
+        }
+    }
+
+    close (sock);
+    return retCode;
+}
+
+def printUsage()
+{
+    println("Usage :");
+    println(" client [ip_address port]");
+    println("\n Without any ip address and port, the default values are 127.0.0.1 and 8888.\n");
+}
