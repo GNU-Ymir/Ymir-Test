@@ -1,0 +1,21 @@
+mod main;
+
+import core.io;
+
+extern (C) pthread_create (thread : p!ulong, attr : p!void, func : fn(p!void) -> p!void, arg : p!void) -> int;
+
+extern (C) pthread_join (th : ulong, a : p!(p!(void)));
+extern (C) pthread_exit (a : int);
+extern (C) sleep (a : int);
+
+def foo(a : p!void) -> p!(void) {
+    println ("test");
+    return null;
+}
+
+def main() {
+    let th1 = 0UL;
+    pthread_create (&th1, null, foo, null);
+    sleep (1);
+    pthread_join (th1, null);
+}
