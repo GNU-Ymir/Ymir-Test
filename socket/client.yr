@@ -6,6 +6,7 @@ extern (C) close (fd : int) -> int;
 extern (C) htons (host : ushort) -> ushort;
 extern (C) connect (socket : int, serverAddr : p!SockAddr, len : uint) -> int;
 extern (C) inet_addr (const c : p!char) -> uint;
+extern (C) send (sock : int, buf : p!void, len : uint, flags : int) -> int;
 
 struct
 | s_addr : uint
@@ -78,6 +79,21 @@ def main(args) -> int
         else
         {
             println ("Connected to server !");
+
+            let message = "Hello World";
+            let messageSize = cast!ushort(message.len);
+            let ret = send (sock, cast!(p!void) (&messageSize), ushort::sizeof, 0);
+            if (ret < 0)
+            {
+                println ("Send size failed !");
+            }
+            else
+            {
+                print ("Sending a message of : "); println (cast!uint(message.len));
+                ret = send (sock, cast!(p!void) (message.ptr), cast!uint(message.len), 0);
+                if (ret < 0)
+                    println ("Send message failed");
+            }
         }
     }
 

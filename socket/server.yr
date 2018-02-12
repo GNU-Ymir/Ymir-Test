@@ -75,13 +75,6 @@ def main(args) -> int
     serverAddr.sin_family = cast!short (AddrFamily::AfInet);
     serverAddr.sin_addr.s_addr = AddrType::InAddrAny;
     serverAddr.sin_port = htons (port);
-
-    // printf("sin_family = %d\n".ptr, serverAddr.sin_family);
-    // printf("sin_addr.s_addr = %d\n".ptr, serverAddr.sin_addr.s_addr);
-    // printf("sin_port = %d\n".ptr, serverAddr.sin_port);
-    // printf("sock : %d\n".ptr, sockServer);
-    // printf("SockAddrIn::sizeof : %lu\n".ptr, SockAddrIn::sizeof);
-    // printf("SockAddr::sizeof : %lu\n".ptr, SockAddr::sizeof);
     
     let res = bind (sockServer, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof);
     if (res < 0)
@@ -113,10 +106,26 @@ def main(args) -> int
             else
             {
                 println ("Client connected !");
+
+                let messageSize = uint::init;
+                let readSize = recv (clientSock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
+                printf ("Received a message of %d bytes\n".ptr, messageSize);
+                recvMessage (clientSock, messageSize);                
             }
         }
     }
     
     close (sockServer);
     return retCode;
+}
+
+def recvMessage (sock : int, messageSize : uint)
+{
+    let message = [char ; messageSize];
+    let readSize = recv (sock, cast!(p!void) (message.ptr), cast!int(messageSize), 0u);
+
+    if (readSize > 0)
+        println (message);
+    else
+        println ("An error occured while receiving the message.");
 }
