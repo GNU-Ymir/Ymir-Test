@@ -6,11 +6,11 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 FILE (
   GLOB_RECURSE
   SourceFiles
-  core/*)
+  std/*)
 
 SET_SOURCE_FILES_PROPERTIES(client.yr server.yr ${SourceFiles} PROPERTIES LANGUAGE C)
 
-ADD_EXECUTABLE(client client.yr ${SourceFiles})
-ADD_EXECUTABLE(server server.yr ${SourceFiles})
+ADD_EXECUTABLE(../client client.yr ${SourceFiles})
+ADD_EXECUTABLE(../server server.yr ${SourceFiles})
 include_directories (client ./)
 include_directories (server ./)
