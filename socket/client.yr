@@ -1,38 +1,7 @@
 import core.io;
 import std.conv;
-
-extern (C) socket (addrFamily : int, socketType : int, protocol : int) -> int;
-extern (C) close (fd : int) -> int;
-extern (C) htons (host : ushort) -> ushort;
-extern (C) connect (socket : int, serverAddr : p!SockAddr, len : uint) -> int;
-extern (C) inet_addr (const c : p!char) -> uint;
-extern (C) send (sock : int, buf : p!void, len : uint, flags : int) -> int;
-
-struct
-| s_addr : uint
- -> InAddr;
-
-struct
-| sin_family : short
-| sin_port : ushort
-| sin_addr : InAddr
-| sin_zero : [char ; 8u]
- -> SockAddrIn;
-
-struct
-| sa_family : ushort
-| sa_data : [char ; 14u]
- -> SockAddr;
-
-/* TODO : complete this enum by using socket.h */
-enum
-| AfInet : 2	/* Internet IP Protocol */
- -> AddrFamily;
-
-/* TODO : complete this enum by using socket.h */
-enum
-| SockStream : 1 /* stream (connection) socket) */
- -> SocketType;
+import std.socket;
+import core.string;
 
 enum : int
 | Error : -1
@@ -40,11 +9,13 @@ enum : int
 | WrongArgs : 1
  -> RetCode;
 
+imut ExitCmd = "exit";
+
 def main(args) -> int
 {
     let retCode = RetCode::Success;
     let port = 8888us;
-    let serverIp = "127.0.0.1";
+    let serverIp = "127.0.0.1".dup();
 
     if (args.len > 1)
     {
@@ -54,6 +25,7 @@ def main(args) -> int
             return RetCode::WrongArgs;
         }
 
+        
         serverIp = args[1];
         port = to!ushort (args[2]);
     }
@@ -80,20 +52,7 @@ def main(args) -> int
         {
             println ("Connected to server !");
 
-            let message = "Hello World";
-            let messageSize = cast!ushort(message.len);
-            let ret = send (sock, cast!(p!void) (&messageSize), ushort::sizeof, 0);
-            if (ret < 0)
-            {
-                println ("Send size failed !");
-            }
-            else
-            {
-                print ("Sending a message of : "); println (cast!uint(message.len));
-                ret = send (sock, cast!(p!void) (message.ptr), cast!uint(message.len), 0);
-                if (ret < 0)
-                    println ("Send message failed");
-            }
+            while (handleCmd(sock)) {}
         }
     }
 
@@ -106,4 +65,31 @@ def printUsage()
     println("Usage :");
     println(" client [ip_address port]");
     println("\n Without any ip address and port, the default values are 127.0.0.1 and 8888.\n");
+}
+
+def handleCmd(sock : int) -> bool
+{
+    print (" > ");
+    let cmd = scanString();
+
+    // if (cmd == ExitCmd)
+    //     return false;
+
+    let messageSize = cast!uint(cmd.strlen());
+    let ret = send (sock, cast!(p!void) (&messageSize), uint::sizeof, 0);
+    if (ret < 0)
+    {
+        println ("Send size failed !");
+    }
+    else
+    {
+        print ("Sending a message of : "); println (messageSize);
+        ret = send (sock, cast!(p!void) (cmd.ptr), messageSize, 0);
+        if (ret < 0)
+            println ("Send message failed");
+        else
+            print ("Sent a message of "); println (ret);
+    }
+    
+    return true;
 }
