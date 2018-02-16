@@ -1,0 +1,10 @@
+mod std.string;
+
+def dup (str : const [char]) -> mut string
+{
+    let res = [char ; str.len];
+    for i in 0U .. str.len {
+        res[i] = str[i];
+    }
+    return string { str.len , res.ptr };
+}
