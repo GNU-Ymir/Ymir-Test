@@ -86,7 +86,7 @@ def recvMessage (sock : int) -> bool
     let messageSize = uint::init;
     let readSize = recv (sock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
 
-    if (readSize < 0)
+    if (readSize <= 0)
         return false;
     else
         print ("Message size : "); println (messageSize);
