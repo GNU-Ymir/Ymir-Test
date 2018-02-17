@@ -72,10 +72,10 @@ def handleCmd(sock : int) -> bool
     print (" > ");
     let cmd = scanString();
 
-    // if (cmd == ExitCmd)
-    //     return false;
+    if (cmd == ExitCmd)
+        return false;
 
-    let messageSize = cast!uint(cmd.strlen());
+    let messageSize = cast!uint(cmd.len);
     let ret = send (sock, cast!(p!void) (&messageSize), uint::sizeof, 0);
     if (ret < 0)
     {
