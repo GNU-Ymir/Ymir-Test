@@ -70,10 +70,9 @@ def main(args) -> int
             {
                 println ("Client connected !");
 
-                let messageSize = uint::init;
-                let readSize = recv (clientSock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
-                printf ("Received a message of %d bytes\n".ptr, messageSize);
-                recvMessage (clientSock, messageSize);                
+                while (recvMessage(clientSock)) {}
+
+                println ("Client disconnected !");
             }
         }
     }
@@ -82,13 +81,24 @@ def main(args) -> int
     return retCode;
 }
 
-def recvMessage (sock : int, messageSize : uint)
+def recvMessage (sock : int) -> bool
 {
+    let messageSize = uint::init;
+    let readSize = recv (sock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
+
+    if (readSize < 0)
+        return false;
+    else
+        print ("Message size : "); println (messageSize);
+    
     let message = [char ; messageSize];
-    let readSize = recv (sock, cast!(p!void) (message.ptr), cast!int(messageSize), 0u);
+    readSize = recv (sock, cast!(p!void) (message.ptr), cast!int(messageSize), 0u);
+
+    if (readSize < 0)
+        return false;
 
     if (readSize > 0)
         println (message);
-    else
-        println ("An error occured while receiving the message.");
+
+    return true;
 }
