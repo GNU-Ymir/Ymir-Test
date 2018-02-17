@@ -1,0 +1,27 @@
+
+
+def debile () {
+    let a = cast!(p!int) (null);
+    *a = 10;
+}
+
+def foo () {
+    foo2 ();
+}
+
+def foo4 () {
+    debile ();
+}
+
+def foo3 () {
+    foo4 ();
+}
+
+def foo2 () {
+    foo3 ();
+}
+
+
+def main () {
+    foo ();
+}
