@@ -1,0 +1,74 @@
+mod std.list;
+
+import std.memory;
+
+public struct (T)
+| head : p!(Node!T)
+ -> List;
+
+public struct (T)
+| value : T
+| next : p!(Node!(T))
+ -> Node;
+
+def list (T) () {
+    return List!T { null };
+}
+
+def push (T) (ref a : List!T, const b : T) {
+    if (a.head is null) {
+        a.head = alloc (Node!T {b, null});        
+    } else {
+        let current = a.head;
+        while current !is null {
+            if ((*current).next is null) {
+                (*current).next = alloc (Node!T {b, null});
+                return;
+            }
+            current = (*current).next;
+        }
+    }
+}
+
+def pop (T) (ref a : List!T) -> T {
+    let current = a.head;
+    if (a.head is null) {
+        return T::init;
+    } else {        
+        while current !is null {
+            if ((*current).next !is null) {
+                if ((*(*current).next).next is null) {
+                    let value = (*(*current).next).value;
+                    (*current).next = null;
+                    return value;
+                }
+            }        
+            current = (*current).next;
+        }
+        
+        let value = (*a.head).value;
+        a.head = null;
+        return value;
+    }    
+}
+
+def next (T) (ref list : List!T) -> p!(Node!T) {
+    return list.head;
+}
+
+def next (T) (const node : p!(Node!T)) -> p!(Node!T) {
+    if (node is null)
+        return null;
+    return nodePtr.next;
+}
+
+def print (T) (const a : List!T) {
+    let current = a.head;
+    while current !is null {
+        print ("[");
+        print ((*current).value);
+        print ("]::");
+        current = (*current).next;
+    }
+    print ("NIL");
+}

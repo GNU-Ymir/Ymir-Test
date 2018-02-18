@@ -1,0 +1,66 @@
+mod core.array;
+import std.abort;
+import std.traits;
+
+struct (T)
+| len : ulong
+| ptr : p!T
+ -> slice;
+
+def print (T) (a : const (slice!(const T))) {
+    let aux = const [T] {a.len, a.ptr};
+    print (aux);
+}
+
+def opIndex (T, T2)(a : const (slice!T),  i : T2) -> T {
+    if i < a.len {
+        return *(a.ptr + (cast!ulong(i) * char::sizeof));
+    } else {
+        abort ();
+        return *a.ptr;
+    }
+}
+
+def opIndex (T, T2) (ref a : slice!T,  i : T2) -> ref T {
+    if i < a.len {
+        return *(a.ptr + (cast!ulong (i) * char::sizeof));
+    } else {
+        abort ();
+        return *a.ptr;
+    }
+}
+
+def opIndex (T2, T) (a : [T2], i : r!(T)) -> mut slice!char {
+    if i.scd >= i.fst && (i.scd - i.fst) <= a.len && i.fst <= a.len {
+        return slice!char {cast!ulong (i.scd - i.fst), a.ptr + i.fst};
+    } else {
+        abort ();
+        return slice!char {0UL, null};
+    }
+}
+
+def opIndex (T2, T) (a : const [T2], i : r!(T)) -> slice!char {
+    if i.scd >= i.fst && (i.scd - i.fst) <= a.len && i.fst <= a.len {
+        return const (slice!char) {cast!ulong (i.scd - i.fst), a.ptr + i.fst};
+    } else {
+        abort ();
+        return const (slice!char) {0UL, null};
+    }
+}
+
+
+def dup (T) (const array : [const T]) -> mut [T] {
+    let res = [T ; array.len];
+    for it in 0U .. array.len {
+        res [it] = array [it];
+    }
+    return res;
+}
+
+def dup (T, N : ulong) (ref array : const ([T ; N])) -> mut [T] {
+    let res = [T ; array.len];
+    for it in 0U .. array.len {
+        res [it] = array [it];
+    }
+    return res;
+}

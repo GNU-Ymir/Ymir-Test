@@ -1,0 +1,12 @@
+mod std.c.string;
+
+def strlen (const a : p!char) -> ulong {
+    let ret = 0UL;
+    if a is null return 0UL;
+    let b = a;
+    while *b != '\0' {
+        b = b + 1U;
+        ret ++;
+    }
+    return ret;
+}

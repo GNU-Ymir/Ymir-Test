@@ -20,6 +20,11 @@ def isUnsigned (T) ()
     return is (T : uint) || is (T : ulong) || is (T : ushort) || is (T : ubyte);
 
 
-def isArray (T of const T2, T2 of [U], const U) () return true;
-def isArray (T) () return false;
+def isDynamicArray (T of const T2, T2 of [U], const U) () return true;
+def isDynamicArray (T) () return false;
 
+def isStaticArray (T of const T2, T2 of [U ; I], const U, I : ulong) () return true;
+def isStaticArray (T) () return false;
+
+def isArray if (isStaticArray!T || isDynamicArray!T) (T) () return true;
+def isArray (T) () return false;
