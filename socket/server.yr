@@ -1,8 +1,16 @@
+mod server;
+
 import core.io;
 import std.conv;
 import std.socket;
+import std.list;
+import std.memory;
 
-extern (C) printf (const c : p!char, ...);
+extern (C) pthread_create (thread : p!ulong, attr : p!void, func : fn(p!void) -> p!void, arg : p!void) -> int;
+
+extern (C) pthread_join (th : ulong, a : p!(p!(void)));
+extern (C) pthread_exit (a : int);
+extern (C) sleep (a : int);
 
 enum
 | InvalidSocket : -1
@@ -12,6 +20,13 @@ enum
 | Error : -1
 | Success : 0
  -> RetCode;
+
+struct
+| sock : int
+| nickname : string
+ -> User;
+
+static clientsList : List!User;
 
 def main(args) -> int
 {
@@ -42,8 +57,7 @@ def main(args) -> int
     let res = bind (sockServer, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof);
     if (res < 0)
     {
-        printf("err : %d\n".ptr, res);
-        println ("Bind error");
+        println (("Bind error : ", res));
         retCode = RetCode::Error;
     }
     else
@@ -56,23 +70,22 @@ def main(args) -> int
         else
         {
             println ("Waiting for incoming connections...");
-
+            
             let clientAddr = SockAddrIn::init;
             let lenAddr = SockAddrIn::sizeof;
-            let clientSock = accept (sockServer, cast!(p!SockAddr) (&clientAddr), cast!(p!uint) (&lenAddr));
+            
+            while (true) {
+                let clientSock = accept (sockServer, cast!(p!SockAddr) (&clientAddr), cast!(p!uint) (&lenAddr));
 
-            if (clientSock < 0)
-            {
-                println ("Accept error");
-                retCode = RetCode::Error;                
-            }
-            else
-            {
-                println ("Client connected !");
-
-                while (recvMessage(clientSock)) {}
-
-                println ("Client disconnected !");
+                if (clientSock < 0)
+                {
+                    println ("Accept error");
+                    retCode = RetCode::Error;                
+                }
+                else
+                {   
+                    startClientThread (clientSock);
+                }
             }
         }
     }
@@ -81,24 +94,94 @@ def main(args) -> int
     return retCode;
 }
 
+def startClientThread (sock : int)
+{
+    let th = 0UL;
+    let arg = alloc (sock);
+    pthread_create (&th, null, clientHandlerThread, cast!(p!void)(arg));
+}
+
+def clientHandlerThread(arg : p!void) -> p!void
+{
+    let sock = cast!(p!int)(arg);
+
+    let nickname = recvMessageOnSocket (*sock);
+    clientsList.push (User { *sock, nickname });
+    println (("Client ", *sock, "(", nickname, ") connected !"));
+    
+    while (recvMessage(*sock)) {}
+    println (("Client ", *sock, "(", nickname, ") disconnected !"));
+    return null;
+}
+
 def recvMessage (sock : int) -> bool
 {
+    let message = recvMessageOnSocket (sock);
+    if (message.len > 0)
+    {
+        println (message);
+
+        sendToAll (sock, message);
+
+        return true;
+    }
+    return false;
+}
+
+def recvMessageOnSocket (sock : int) -> mut string
+{    
     let messageSize = uint::init;
     let readSize = recv (sock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
-
+    let emptyStringTmp = [char ; 0U];
+    
     if (readSize <= 0)
-        return false;
-    else
-        print ("Message size : "); println (messageSize);
+        return emptyStringTmp;
     
     let message = [char ; messageSize];
     readSize = recv (sock, cast!(p!void) (message.ptr), cast!int(messageSize), 0u);
 
     if (readSize < 0)
-        return false;
+        return emptyStringTmp;
 
     if (readSize > 0)
-        println (message);
+        return message;
+    return emptyStringTmp;
+}
 
-    return true;
+def nextt (T) (ref node : Node!T) -> p!(Node!T) {
+    return node.next;
+}
+
+def sendToAll (sock : int, message : string)
+{
+    let node = clientsList.next();
+    while (node !is null)
+    {
+        let client = (*node).value;
+        if (client.sock != sock)
+            sendTo (client, message);
+        node = (*node).nextt();
+    }
+}
+
+def sendTo (ref client : User, message : string)
+{
+    sendToSock (client.sock, client.nickname);
+    sendToSock (client.sock, message);
+}
+
+def sendToSock (sock : int, message : string)
+{
+    let messageSize = cast!uint(message.len);
+    let ret = send (sock, cast!(p!void) (&messageSize), uint::sizeof, 0);
+    if (ret < 0)
+    {
+        println ("Send size failed !");
+    }
+    else
+    {
+        ret = send (sock, cast!(p!void) (message.ptr), messageSize, 0);
+        if (ret < 0)
+            println ("Send message failed");
+    }
 }
