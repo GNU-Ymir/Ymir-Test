@@ -1,13 +1,22 @@
 import core.io;
 import std.conv;
 import std.socket;
-import std.string;
+import core.string;
+import std.memory;
+
+extern (C) pthread_create (thread : p!ulong, attr : p!void, func : fn(p!void) -> p!void, arg : p!void) -> int;
+
+extern (C) pthread_join (th : ulong, a : p!(p!(void)));
+extern (C) pthread_exit (a : int);
+extern (C) sleep (a : int);
 
 enum : int
 | Error : -1
 | Success : 0
 | WrongArgs : 1
  -> RetCode;
+
+imut ExitCmd = "exit";
 
 def main(args) -> int
 {
@@ -23,6 +32,7 @@ def main(args) -> int
             return RetCode::WrongArgs;
         }
 
+        
         serverIp = args[1];
         port = to!ushort (args[2]);
     }
@@ -49,20 +59,9 @@ def main(args) -> int
         {
             println ("Connected to server !");
 
-            let message = "Hello World";
-            let messageSize = cast!ushort(message.len);
-            let ret = send (sock, cast!(p!void) (&messageSize), ushort::sizeof, 0);
-            if (ret < 0)
-            {
-                println ("Send size failed !");
-            }
-            else
-            {
-                print ("Sending a message of : "); println (cast!uint(message.len));
-                ret = send (sock, cast!(p!void) (message.ptr), cast!uint(message.len), 0);
-                if (ret < 0)
-                    println ("Send message failed");
-            }
+            startRecvThread(sock);
+            
+            while (handleCmd(sock)) {}
         }
     }
 
@@ -75,4 +74,68 @@ def printUsage()
     println("Usage :");
     println(" client [ip_address port]");
     println("\n Without any ip address and port, the default values are 127.0.0.1 and 8888.\n");
+}
+
+def handleCmd(sock : int) -> bool
+{
+    print (" > ");
+    let cmd = scanString();
+
+    if (cmd == ExitCmd)
+        return false;
+
+    let messageSize = cast!uint(cmd.len);
+    let ret = send (sock, cast!(p!void) (&messageSize), uint::sizeof, 0);
+    if (ret < 0)
+    {
+        println ("Send size failed !");
+    }
+    else
+    {
+        ret = send (sock, cast!(p!void) (cmd.ptr), messageSize, 0);
+        if (ret < 0)
+            println ("Send message failed");
+    }
+    
+    return true;
+}
+
+def startRecvThread (sock : int)
+{
+    let th = 0UL;
+    let arg = alloc (sock);
+    pthread_create (&th, null, recvThread, cast!(p!void)(arg));
+}
+
+def recvThread (arg : p!void) -> p!void
+{
+    let sock = cast!(p!int) (arg);
+    while (true)
+    {
+        let nickname = recvMessageOnSocket(*sock);
+        let message = recvMessageOnSocket(*sock);
+        println ("\n[", nickname, "] : ", message);
+    }
+    
+    return null;
+}
+
+def recvMessageOnSocket (sock : int) -> mut string
+{    
+    let messageSize = uint::init;
+    let readSize = recv (sock, cast!(p!void) (&messageSize), cast!int(uint::sizeof), 0u);
+    let emptyStringTmp = [char ; 0U];
+    
+    if (readSize <= 0)
+        return emptyStringTmp;
+    
+    let message = [char ; messageSize];
+    readSize = recv (sock, cast!(p!void) (message.ptr), cast!int(messageSize), 0u);
+
+    if (readSize < 0)
+        return emptyStringTmp;
+
+    if (readSize > 0)
+        return message;
+    return emptyStringTmp;
 }
