@@ -1,0 +1,15 @@
+mod main;
+import core.io;
+import thread;
+
+def test (a : int, b : char) {
+    println ("la");
+    println (a, " ", b);
+}
+
+def main () {
+    let data = (1, 'r');
+    let a = spawn!(int, char) (1U, test, data);
+    sleep (1);
+    //a.join ();
+}

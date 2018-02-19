@@ -1,0 +1,11 @@
+main (signed int argc, unsigned char * * argv)
+{
+  signed int D.54;
+  signed int _1_;
+
+  _1_ = y_run_main (argc, argv, _Ymain);
+  D.54 = _1_;
+  return D.54;
+}
+
+

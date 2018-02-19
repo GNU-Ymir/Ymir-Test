@@ -1,0 +1,58 @@
+mod thread;
+
+extern (C) pthread_join (th : ulong, a : p!(p!(void)));
+extern (C) pthread_exit (a : int);
+
+public extern (C) sleep (a : int) -> void;
+
+struct
+| id : ulong
+ -> Thread;
+
+// def thread_init (T...) (data : p!void) {
+
+// }
+
+def print (const a : fn (int, char) -> void) {
+    extern (C) printf (const c : p!char, ...);
+    printf ("%d\n".ptr, a);
+}
+
+
+struct (T...)
+| foo : fn (T) -> void
+| data : T
+ -> Foo;
+
+def spawn (T...) (n : uint, foo : fn (T)-> void, data : const T) -> int {
+    extern (C) pthread_create (thread : p!ulong, ...) -> int;
+    //let res = [Thread ; n];
+    
+    for it in 0U .. n {
+        let id = 0UL;
+        let ptr = (ptr : p!(Foo!(T))) {
+            let fun = (*ptr).foo;
+            // let (inner) = tuple;
+            println ("ici");
+            fun ((1, 'r'));
+        };
+
+        let alloc = [Foo!(T) ; 1U];
+        alloc [0] = Foo!(T) {foo, data};
+        //pthread_create (&id, null, ptr, alloc.ptr);
+        //res [it] = Thread {id};
+    }
+    return 0;
+}
+
+
+
+def join (const th : Thread) {
+    pthread_join (th.id, null);
+}
+
+def join (const th : [Thread]) {
+    for it in th
+        pthread_join (it.id, null);
+}
+
