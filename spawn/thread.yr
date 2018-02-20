@@ -18,26 +18,21 @@ def print (const a : fn (int, char) -> void) {
     printf ("%d\n".ptr, a);
 }
 
-
-struct (T...)
-| foo : fn (T) -> void
-| data : T
- -> Foo;
-
 def spawn (T...) (n : uint, foo : fn (T)-> void, data : T) -> mut [Thread] {
-    extern (C) pthread_create (thread : p!ulong, ...) -> int;
+    extern (C) pthread_create (thread : p!ulong, attr : p!void, ...) -> int;
     let res = [Thread ; n];
     
     for it in 0U .. n {
         let id = cast!ulong (it);
-        let ptr = (ptr : p!(Foo!(T))) {
-            let fun = (*ptr).foo;
-            fun ((*ptr).data.expand);
+        let ptr = (ptr : p!(t!(fn (T) -> void, T))) {
+            let (fun, data...) =  *ptr;
+            fun (data.expand);
             return cast!(p!void) (null);
         };
 
-        let alloc = [Foo!(T) ; 1U];
-        alloc [0] = Foo!(T) {foo, data};
+        let alloc = [t!(fn (T) -> void, T) ; 1U];
+        alloc[0] = (foo, 3, 't');
+        
         pthread_create (&id, null, ptr, alloc.ptr);        
         res [it] = Thread {id};
     }

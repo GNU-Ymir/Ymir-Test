@@ -9,3 +9,211 @@ main (signed int argc, unsigned char * * argv)
 }
 
 
+core.io.main.print (struct char[] a, unsigned char b)
+{
+  {
+    core.io.print (a);
+    core.io.print (b);
+  }
+}
+
+
+core.io.main.println (signed int s, struct t([char], char) i)
+{
+  {
+    core.io.print (s);
+    _1 = i._1;
+    core.io.main.print (i._0, _1);
+    core.io.print (10);
+  }
+}
+
+
+main.test (signed int a, unsigned char b)
+{
+  {
+    typedef struct char[] ;
+    typedef struct t([char], char) ;
+    struct t([char], char) _1_;
+    struct char[] _2_;
+
+    try
+      {
+        _2_.len = 1;
+        _2_.ptr = &" "[0];
+        _1_._0 = _2_;
+        _1_._1 = b;
+        core.io.main.println (a, _1_);
+      }
+    finally
+      {
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+      }
+  }
+}
+
+
+thread.spawn.Lambda_2 (struct t(fn(int,char)->void, int, char) * ptr)
+{
+  void * D.103;
+
+  {
+    void (*<T8b>) (signed int, unsigned char) fun;
+    typedef struct t(int, char) ;
+    struct t(int, char) data;
+    struct t(int, char) _1_;
+
+    try
+      {
+        _1 = ptr->_1;
+        _1_._0 = _1;
+        _2 = ptr->_2;
+        _1_._1 = _2;
+        fun = ptr->_0;
+        data = _1_;
+        _3 = data._1;
+        _4 = data._0;
+        fun (_4, _3);
+        D.103 = 0B;
+        return D.103;
+      }
+    finally
+      {
+        data = {CLOBBER};
+        _1_ = {CLOBBER};
+      }
+  }
+}
+
+
+thread.main.spawn (unsigned int n, void (*<T8b>) (signed int, unsigned char) foo, struct t(int, char) data)
+{
+  struct thread.Thread!()[] D.150;
+
+  {
+    struct thread.Thread!()[] res;
+    typedef struct thread.Thread!() ;
+    struct thread.Thread!()[] _1_;
+    unsigned int it;
+    typedef struct R_xk ;
+    struct R_xk _2_;
+    unsigned int _3_;
+
+    try
+      {
+        _1 = (unsigned long) n;
+        _1_.len = _1;
+        _2 = _y_newArray (8, n);
+        _1_.ptr = _2;
+        res = _1_;
+        _2_.fst = 0;
+        _2_.scd = n;
+        _3_ = _2_.fst;
+        goto test;
+        begin:
+        {
+          unsigned long id;
+          typedef struct t(fn(int,char)->void, int, char) ;
+          void * (*<T9a>) (struct t(fn(int,char)->void, int, char) *) ptr;
+          typedef struct t(fn(int,char)->void, int, char)[] ;
+          struct t(fn(int,char)->void, int, char)[] alloc;
+          struct t(fn(int,char)->void, int, char)[] _4_;
+          struct t(fn(int,char)->void, int, char) _5_;
+          struct thread.Thread!() _6_;
+
+          try
+            {
+              it = _3_;
+              _4_.len = 1;
+              _3 = _y_newArray (16, 1);
+              _4_.ptr = _3;
+              _5_._0 = foo;
+              _5_._1 = 3;
+              _5_._2 = 116;
+              id.0_4 = id;
+              _6_.id = id.0_4;
+              _5 = (unsigned long) it;
+              id = _5;
+              ptr = _Y6thread5spawn8Lambda_2FPTPFxixaZvoidxixaZcxPv;
+              alloc = _4_;
+              _6 = alloc.ptr;
+              _7 = _6;
+              *_7 = _5_;
+              _8 = alloc.ptr;
+              C.pthread_create (&id, 0B, ptr, _8);
+              _9 = res.ptr;
+              _10 = (unsigned long) it;
+              _11 = _10 * 8;
+              _12 = _9 + _11;
+              MEM[(struct thread.Thread!() *)_12] = _6_;
+              _13 = _2_.fst;
+              _14 = _2_.scd;
+              if (_13 < _14) goto <D.145>; else goto <D.146>;
+              <D.145>:
+              _3_ = _3_ + 1;
+              goto <D.147>;
+              <D.146>:
+              _3_ = _3_ + 4294967295;
+              <D.147>:
+            }
+          finally
+            {
+              id = {CLOBBER};
+              alloc = {CLOBBER};
+              _4_ = {CLOBBER};
+              _5_ = {CLOBBER};
+              _6_ = {CLOBBER};
+            }
+        }
+        goto test;
+        test:
+        _15 = _2_.scd;
+        if (_3_ != _15) goto <D.148>; else goto <D.149>;
+        <D.148>:
+        goto begin;
+        <D.149>:
+        goto end;
+        end:
+        end:
+        D.150 = res;
+        return D.150;
+      }
+    finally
+      {
+        res = {CLOBBER};
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+      }
+  }
+}
+
+
+main.main ()
+{
+  signed int D.164;
+
+  {
+    typedef struct thread.Thread!()[] ;
+    struct thread.Thread!()[] a;
+    typedef struct t(int, char) ;
+    struct t(int, char) _1_;
+
+    try
+      {
+        _1_._0 = 1;
+        _1_._1 = 116;
+        a = thread.main.spawn (100, _Y4main4testFiaZv, _1_);
+        thread.join (a);
+      }
+    finally
+      {
+        a = {CLOBBER};
+        _1_ = {CLOBBER};
+      }
+  }
+  D.164 = 0;
+  return D.164;
+}
+
+
