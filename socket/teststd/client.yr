@@ -9,12 +9,12 @@ def main()
     if (socket.Connect ("127.0.0.1", cast!ushort(8888))) {
         println ("ok");
 
-        socket.Send ("test");
-        let a = socket.Recv ();
+        socket.send ("test");
+        let a = socket.recv ();
 
         println (a);
         
-        socket.Close();
+        socket.close();
     } else {
         println ("err");
     }

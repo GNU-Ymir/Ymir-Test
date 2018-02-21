@@ -11,13 +11,13 @@ def main()
     }
     else
     {
-        if (!sock.Bind (8888US))
+        if (!sock.bind (8888US))
         {
             println ("Bind() error");
         }
         else
         {
-            if (!sock.Listen (3))
+            if (!sock.listen (3))
             {
                 println ("Listen() error");
             }
@@ -26,7 +26,7 @@ def main()
                 let clientSock = Socket::init;
                 let clientAddr = SockAddrIn::init;
 
-                if (!sock.Accept (clientSock, clientAddr))
+                if (!sock.accept (clientSock, clientAddr))
                 {
                     println ("Accept() error");
                 }
@@ -34,14 +34,14 @@ def main()
                 {
                     println ("New client ! sock : ", clientSock.handle);
 
-                    let message = clientSock.Recv ();
+                    let message = clientSock.recv ();
                     println ("Message : ", message);
 
-                    clientSock.Send ("hello !");
-                    clientSock.Close();
+                    clientSock.send ("hello !");
+                    clientSock.close();
                 }
             }
         }
-        sock.Close();
+        sock.close();
     }
 }
