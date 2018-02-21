@@ -1,0 +1,21 @@
+import core.io;
+import socket;
+
+def main()
+{
+    let socket = CreateSocket (AddrFamily::AfInet, SocketType::SockStream);
+    println (socket);
+
+    if (socket.Connect ("127.0.0.1", cast!ushort(8888))) {
+        println ("ok");
+
+        socket.Send ("test");
+        let a = socket.Recv ();
+
+        println (a);
+        
+        socket.Close();
+    } else {
+        println ("err");
+    }
+}

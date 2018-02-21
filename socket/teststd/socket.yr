@@ -1,0 +1,123 @@
+mod socket;
+
+extern (C) socket (addrFamily : int, socketType : int, protocol : int) -> int;
+extern (C) close (fd : int) -> int;
+extern (C) htons (host : ushort) -> ushort;
+extern (C) connect (socket : int, serverAddr : p!SockAddr, len : uint) -> int;
+extern (C) inet_addr (const c : p!char) -> uint;
+extern (C) send (sock : int, buf : const p!void, len : const uint, flags : const int) -> int;
+extern (C) recv (s : int, buf : p!void, len : int, flags : int) -> int;
+extern (C) listen (s : int, backlog : int) -> int;
+extern (C) bind (sockfd : int, my_addr : p!SockAddr, addrlen : uint) -> int;
+extern (C) accept (sock : int, addr : p!SockAddr, addlen : p!uint) -> int;
+
+struct
+| handle : int
+| addrFamily : AddrFamily
+| sockType : SocketType
+ -> Socket;
+
+struct
+| s_addr : uint
+ -> InAddr;
+
+struct
+| sin_family : short
+| sin_port : ushort
+| sin_addr : InAddr
+| sin_zero : [char ; 8u]
+ -> SockAddrIn;
+
+struct
+| sa_family : ushort
+| sa_data : [char ; 14u]
+ -> SockAddr;
+
+/* TODO : complete this enum by using socket.h */
+enum : int
+| AfInet : 2	/* Internet IP Protocol */
+ -> AddrFamily;
+
+/* TODO : complete this enum by using socket.h */
+enum : int
+| SockStream : 1 /* stream (connection) socket) */
+ -> SocketType;
+
+enum : uint
+| InAddrAny : 0U /* linux/in.h */
+ -> AddrType;
+
+def CreateSocket (addrFamily : AddrFamily, sockType : SocketType) -> Socket {
+    return CreateSocket (addrFamily, sockType, 0);
+}
+
+def CreateSocket (addrFamily : AddrFamily, sockType : SocketType, protocol : int) {
+    let handle = socket (addrFamily, sockType, protocol);
+    return Socket { handle, addrFamily, sockType };
+}
+
+def Connect (ref socket : Socket, const ip : string, const port : ushort) -> bool {
+    let remoteAddr = SockAddrIn::init;
+    remoteAddr.sin_addr.s_addr = inet_addr (ip.ptr);
+    remoteAddr.sin_family = cast!short (socket.addrFamily);
+    remoteAddr.sin_port = htons (port);
+
+    return connect (socket.handle, cast!(p!SockAddr) (&remoteAddr), SockAddrIn::sizeof) == 0;
+}
+
+def Bind (ref socket : Socket, port : ushort) -> bool {
+    let localAddr = SockAddrIn::init;
+    localAddr.sin_family = cast!short (socket.addrFamily);
+    localAddr.sin_port = htons (port);
+    return bind (socket.handle, cast!(p!SockAddr) (&localAddr), SockAddrIn::sizeof) == 0;
+}
+
+def Listen (ref socket : Socket, backlog : int) -> bool {
+    return  listen (socket.handle, backlog) == 0;
+}
+
+def Accept (ref socket : Socket, ref clientSocket : Socket, ref clientAddr : SockAddrIn) -> bool {
+    let lenAddr = SockAddrIn::sizeof;
+    let ret = accept (socket.handle, cast!(p!SockAddr) (&clientAddr), cast!(p!uint) (&lenAddr));
+    if (ret < 0)
+        return false;
+    clientSocket.handle = ret;
+    return true;
+}
+
+def Close (ref socket : Socket) {
+    close (socket.handle);
+}
+
+def Send (ref socket : Socket, const message : string) -> bool {
+    return socket.Send (message, 0);
+}
+
+def Send (ref socket : Socket, const message : string, flag : int) -> bool {
+    let messageSize = cast!uint(message.len);
+    let ret = send (socket.handle, cast!(p!void) (&messageSize), uint::sizeof, flag);
+    if (ret < 0)
+        return false;
+    ret = send (socket.handle, cast!(p!void) (message.ptr), messageSize, flag);
+    return ret >= 0;
+}
+
+def Recv (ref socket : Socket) -> mut string {
+    return socket.Recv (0);
+}
+
+def Recv (ref socket : Socket, flag : int) -> mut string {
+    let messageSize = uint::init;
+    let readSize = recv (socket.handle, cast!(p!void) (&messageSize), cast!int(uint::sizeof), flag);
+
+    if (readSize <= 0)
+        return [char ; 0U];
+
+    let message = [char ; messageSize];
+    readSize = recv (socket.handle, cast!(p!void) (message.ptr), cast!int(messageSize), flag);
+
+    if (readSize <= 0)
+        return [char ; 0U];
+
+    return message;
+}
