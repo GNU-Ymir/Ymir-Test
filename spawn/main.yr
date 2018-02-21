@@ -1,0 +1,13 @@
+mod main;
+import core.io;
+import thread, core.string;
+
+def test (a : int, b : string) {
+    println (a, " ", b);
+}
+
+def main () {
+    let str = "salut".dup ();
+    let a = spawn (4U, test, 1, str);
+    a.join ();
+}
