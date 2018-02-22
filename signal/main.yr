@@ -1,0 +1,32 @@
+import core.io;
+
+struct (T...)
+| func : [fn (T) -> void]
+ -> Signal;
+
+def connect (T...) (ref sig : Signal!T, foo : fn (T) -> void) {
+    sig.func = sig.func ~ [foo];
+}
+
+def call (T...) (ref sig : Signal!T, elems : T) {
+    for it in 0U .. sig.func.len {
+        sig.func [it] (elems.expand);
+    }
+}
+
+def test2 (a : int, b : int) {
+    println (a * b);
+}
+
+def main () {
+    let a = Signal!(int, int)::init;
+    a.connect ((a : int, b : int) {
+        println (a + b);
+    });
+
+    a.connect (test2);    
+    a.call (1, 2);
+    
+}
+
+
