@@ -1,57 +1,118 @@
-thread.print (void (*<T77>) (signed int, unsigned char) a)
+thread.ThreadInfos.self ()
 {
-  {
-    thread.print.printf (&"%d\n"[0], a);
-  }
+  try
+    {
+      {
+        typedef struct thread.Thread ;
+        typedef struct thread.Thread[] ;
+        struct thread.Thread[] _1_;
+        struct thread.Thread _2_;
+
+        try
+          {
+            _1_.len = 1;
+            _1 = _y_newArray (8, 1);
+            _1_.ptr = _1;
+            _2 = _1_.len;
+            thread11ThreadInfos8launched.len = _2;
+            _3 = _1_.ptr;
+            thread11ThreadInfos8launched.ptr = _3;
+            _2_.id = 0;
+            _4 = thread11ThreadInfos8launched.ptr;
+            _5 = _4;
+            MEM[(struct thread.Thread *)_5] = _2_;
+          }
+        finally
+          {
+            _1_ = {CLOBBER};
+            _2_ = {CLOBBER};
+          }
+      }
+    }
+  finally
+    {
+      {
+        abort ();
+      }
+    }
 }
 
 
-thread.join (struct thread.Thread!() th)
+thread.join (struct thread.Thread th)
 {
-  {
-    _1 = th.id;
-    thread.pthread_join (_1, 0B);
-  }
+  try
+    {
+      {
+        _1 = th.id;
+        thread.pthread_join (_1, 0B);
+      }
+    }
+  finally
+    {
+      {
+        abort ();
+      }
+    }
 }
 
 
-thread.join (struct thread.Thread!()[] th)
+thread.join (struct thread.Thread[] th)
 {
-  {
-    typedef struct thread.Thread!() ;
-    struct thread.Thread!() it;
-    unsigned long _1_;
+  try
+    {
+      {
+        typedef struct thread.Thread ;
+        struct thread.Thread it;
+        unsigned long _1_;
 
-    try
-      {
-        _1_ = 0;
-        goto test;
-        begin:
-        {
-          _1 = th.ptr;
-          _2 = _1_ * 8;
-          _3 = _1 + _2;
-          it = MEM[(struct thread.Thread!() *)_3];
-          _4 = it.id;
-          thread.pthread_join (_4, 0B);
-          _1_ = _1_ + 1;
-        }
-        goto test;
-        test:
-        _5 = th.len;
-        if (_1_ < _5) goto <D.72>; else goto <D.73>;
-        <D.72>:
-        goto begin;
-        <D.73>:
-        goto end;
-        end:
-        end:
+        try
+          {
+            _1_ = 0;
+            goto test;
+            begin:
+            {
+              _1 = th.ptr;
+              _2 = _1_ * 8;
+              _3 = _1 + _2;
+              it = MEM[(struct thread.Thread *)_3];
+              try
+                {
+                  {
+                    _4 = it.id;
+                    thread.pthread_join (_4, 0B);
+                  }
+                }
+              finally
+                {
+                  {
+                    abort ();
+                  }
+                }
+              _1_ = _1_ + 1;
+            }
+            goto test;
+            test:
+            _5 = th.len;
+            if (_1_ < _5) goto <D.84>; else goto <D.85>;
+            <D.84>:
+            goto begin;
+            <D.85>:
+            goto end;
+            end:
+            end:
+          }
+        finally
+          {
+            it = {CLOBBER};
+          }
       }
-    finally
+    }
+  finally
+    {
       {
-        it = {CLOBBER};
+        abort ();
       }
-  }
+    }
 }
 
 

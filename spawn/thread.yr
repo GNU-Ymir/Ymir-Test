@@ -9,17 +9,27 @@ struct
 | id : ulong
  -> Thread;
 
-def print (const a : fn (int, char) -> void) {
-    extern (C) printf (const c : p!char, ...);
-    printf ("%d\n".ptr, a);
+private mod pthread (T) {
+    public extern (C) pthread_create (thread : p!ulong, attr : p!void, call : fn (p!T)-> p!void, data : p!T);
+}
+
+
+
+private mod ThreadInfos {
+
+    public static launched : [Thread]; 
+    self () {
+        launched = [Thread ; 1UL];
+        launched [0] = Thread {0UL};
+    }
+
 }
 
 def spawn (T...) (n : uint, foo : fn (T)-> void, data : T) -> mut [Thread] {
-    extern (C) pthread_create (thread : p!ulong, attr : p!void, ...) -> int;
     let res = [Thread ; n];
     
     for it in 0U .. n {
-        let id = cast!ulong (it + 1U);
+        let id = 0UL;//cast!ulong (it) + ThreadInfos::launched.len;
         let ptr = (ptr : p!(t!(fn (T) -> void, T))) {
             let (fun, data...) =  *ptr;
             fun (data.expand);
@@ -28,10 +38,32 @@ def spawn (T...) (n : uint, foo : fn (T)-> void, data : T) -> mut [Thread] {
 
         let alloc = [t!(fn (T) -> void, T) ; 1U];
         alloc[0] = (foo, data.expand);
-        
-        pthread_create (&id, null, ptr, alloc.ptr);        
+        pthread!(t!(fn (T) -> void, T))::pthread_create (&id, null, ptr, alloc.ptr);
         res [it] = Thread {id};
     }
+    
+    ThreadInfos::launched = ThreadInfos::launched ~ res;
+    return res;
+}
+
+def spawn (F : FUN, FUN, T...) (n : uint, data : T) -> mut [Thread] {
+    let res = [Thread ; n];
+    
+    for it in 0U .. n {
+        let id = 0UL;//cast!ulong (it) + ThreadInfos::launched.len;
+        let ptr = (ptr : p!(t!(fn (T) -> void, T))) {
+            let (fun, data...) =  *ptr;
+            fun (data.expand);
+            return cast!(p!void) (null);
+        };
+
+        let alloc = [t!(fn (T) -> void, T) ; 1U];
+        alloc[0] = (fn (T) -> void (F), data.expand);
+        pthread!(t!(fn (T) -> void, T))::pthread_create (&id, null, ptr, alloc.ptr);
+        res [it] = Thread {id};
+    }
+    
+    ThreadInfos::launched = ThreadInfos::launched ~ res;
     return res;
 }
 

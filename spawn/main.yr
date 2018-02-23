@@ -1,13 +1,9 @@
 mod main;
+import thread;
 import core.io;
-import thread, core.string;
 
-def test (a : int, b : string) {
-    println (a, " ", b);
-}
 
 def main () {
-    let str = "salut".dup ();
-    let a = spawn (4U, test, 1, str);
-    a.join ();
+    let ths = spawn!((a, b) => println (a, " ", b)) (4U, 10, "salut");
+    ths.join ();
 }
