@@ -1,5 +1,7 @@
 mod socket;
 
+import std.traits;
+
 private mod native {
     public {
         extern (C) socket (addrFamily : int, socketType : int, protocol : int) -> int;
@@ -8,10 +10,10 @@ private mod native {
         extern (C) connect (socket : int, serverAddr : p!SockAddr, len : uint) -> int;
         extern (C) inet_addr (const c : p!char) -> uint;
         extern (C) send (sock : int, buf : const p!void, len : const uint, flags : const int) -> int;
-        extern (C) recv (s : int, buf : p!void, len : int, flags : int) -> int;
-        extern (C) listen (s : int, backlog : int) -> int;
-        extern (C) bind (sockfd : int, my_addr : p!SockAddr, addrlen : uint) -> int;
-        extern (C) accept (sock : int, addr : p!SockAddr, addlen : p!uint) -> int;
+        extern (C) recv (sock : int, buf : const p!void, len : const uint, flags : const int) -> int;
+        extern (C) listen (sick : int, backlog : int) -> int;
+        extern (C) bind (sock : int, my_addr : p!SockAddr, addrlen : uint) -> int;
+        extern (C) accept (sock : int, addr : p!SockAddr, addrlen : p!uint) -> int;
     }
 }
 
@@ -37,14 +39,24 @@ struct
 | sa_data : [char ; 14u]
  -> SockAddr;
 
-/* TODO : complete this enum by using socket.h */
+/* Source : socket.h */
 enum : int
-| AfInet : 2	/* Internet IP Protocol */
+| Unspec    : 0
+| Unix      : 1  /* Unix domain sockets  */
+| AfInet    : 2	 /* Internet IP Protocol */
+| Bridge    : 7  /* Multiprotocol bridge */
+| Inet6     : 10 /* IP version 6	 */
+| Max       : 12
  -> AddrFamily;
 
 /* TODO : complete this enum by using socket.h */
 enum : int
-| SockStream : 1 /* stream (connection) socket) */
+| SockStream    : 1  /* stream (connection) socket) */
+| SockDGram     : 2  /* datagram (conn.less) socket */
+| SockRaw       : 3  /* raw socket		    */
+| SockRdm       : 4  /* reliably-delivered message  */
+| SockSeqPacket : 5  /* sequential packet socket    */
+| SockPacket    : 10 /* see socket.h                */
  -> SocketType;
 
 enum : uint
@@ -93,35 +105,38 @@ def close (ref socket : Socket) {
     native::close (socket.handle);
 }
 
-def send (ref socket : Socket, const message : string) -> bool {
-    return socket.send (message, 0);
+def send (ref socket : Socket, const message : p!byte, const size : uint, const flag : int) -> bool {
+    return native::send (socket.handle, cast!(p!void) (message), size, flag) >= 0;
 }
 
-def send (ref socket : Socket, const message : string, flag : int) -> bool {
-    let messageSize = cast!uint(message.len);
-    let ret = native::send (socket.handle, cast!(p!void) (&messageSize), uint::sizeof, flag);
-    if (ret < 0)
-        return false;
-    ret = native::send (socket.handle, cast!(p!void) (message.ptr), messageSize, flag);
-    return ret >= 0;
+def send (T of [U], U) (ref socket : Socket, const message : T, const flag : int) -> bool {
+    return socket.send (cast!(p!byte) (message.ptr), cast!uint(message.len), flag);
 }
 
-def recv (ref socket : Socket) -> mut string {
-    return socket.recv (0);
+def send (T of [U], U) (ref socket : Socket, const message : T) -> bool {
+    return socket.send (cast!(p!byte) (message.ptr), cast!uint(message.len), 0);
 }
 
-def recv (ref socket : Socket, flag : int) -> mut string {
-    let messageSize = uint::init;
-    let readSize = native::recv (socket.handle, cast!(p!void) (&messageSize), cast!int(uint::sizeof), flag);
+def send (T) (ref socket : Socket, message : T, const flag : int) -> bool {
+    return socket.send (cast!(p!byte) (&message), T::sizeof, flag);
+}
 
-    if (readSize <= 0)
-        return [char ; 0U];
+def send (T) (ref socket : Socket, message : T) -> bool {
+    return socket.send (cast!(p!byte) (&message), T::sizeof, 0);
+}
 
-    let message = [char ; messageSize];
-    readSize = native::recv (socket.handle, cast!(p!void) (message.ptr), cast!int(messageSize), flag);
+def recv (T of [U], U) (ref socket : Socket, ref outBuffer : T, flag : int) -> int {
+    return native::recv (socket.handle, cast!(p!void) (outBuffer.ptr), cast!(uint)(outBuffer.len), flag);
+}
 
-    if (readSize <= 0)
-        return [char ; 0U];
+def recv (T of [U], U) (ref socket : Socket, ref outBuffer : T) -> int {
+    return socket.recv (outBuffer, 0);
+}
 
-    return message;
+def recv (T) (ref socket : Socket, ref outBuffer : T, const flag : int) -> int {
+    return native::recv (socket.handle, cast!(p!void) (&outBuffer), T::sizeof, flag);
+}
+
+def recv (T) (ref socket : Socket, ref outBuffer : T) -> int {
+    return socket.recv (outBuffer, 0);
 }

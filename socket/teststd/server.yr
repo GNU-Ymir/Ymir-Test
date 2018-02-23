@@ -11,7 +11,7 @@ def main()
     }
     else
     {
-        if (!sock.bind (8888US))
+        if (!sock.bind (7777US))
         {
             println ("Bind() error");
         }
@@ -34,10 +34,21 @@ def main()
                 {
                     println ("New client ! sock : ", clientSock.handle);
 
-                    let message = clientSock.recv ();
-                    println ("Message : ", message);
+                    let size = uint::init;
+                    let s = clientSock.recv (size);
+                    if (s <= 0) {
+                        println ("recv error, size received : ", s);
+                    }
 
-                    clientSock.send ("hello !");
+                    let buffer = [char ; size];
+                    clientSock.recv (buffer);
+                    println (buffer);
+
+                    let message = "Hello client !";
+                    size = cast!uint(message.len);
+                    clientSock.send (size);
+                    clientSock.send (message);
+                    
                     clientSock.close();
                 }
             }

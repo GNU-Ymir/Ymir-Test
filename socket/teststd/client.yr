@@ -1,18 +1,27 @@
 import core.io;
 import socket;
+import std.traits;
 
 def main()
 {
     let socket = CreateSocket (AddrFamily::AfInet, SocketType::SockStream);
     println (socket);
 
-    if (socket.Connect ("127.0.0.1", cast!ushort(8888))) {
-        println ("ok");
+    if (socket.connect ("127.0.0.1", cast!ushort(7777))) {
+        println ("Connected !");
 
-        socket.send ("test");
-        let a = socket.recv ();
+        let message = "Hello server !";
+        let size = cast!uint(message.len);
 
-        println (a);
+        if (!socket.send (size))
+            println ("send error");
+        socket.send (message);
+
+        if (socket.recv (size) <= 0)
+            println ("recv error");
+        let buffer = [char ; size];
+        socket.recv (buffer);
+        println (buffer);
         
         socket.close();
     } else {
