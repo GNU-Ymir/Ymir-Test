@@ -4,7 +4,7 @@ import std.traits;
 
 def main()
 {
-    let socket = CreateSocket (AddrFamily::AfInet, SocketType::SockStream, IpProtocol::Udp);
+    let socket = UdpSocket ();
     println (socket);
 
     let serverAddr = SockAddrInCreate (AddrFamily::AfInet, 8888US, "127.0.0.1");
@@ -12,7 +12,8 @@ def main()
     let message = "hello server";
     if (!socket.sendTo (message, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof))
         println ("sendTo error");
-
+    println ("message sent");
+    
     let buffer = [char ; 255U];
     if (socket.recvFrom (buffer, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof) < 0)
         println ("recvFrom error");

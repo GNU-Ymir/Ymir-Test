@@ -3,7 +3,7 @@ import socket;
 
 def main()
 {
-    let sock = CreateSocket (AddrFamily::AfInet, SocketType::SockStream);
+    let sock = TcpSocket ();
 
     if (sock.handle < 0)
     {

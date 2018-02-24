@@ -1,6 +1,7 @@
 mod socket;
 
 import std.traits;
+import core.io;
 
 private mod native {
     public {
@@ -90,6 +91,14 @@ def CreateSocket (addrFamily : AddrFamily, sockType : SocketType, protocol : int
     return Socket { handle, addrFamily, sockType };
 }
 
+def TcpSocket () -> Socket {
+    return CreateSocket (AddrFamily::AfInet, SocketType::SockStream, IpProtocol::Tcp);
+}
+
+def UdpSocket () -> Socket {
+    return CreateSocket (AddrFamily::AfInet, SocketType::SockDGram, IpProtocol::Udp);
+}
+
 // TODO : support ip addr AND hostname
 def SockAddrInCreate (const addrFamily : AddrFamily, const port : ushort, const addr : string) -> SockAddrIn {
     let sockAddr = SockAddrIn::init;
@@ -173,23 +182,25 @@ def recv (T) (ref socket : Socket, ref outBuffer : T) -> int {
 }
 
 def sendTo (ref socket : Socket, const message : p!byte, const size : uint, const destAddr : p!SockAddr, addrlen : uint, const flag : int) -> bool {
-    return native::sendto (socket.handle, cast!(p!void) (message), size, flag, destAddr, addrlen) >= 0;
+    let s = native::sendto (socket.handle, cast!(p!void) (message), size, flag, destAddr, addrlen);
+    println ("size : ", s);
+    return s >= 0;
 }
 
 def sendTo (T of [U], U) (ref socket : Socket, const message : T, const destAddr : p!SockAddr, addrlen : uint, const flag : int) -> bool {
-    return socket.send (cast!(p!byte) (message.ptr), cast!uint(message.len), destAddr, addrlen, flag);
+    return socket.sendTo (cast!(p!byte) (message.ptr), cast!uint(message.len), destAddr, addrlen, flag);
 }
 
 def sendTo (T of [U], U) (ref socket : Socket, const message : T, const destAddr : p!SockAddr, addrlen : uint) -> bool {
-    return socket.send (cast!(p!byte) (message.ptr), cast!uint(message.len), 0);
+    return socket.sendTo (cast!(p!byte) (message.ptr), cast!uint(message.len), destAddr, addrlen, 0);
 }
 
 def sendTo (T) (ref socket : Socket, message : T, const flag : int, const destAddr : p!SockAddr, addrlen : uint) -> bool {
-    return socket.send (cast!(p!byte) (&message), T::sizeof, flag);
+    return socket.sendTo (cast!(p!byte) (&message), T::sizeof, destAddr, addrlen, flag);
 }
 
 def sendTo (T) (ref socket : Socket, message : T, const destAddr : p!SockAddr, addrlen : uint) -> bool {
-    return socket.send (cast!(p!byte) (&message), T::sizeof, 0);
+    return socket.sendTo (cast!(p!byte) (&message), T::sizeof, destAddr, addrlen, 0);
 }
 
 def recvFrom (T of [U], U) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, addrlen : uint, flag : int) -> int {
@@ -205,5 +216,6 @@ def recvFrom (T) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, 
 }
 
 def recvFrom (T) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, addrlen : uint) -> int {
+    println ("recv...");
     return socket.recvFrom (outBuffer, srcAddr, addrlen, 0);
 }
