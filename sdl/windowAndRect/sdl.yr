@@ -1,0 +1,172 @@
+mod sdl;
+
+public {
+    extern (C) SDL_Init (flags : uint) -> int;
+    extern (C) SDL_CreateWindow (const title : p!char, x : int, y : int, w : int, h : int, flags : uint) -> p!SDLWindow;
+    extern (C) SDL_CreateRenderer (window : p!SDLWindow, index : int, flags : uint) -> p!SDLRenderer;
+    extern (C) SDL_RenderSetLogicalSize(renderer : p!SDLRenderer, w : int, h : int) -> int;
+    extern (C) SDL_PollEvent (event : p!SDLEvent) -> int;
+    extern (C) SDL_SetRenderDrawColor (renderer : p!SDLRenderer, r : ubyte, g : ubyte, b : ubyte, a : ubyte) -> int;
+    extern (C) SDL_RenderFillRect (renderer : p!SDLRenderer, const rect : p!SDLRect) -> int;
+    extern (C) SDL_RenderPresent (renderer : p!SDLRenderer);
+    extern (C) SDL_DestroyRenderer (renderer : p!SDLRenderer);
+    extern (C) SDL_DestroyWindow (window : p!SDLWindow);
+}
+
+struct
+| data : p!void
+ -> SDLWindow;
+
+struct
+| data : p!void
+ -> SDLRenderer;
+
+struct
+| type : uint
+| data : [ubyte ; 52U] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
+ -> SDLEvent;
+
+struct
+| type : uint
+| timestamp : uint
+| windowId : uint
+| which : uint
+| button : ubyte
+| state : ubyte
+| clicks : ubyte
+| padding1 : ubyte
+| x : int
+| y : int
+-> SDLMouseButtonEvent;
+
+struct
+| type : int
+| timestamp : uint
+| windowId : uint
+| state : ubyte
+| repeat : ubyte
+| padding2 : ubyte
+| padding3 : ubyte
+| scancode : uint //SDL_Scancode
+| sym : int
+| mode : ushort
+| unicode : uint    
+-> SDLKeyboardEvent;
+
+struct
+| x : int
+| y : int
+| w : int
+| h : int
+ -> SDLRect;
+
+// TODO : complete by using SDL.h
+enum : uint
+| Audio : 16u
+| Video : 32u
+ -> SDLInitFlag;
+
+// TODO : complete by using SDL_video.h
+enum : uint
+| FullScreen : 1u
+| OpenGL : 2u
+| Shown : 4u
+| Hidden : 8u
+| Borderless : 16u
+ -> SDLWindowFlag;
+
+enum : uint
+| Software : 1u
+| Accelerated : 2u
+| PresentVSync : 4u
+| TargetTexture : 8u
+ -> SDLRendererFlag;
+
+// TODO : complete by using SDL_events.h
+enum : uint
+| Quit : 256U
+| KeyDown : 768U
+| KeyUp : 769U
+| MouseMotion : 1024U
+| MouseButtonDown : 1025U
+| MouseButtonUp : 1026U
+| MouseWheel : 1027U
+| Unknown : 0U // not used by the SDL
+ -> SDLEventType;
+
+enum SDL_Keycode {
+    SDLK_UNKNOWN : 0,
+    
+    SDLK_RETURN : cast!int ('\r'),
+    SDLK_ESCAPE : cast!int ('\033'),
+    SDLK_BACKSPACE : cast!int ('\b'),
+    SDLK_TAB : cast!int ('\t'),
+    SDLK_SPACE : cast!int (' '),
+    SDLK_EXCLAIM : cast!int ('!'),
+    SDLK_QUOTEDBL : cast!int ('"'),
+    SDLK_HASH : cast!int ('#'),
+    SDLK_PERCENT : cast!int ('%'),
+    SDLK_DOLLAR : cast!int ('$'),
+    SDLK_AMPERSAND : cast!int ('&'),
+    SDLK_QUOTE : 39,
+    SDLK_LEFTPAREN : cast!int ('('),
+    SDLK_RIGHTPAREN : cast!int (')'),
+    SDLK_ASTERISK : cast!int ('*'),
+    SDLK_PLUS : cast!int ('+'),
+    SDLK_COMMA : cast!int (','),
+    SDLK_MINUS : cast!int ('-'),
+    SDLK_PERIOD : cast!int ('.'),
+    SDLK_SLASH : cast!int ('/'),
+    SDLK_0 : cast!int ('0'),
+    SDLK_1 : cast!int ('1'),
+    SDLK_2 : cast!int ('2'),
+    SDLK_3 : cast!int ('3'),
+    SDLK_4 : cast!int ('4'),
+    SDLK_5 : cast!int ('5'),
+    SDLK_6 : cast!int ('6'),
+    SDLK_7 : cast!int ('7'),
+    SDLK_8 : cast!int ('8'),
+    SDLK_9 : cast!int ('9'),
+    SDLK_COLON : cast!int (':'),
+    SDLK_SEMICOLON : cast!int (';'),
+    SDLK_LESS : cast!int ('<'),
+    SDLK_EQUALS : cast!int (':'),
+    SDLK_GREATER : cast!int ('>'),
+    SDLK_QUESTION : cast!int ('?'),
+    SDLK_AT : cast!int ('@'),
+    /*
+       Skip uppercase letters
+     */
+    SDLK_LEFTBRACKET : cast!int ('['),
+    SDLK_BACKSLASH : cast!int (92),
+    SDLK_RIGHTBRACKET : cast!int (']'),
+    SDLK_CARET : cast!int ('^'),
+    SDLK_UNDERSCORE : cast!int ('_'),
+    SDLK_BACKQUOTE : cast!int ('`'),
+    SDLK_a : cast!int ('a'),
+    SDLK_b : cast!int ('b'),
+    SDLK_c : cast!int ('c'),
+    SDLK_d : cast!int ('d'),
+    SDLK_e : cast!int ('e'),
+    SDLK_f : cast!int ('f'),
+    SDLK_g : cast!int ('g'),
+    SDLK_h : cast!int ('h'),
+    SDLK_i : cast!int ('i'),
+    SDLK_j : cast!int ('j'),
+    SDLK_k : cast!int ('k'),
+    SDLK_l : cast!int ('l'),
+    SDLK_m : cast!int ('m'),
+    SDLK_n : cast!int ('n'),
+    SDLK_o : cast!int ('o'),
+    SDLK_p : cast!int ('p'),
+    SDLK_q : cast!int ('q'),
+    SDLK_r : cast!int ('r'),
+    SDLK_s : cast!int ('s'),
+    SDLK_t : cast!int ('t'),
+    SDLK_u : cast!int ('u'),
+    SDLK_v : cast!int ('v'),
+    SDLK_w : cast!int ('w'),
+    SDLK_x : cast!int ('x'),
+    SDLK_y : cast!int ('y'),
+    SDLK_z : cast!int ('z')
+}
