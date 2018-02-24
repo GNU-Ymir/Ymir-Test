@@ -7,7 +7,9 @@ def main()
     let socket = UdpSocket ();
     println (socket);
 
-    let serverAddr = SockAddrInCreate (AddrFamily::AfInet, 8888US, "127.0.0.1");
+    let serverAddr = SockAddrIn::init;
+    if (!SockAddrInCreate (serverAddr, AddrFamily::AfInet, 8888US, "127.0.0.1"))
+        println ("SockAddrInCreate() error");
 
     let message = "hello server";
     if (!socket.sendTo (message, cast!(p!SockAddr) (&serverAddr), SockAddrIn::sizeof))

@@ -100,16 +100,15 @@ def UdpSocket () -> Socket {
 }
 
 // TODO : support ip addr AND hostname
-def SockAddrInCreate (const addrFamily : AddrFamily, const port : ushort, const addr : string) -> SockAddrIn {
-    let sockAddr = SockAddrIn::init;
-    sockAddr.sin_family = cast!short(addrFamily);
-    sockAddr.sin_port = port;
+def SockAddrInCreate (ref sockAddrIn : SockAddrIn, const addrFamily : AddrFamily, const port : ushort, const addr : string) -> bool {
+    sockAddrIn.sin_family = cast!short(addrFamily);
+    sockAddrIn.sin_port = port;
 
     // we try to translate the ip address into in_addr
-    if (native::inet_aton (addr.ptr, &sockAddr.sin_addr) == 0)
-        return SockAddrIn::init;
-
-    return sockAddr;
+    if (native::inet_aton (addr.ptr, &sockAddrIn.sin_addr) == 0)
+        return false;
+    
+    return true;
 }
 
 def connect (ref socket : Socket, const ip : string, const port : ushort) -> bool {
@@ -183,7 +182,6 @@ def recv (T) (ref socket : Socket, ref outBuffer : T) -> int {
 
 def sendTo (ref socket : Socket, const message : p!byte, const size : uint, const destAddr : p!SockAddr, addrlen : uint, const flag : int) -> bool {
     let s = native::sendto (socket.handle, cast!(p!void) (message), size, flag, destAddr, addrlen);
-    println ("size : ", s);
     return s >= 0;
 }
 
@@ -204,6 +202,8 @@ def sendTo (T) (ref socket : Socket, message : T, const destAddr : p!SockAddr, a
 }
 
 def recvFrom (T of [U], U) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, addrlen : uint, flag : int) -> int {
+    // println ("recv using ", socket, " on ", *srcAddr, " of size : ", addrlen);
+    println ("recv...");
     return native::recvfrom (socket.handle, cast!(p!void) (outBuffer.ptr), cast!(uint)(outBuffer.len), flag, srcAddr, addrlen);
 }
 
@@ -216,6 +216,5 @@ def recvFrom (T) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, 
 }
 
 def recvFrom (T) (ref socket : Socket, ref outBuffer : T, srcAddr : p!SockAddr, addrlen : uint) -> int {
-    println ("recv...");
     return socket.recvFrom (outBuffer, srcAddr, addrlen, 0);
 }
