@@ -1,0 +1,58 @@
+import core.io;
+import socket;
+
+def main()
+{
+    let sock = CreateSocket (AddrFamily::AfInet, SocketType::SockStream);
+
+    if (sock.handle < 0)
+    {
+        println ("CreateSocket() error");
+    }
+    else
+    {
+        if (!sock.bind (7777US))
+        {
+            println ("Bind() error");
+        }
+        else
+        {
+            if (!sock.listen (3))
+            {
+                println ("Listen() error");
+            }
+            else
+            {
+                let clientSock = Socket::init;
+                let clientAddr = SockAddrIn::init;
+
+                if (!sock.accept (clientSock, clientAddr))
+                {
+                    println ("Accept() error");
+                }
+                else
+                {
+                    println ("New client ! sock : ", clientSock.handle);
+
+                    let size = uint::init;
+                    let s = clientSock.recv (size);
+                    if (s <= 0) {
+                        println ("recv error, size received : ", s);
+                    }
+
+                    let buffer = [char ; size];
+                    clientSock.recv (buffer);
+                    println (buffer);
+
+                    let message = "Hello client !";
+                    size = cast!uint(message.len);
+                    clientSock.send (size);
+                    clientSock.send (message);
+                    
+                    clientSock.close();
+                }
+            }
+        }
+        sock.close();
+    }
+}
