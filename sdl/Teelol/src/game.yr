@@ -1,0 +1,60 @@
+mod src.game;
+
+import core.io;
+import std.memory;
+import src.screen;
+import src.eventHandler;
+import src.lib.signal;
+import src.lib.sdl;
+
+struct
+| screen : Screen
+| eventHdl : EventHandler
+| continue : bool
+ -> Game;
+
+// for now...
+imut WindowWidth = 600;
+imut WindowHeight = 300;
+imut WindowPosX = 100;
+imut WindowPosY = 100;
+imut Title = "Teelol";
+
+def createGame () -> p!Game
+{   
+    let screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
+    let eventHdl = createEventHandler ();
+
+    initEvents (eventHdl);
+    
+    return Game { screen, eventHdl, true };
+}
+
+def start (ref game : Game)
+{
+    let screen = game.screen;
+
+    // we don't forget to free sdl at the end of the scope !
+    on exit => screen.destroy();
+    
+    while (game.continue)
+    {
+        game.eventHdl.handleEvents ();
+        screen.display();
+    }
+}
+
+def initEvents (ref eventHdl : EventHandler)
+{
+    let quitSignal = Signal!(ref Game)::init;
+    quitSignal.connect (onQuit);
+    
+    eventHdl.onEvent (SDL_EventType::Quit, quitSignal);
+    eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_ESCAPE, quitSignal);
+}
+
+def onQuit (ref game : Game)
+{
+    game.continue = false;
+    println ("Bye !");
+}

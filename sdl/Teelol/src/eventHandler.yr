@@ -1,0 +1,74 @@
+mod src.eventHandler;
+
+import core.io;
+import std.list;
+import src.lib.sdl;
+import src.lib.signal;
+import src.game;
+
+struct
+| type : uint
+| signal : Signal!(ref Game)
+ -> ClassicEvent;
+
+struct
+| type : uint
+| keyCode : int
+| signal : Signal!(ref Game)
+ -> KeyboardEvent;
+
+struct
+| classicEvents : List!ClassicEvent
+| keyboardEvents : List!KeyboardEvent
+| sdlEvent : SDL_Event
+ -> EventHandler;
+
+def createEventHandler (ref game : Game) -> mut EventHandler
+{
+    let listClassicEvent = list!ClassicEvent ();
+    let listKeyboardEvent = list!KeyboardEvent ();
+    let sdlEvent = SDL_Event::init;
+    return EventHandler { listClassicEvent, listKeyboardEvent, sdlEvent, &game };
+}
+
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, signal : Signal!(ref Game))
+{
+    eventHdl.classicEvents.push (ClassicEvent { eventType, signal });
+}
+
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyCode : SDL_Keycode, signal : Signal!(ref Game))
+{
+    eventHdl.keyboardEvents.push (KeyboardEvent { eventType, keyCode, signal });
+}
+
+def handleEvents(ref eventHdl : EventHandler)
+{
+    let sdlEventPtr = &(eventHdl.sdlEvent);
+    while (SDL_PollEvent (sdlEventPtr) != 0)
+    {
+        match (*sdlEventPtr).type
+        {
+            SDL_EventType::Quit => eventHdl.handleClassicEvent ((*sdlEventPtr).type);
+            SDL_EventType::KeyUp => {
+                let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
+                eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);
+            }
+        }
+    }
+}
+
+def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
+{
+    let next = eventHdl.classicEvents.next ();
+    while (next !is null)
+    {
+        if ((*next).type == eventType)
+            (*next).signal.call (*gamePtr);
+        next = next.next();
+    }
+}
+
+def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode : int)
+{
+    println ("test");
+}
