@@ -1,0 +1,23 @@
+Error : Incompatible types 'src.eventHandler.EventHandler' and 'src.eventHandler.EventHandler'
+ --> /home/guillaume/Documents/ymir/Ymir-Test/sdl/Teelol/src/eventHandler.yr:(31,5)
+    | 
+31  |     return EventHandler { listClassicEvent, listKeyboardEvent, sdlEvent };
+    |     ^^^^^^
+Error : Operator '()' is undefined for type 'function <std.list.push> (ref a : List!(T), const b : T)' and (std.list.List!(src.eventHandler.ClassicEvent), src.eventHandler.ClassicEvent)
+ --> /home/guillaume/Documents/ymir/Ymir-Test/sdl/Teelol/src/eventHandler.yr:(36,33)
+    | 
+36  |     eventHdl.classicEvents.push (ClassicEvent { eventType, signal });
+    |                                 ^                                  ^
+Error : Operator '()' is undefined for type 'function <std.list.push> (ref a : List!(T), const b : T)' and (std.list.List!(src.eventHandler.KeyboardEvent), src.eventHandler.KeyboardEvent)
+ --> /home/guillaume/Documents/ymir/Ymir-Test/sdl/Teelol/src/eventHandler.yr:(41,34)
+    | 
+41  |     eventHdl.keyboardEvents.push (KeyboardEvent { eventType, keyCode, signal });
+    |                                  ^                                            ^
+ymir1: erreur fatale : NB Error : 3
+compilation terminée.
+CMakeFiles/../teelol.dir/build.make:86 : la recette pour la cible « CMakeFiles/../teelol.dir/src/eventHandler.yr.o » a échouée
+make[2]: *** [CMakeFiles/../teelol.dir/src/eventHandler.yr.o] Erreur 1
+CMakeFiles/Makefile2:67 : la recette pour la cible « CMakeFiles/../teelol.dir/all » a échouée
+make[1]: *** [CMakeFiles/../teelol.dir/all] Erreur 2
+Makefile:83 : la recette pour la cible « all » a échouée
+make: *** [all] Erreur 2

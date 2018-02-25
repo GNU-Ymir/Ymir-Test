@@ -1,0 +1,10 @@
+mod main;
+
+import src.game;
+
+def main()
+{
+    // on passera sans doute plus tard des params tel que la map, la dim de l'ecran...
+    let game = createGame ();
+    game.start();
+}
