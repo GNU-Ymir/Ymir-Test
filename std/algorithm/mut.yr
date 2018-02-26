@@ -1,0 +1,9 @@
+import core.io;
+import std.algorithm.mutation;
+
+
+def main () {
+    let a = generate!(ulong, (a, b) => a + b) (10UL); // dynamic
+    let b = generate!(ulong, (a, b) => a + b, 10UL) (); // static
+    println (a, " ", b);
+}

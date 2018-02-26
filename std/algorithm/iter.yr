@@ -1,0 +1,12 @@
+import core.io;
+import std.algorithm.iteration;
+
+def main () {
+    let a = [1, 2, 3];
+    a.scan!((a, b) => a + b)
+        .map!((a) => 1. * a)
+        .filter!((a) => a < 6.)
+        .each!((a) => println (a));
+
+    println (a.fold!((a, b) => a + b));
+}
