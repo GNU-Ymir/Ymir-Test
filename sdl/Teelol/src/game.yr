@@ -20,20 +20,18 @@ imut WindowPosX = 100;
 imut WindowPosY = 100;
 imut Title = "Teelol";
 
-def createGame () -> p!Game
-{   
-    let screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
-    let eventHdl = createEventHandler ();
-
-    initEvents (eventHdl);
+def createGame (ref game : Game) 
+{
+    game.screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
+    game.eventHdl = createEventHandler (game);
+    game.continue = true;
     
-    return Game { screen, eventHdl, true };
+    initEvents (game.eventHdl);    
 }
 
 def start (ref game : Game)
 {
     let screen = game.screen;
-
     // we don't forget to free sdl at the end of the scope !
     on exit => screen.destroy();
     

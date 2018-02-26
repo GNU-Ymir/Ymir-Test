@@ -21,6 +21,7 @@ struct
 | classicEvents : List!ClassicEvent
 | keyboardEvents : List!KeyboardEvent
 | sdlEvent : SDL_Event
+| game : p!Game
  -> EventHandler;
 
 def createEventHandler (ref game : Game) -> mut EventHandler
@@ -59,12 +60,13 @@ def handleEvents(ref eventHdl : EventHandler)
 
 def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
 {
-    let next = eventHdl.classicEvents.next ();
-    while (next !is null)
+    let next_ = eventHdl.classicEvents.next ();
+    while (next_ !is null)
     {
-        if ((*next).type == eventType)
-            (*next).signal.call (*gamePtr);
-        next = next.next();
+        if ((*next_).value.type == eventType) {
+            let sig = (*next_).value.signal;
+            sig.call (*(eventHdl.game));
+        } next_ = next_.next();
     }
 }
 
