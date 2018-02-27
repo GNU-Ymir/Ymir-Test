@@ -1,0 +1,45 @@
+#   Copyright (C) 2017 Free Software Foundation, Inc.
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GCC; see the file COPYING3.  If not see
+# <http://www.gnu.org/licenses/>.
+
+# GCC testsuite that uses the `dg.exp' driver.
+
+# Load support procs.
+load_lib gyc-dg.exp
+
+# The default option list can be overridden by
+# TORTURE_OPTIONS="{ { list1 } ... { listN } }"
+
+if ![info exists TORTURE_OPTIONS] {
+    set TORTURE_OPTIONS [list \
+        { -O0 } { -O1 } { -O2 } { -O3 } { -Os }]
+}
+
+# Initialize `dg'.
+dg-init
+
+# Initialize use of torture lists.
+torture-init
+set-torture-options $TORTURE_OPTIONS
+
+# Main loop.
+gyc-dg-runtest [lsort \
+       [glob -nocomplain $srcdir/runnable/*.yr ] ] "" ""
+
+# Finalize use of torture lists.
+torture-finish
+
+# All done.
+dg-finish
