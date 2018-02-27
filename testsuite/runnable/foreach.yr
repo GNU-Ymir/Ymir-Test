@@ -1,0 +1,125 @@
+import core.io;
+import core.string;
+
+def foo (ref a) {
+    println ("foo");
+    a = a ~ "foo";
+    return 10;
+}
+
+def test1 () {
+    let a = [char]::init;
+    for i in 0 .. foo (a) {
+        println (i);
+        a = a ~ [cast!char (i) + '0'];
+    }
+    assert (a == "foo0123456789");
+
+    for i in foo (a) .. 0 {
+        println (i);
+        a = a ~ [cast!char (i) + '0'];
+    }
+    assert (a == "foo0123456789foo:987654321");  // 10 + '0' == ':'          
+}
+
+
+def test2 () {
+    let i = 0U;
+    for it in "abcd" {
+        match i {
+            0U => assert (it == 'a');
+            1U => assert (it == 'b');
+            2U => assert (it == 'c');
+            3U => assert (it == 'd');
+            _ => assert (false);
+        }
+        i++;
+    }
+}
+
+def test3 () {
+    let i = 0U;
+    let a = [16U, 1U, 5U, 8U, 3U];
+    for u in a {
+        match i {
+            0U => assert (u == 16U);
+            1U => assert (u == 1U);
+            2U => assert (u == 5U);
+            3U => assert (u == 8U);
+            4U => assert (u == 3U);
+            _ => assert (false);
+        }
+        i++;
+    }
+}
+
+def test4 () {
+    let i = 0U;
+    let a = [uint ; imut 5U];
+    a [0] = 16U;
+    for u in a {
+        i = i + u;
+        u ++;
+    }
+    
+    assert (i == 16U);
+    assert (a [0] == 17U);
+    assert (a [4] == 1U);
+
+    for u in a {
+        println ("u = ", u);
+    }
+    
+    assert (a [0] == 17U);
+    assert (a [4] == 1);
+}
+
+enum
+| A : 0
+ -> E4;
+
+struct
+| b : const [char]
+| a : E4
+ -> X4;
+
+def test5 () {
+    let x = [X4 {"_1", E4::A}, X4{"_2", E4::A}, X4{"_3", E4::A}];
+    for it in x {
+        println (it);
+    }
+}
+
+def test6 () {
+    let a = [21L, 22L, 23L];
+    let b = [long; imut 3U];
+    let sum = 0L, i = 0UL;
+    
+    for v in a {
+        println ("a [", i, "] = ", v);
+        b [i] = v;
+        i++;        
+    }
+
+    for i_ in 0 .. 3
+        assert (b [i_] == 21 + i_);
+
+    for v in a {
+        println ("a [] = ", v);
+        sum = sum + v;
+    }
+    
+    assert (sum == 21L + 22L + 23L);
+}
+
+
+def main () {
+    test1 ();
+    test2 ();
+    test3 ();
+    test4 ();
+    test5 ();
+    test6 ();
+    
+    println ("Success !!");
+}

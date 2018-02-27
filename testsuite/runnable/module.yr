@@ -1,0 +1,30 @@
+import core.io;
+
+static glob = 0U;
+
+use test!int;
+
+self () {
+    assert (glob == 0U);
+    glob = 1U;
+}
+
+mod test (T) {
+    self () {
+        println ("ici");
+        glob = 2U;
+        //Bug
+    }
+
+    def foo () {
+        imut assert (is (T : int));
+    }
+    
+}
+
+def main () {
+    assert (glob == 1U);
+    glob = 1U;
+    foo ();
+}
+

@@ -1,0 +1,7 @@
+import core.io;
+
+def main () {
+    for it in [1, 2, 3]
+        println (it);
+    return 0;
+}

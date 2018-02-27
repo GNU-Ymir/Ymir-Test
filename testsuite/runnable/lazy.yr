@@ -1,0 +1,10 @@
+
+def ifthen (cond : bool, lazy dg) {
+    if (cond)
+        dg ();
+}
+
+def test1 () {
+    ifThen (true, println ("yes"));
+    ifThen (false, println ("no"));    
+}

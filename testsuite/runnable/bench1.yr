@@ -1,0 +1,22 @@
+
+extern (C) printf (const c : p!char, ...) -> int;
+extern (C) atoi (const c : p!char) -> int;
+
+def main (args) {
+    let s = [char ; 0U];
+    let count = 0U;
+    count = cast!uint (atoi ((args [1] ~ "\0").ptr));
+    if (count == 0U) count = 1U;
+    printf ("count = %u\n".ptr, count);
+
+    for loop_ in 0U .. count
+        s = s ~ "hello\n";
+    for loop_ in 0U .. count
+        s = s ~ "h";
+    
+    printf ("%d\n".ptr, s.len);
+    assert (s.len == count * (6U + 1U));
+    return 0;
+}
+
+    

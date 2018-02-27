@@ -1,0 +1,4 @@
+
+def main () {
+    imut assert (1 == 1);    
+}

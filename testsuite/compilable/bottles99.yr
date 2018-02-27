@@ -1,0 +1,12 @@
+mod bottles99;
+
+
+def decimaldigit (n : int) () -> string {
+    let str = "0123456789";
+    return const!string { 1UL, str.ptr + n };
+}
+
+def main () {
+    
+}
+  

@@ -1,0 +1,224 @@
+addrtmp.self ()
+{
+  {
+    typedef struct addrtmp.A ;
+    struct addrtmp.A _1_[2];
+    struct addrtmp.A _2_;
+    struct addrtmp.A _3_;
+
+    try
+      {
+        _2_.a = 1;
+        _2_.b = 2;
+        _3_.a = 3;
+        _3_.b = 4;
+        _1_[0] = _2_;
+        _1_[1] = _3_;
+        _1 = 2;
+        _2 = (unsigned long) _1;
+        _3 = _2 * 8;
+        memcpy (&addrtmp1y, &_1_, _3);
+      }
+    finally
+      {
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+        _3_ = {CLOBBER};
+      }
+  }
+}
+
+
+addrtmp.g (signed int * a)
+{
+  signed int * D.64;
+
+  {
+    D.64 = a;
+    return D.64;
+  }
+}
+
+
+addrtmp.f1 ()
+{
+  signed int * D.75;
+
+  {
+    typedef struct addrtmp.A ;
+    struct addrtmp.A x[2];
+    struct addrtmp.A _1_[2];
+    struct addrtmp.A _2_;
+    struct addrtmp.A _3_;
+
+    try
+      {
+        _2_.a = 1;
+        _2_.b = 2;
+        _3_.a = 3;
+        _3_.b = 4;
+        _1_[0] = _2_;
+        _1_[1] = _3_;
+        x = _1_;
+        D.75 = addrtmp.g (&x[1].a);
+        return D.75;
+      }
+    finally
+      {
+        x = {CLOBBER};
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+        _3_ = {CLOBBER};
+      }
+  }
+}
+
+
+addrtmp.f2 (signed int n)
+{
+  signed int * D.97;
+
+  {
+    typedef struct addrtmp.A ;
+    struct addrtmp.A x[2];
+    struct addrtmp.A _1_[2];
+    struct addrtmp.A _2_;
+    struct addrtmp.A _3_;
+    signed int _4_;
+    signed int * _5_;
+
+    try
+      {
+        _2_.a = 1;
+        _2_.b = 2;
+        _3_.a = 3;
+        _3_.b = 4;
+        _1_[0] = _2_;
+        _1_[1] = _3_;
+        x = _1_;
+        _4_ = n;
+        if (_4_ == 0) goto <D.93>; else goto <D.94>;
+        <D.93>:
+        goto then;
+        <D.94>:
+        goto else;
+        then:
+        _5_ = 0B;
+        goto end_if;
+        else:
+        if (1 != 0) goto <D.95>; else goto <D.96>;
+        <D.95>:
+        goto then;
+        <D.96>:
+        goto end_if;
+        then:
+        _5_ = addrtmp.g (&x[1].a);
+        goto end_if;
+        goto end_if;
+        end_if:
+        D.97 = _5_;
+        return D.97;
+      }
+    finally
+      {
+        x = {CLOBBER};
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+        _3_ = {CLOBBER};
+      }
+  }
+}
+
+
+addrtmp.h ()
+{
+  signed int * D.104;
+
+  {
+    typedef struct addrtmp.A ;
+
+    D.104 = addrtmp.g (&addrtmp1y[1].a);
+    return D.104;
+  }
+}
+
+
+addrtmp.j (signed int n)
+{
+  signed int * D.127;
+
+  {
+    typedef struct addrtmp.A ;
+    struct addrtmp.A x[2];
+    struct addrtmp.A _1_[2];
+    struct addrtmp.A _2_;
+    struct addrtmp.A _3_;
+    signed int * px;
+
+    try
+      {
+        _2_.a = 1;
+        _2_.b = 2;
+        _3_.a = 3;
+        _3_.b = 4;
+        _1_[0] = _2_;
+        _1_[1] = _3_;
+        x = _1_;
+        px = addrtmp.g (&addrtmp1y[1].a);
+        if (n == 1) goto <D.123>; else goto <D.124>;
+        <D.123>:
+        goto then;
+        <D.124>:
+        goto end_if;
+        then:
+        {
+          px = addrtmp.g (&x[1].a);
+        }
+        goto end_if;
+        end_if:
+        if (n == 2) goto <D.125>; else goto <D.126>;
+        <D.125>:
+        goto then;
+        <D.126>:
+        goto end_if;
+        then:
+        {
+          px = addrtmp.g (&x[0].b);
+        }
+        goto end_if;
+        end_if:
+        D.127 = px;
+        return D.127;
+      }
+    finally
+      {
+        x = {CLOBBER};
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+        _3_ = {CLOBBER};
+      }
+  }
+}
+
+
+addrtmp.s ()
+{
+  signed int * D.131;
+
+  {
+    signed int i;
+
+    try
+      {
+        i = 0;
+        D.131 = &i;
+        return D.131;
+      }
+    finally
+      {
+        i = {CLOBBER};
+      }
+  }
+}
+
+

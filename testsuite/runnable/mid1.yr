@@ -1,0 +1,54 @@
+import core.io, core.string;
+
+def testmatch () {
+    let i;
+    i = 3;
+    match i {
+        3 => {}
+        0 | 1 | _ => assert (false);
+    }
+}
+
+def testbreak () {
+    let li = 0, lj = 0;
+    for:Louter (i in 0 .. 10) {
+        for j in 0 .. 10 {
+            if j == 3
+                break Louter;
+            lj ++;
+        }
+        li ++;
+    }
+
+    assert (li == 0);
+    assert (lj == 3);    
+}
+
+def foo (const s : [char]) {
+    return match s {
+        "hello" => 1;
+        "goodbye" => 2;
+        "goodb" => 3;
+        _ => 10;
+    };    
+}
+
+def teststringmatch () {
+    let i = foo ("hello");
+    assert (i == 1);
+    
+    i = foo ("goodbye");
+    assert (i == 2);
+    
+    i = foo ("goodb");
+    assert (i == 3);
+
+    i = foo ("huzzah");
+    assert (i == 10);
+}
+
+def main () {
+    testmatch ();
+    testbreak ();
+    teststringmatch ();
+}

@@ -1,0 +1,10 @@
+import core.io;
+
+mod cat1 (T) {
+    def cat1 (i : T)-> T
+        return i + 1;        
+}
+
+def test1 () {
+    let a = cat1!(int)::cat1 (1);
+}
