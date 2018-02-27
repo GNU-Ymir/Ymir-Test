@@ -4,12 +4,24 @@ extern (C) printf (const c : p!char, ...);
 
 import core.io;
 import std.abort;
+import std.list;
 import src.lib.sdl;
 
 struct
 | window : p!SDL_Window
 | renderer : p!SDL_Renderer
+| rects : List!(p!SDL_Rect)
+| background : SDL_Rect
  -> Screen;
+
+private
+{
+    def printErr (const message : string)
+    {
+        print (message, " : ");
+        printf ("%s".ptr, SDL_GetError());
+    }
+}
 
 // TODO : the createwindow flag should come from the main function in order to propose the fullscreen mode
 def createScreen (const title : string, const windowWidth : int, const windowHeight : int, const windowPosX : int, const windowPosY : int) -> Screen
@@ -40,11 +52,28 @@ def createScreen (const title : string, const windowWidth : int, const windowHei
 
     SDL_RenderSetLogicalSize (screen.renderer, windowWidth, windowHeight);
 
+    screen.rects = list!(p!SDL_Rect) ();
+    
     return screen;
+}
+
+def clear (ref screen : Screen)
+{
+    SDL_SetRenderDrawColor (screen.renderer, 0ub, 0ub, 0ub, 255ub);
+    SDL_RenderClear (screen.renderer);
 }
 
 def display (ref screen : Screen)
 {
+    SDL_SetRenderDrawColor (screen.renderer, 255ub, 255ub, 255ub, 255ub);
+
+    let next_ = screen.rects.next ();
+    while (next_ !is null)
+    {
+        SDL_RenderFillRect (screen.renderer, (*next_).value);
+        next_ = (*next_).next;
+    }
+    
     SDL_RenderPresent (screen.renderer);
 }
 
@@ -57,8 +86,7 @@ def destroy (ref screen : Screen)
         SDL_DestroyWindow (screen.window);
 }
 
-def printErr (const message : string)
+def addRect (ref screen : Screen, rect : p!SDL_Rect)
 {
-    print (message, " : ");
-    printf ("%s".ptr, SDL_GetError());
+    screen.rects.push (rect);
 }

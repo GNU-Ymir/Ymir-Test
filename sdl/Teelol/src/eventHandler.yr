@@ -63,14 +63,25 @@ def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
     let next_ = eventHdl.classicEvents.next ();
     while (next_ !is null)
     {
-        if ((*next_).value.type == eventType) {
+        if ((*next_).value.type == eventType)
+        {
             let sig = (*next_).value.signal;
             sig.call (*(eventHdl.game));
-        } next_ = next_.next();
+        }
+        next_ = next(next_);
     }
 }
 
 def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode : int)
 {
-    println ("test");
+    let next_ = eventHdl.keyboardEvents.next();
+    while (next_ !is null)
+    {
+        if ((*next_).value.type == eventType && (*next_).value.keyCode == keyCode)
+        {
+            let sig = (*next_).value.signal;
+            sig.call (*(eventHdl.game));
+        }
+        next_ = next_.next();
+    }
 }

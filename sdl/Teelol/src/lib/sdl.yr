@@ -9,6 +9,7 @@ public {
     extern (C) SDL_SetRenderDrawColor (renderer : p!SDL_Renderer, r : ubyte, g : ubyte, b : ubyte, a : ubyte) -> int;
     extern (C) SDL_RenderFillRect (renderer : p!SDL_Renderer, const rect : p!SDL_Rect) -> int;
     extern (C) SDL_RenderPresent (renderer : p!SDL_Renderer);
+    extern (C) SDL_RenderClear (renderer : p!SDL_Renderer) -> int;
     extern (C) SDL_DestroyRenderer (renderer : p!SDL_Renderer);
     extern (C) SDL_DestroyWindow (window : p!SDL_Window);
     extern (C) SDL_GetError () -> const p!char;
@@ -95,6 +96,20 @@ enum : uint
 | Unknown : 0U // not used by the SDL
  -> SDL_EventType;
 
+imut SDLK_SCANCODE_MASK = (1 << 30);
+
+def SdlScanCodeToKeyCode (code : int) -> int {
+    return (code | SDLK_SCANCODE_MASK);
+}
+
+enum SDL_Scancode {
+    SDL_SCANCODE_RIGHT : 79,
+    SDL_SCANCODE_LEFT : 80,
+    SDL_SCANCODE_DOWN : 81,
+    SDL_SCANCODE_UP : 82
+}
+
+
 enum SDL_Keycode {
     SDLK_UNKNOWN : 0,
     
@@ -169,5 +184,11 @@ enum SDL_Keycode {
     SDLK_w : cast!int ('w'),
     SDLK_x : cast!int ('x'),
     SDLK_y : cast!int ('y'),
-    SDLK_z : cast!int ('z')
+    SDLK_z : cast!int ('z'),
+
+
+    SDLK_RIGHT : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_RIGHT),
+    SDLK_LEFT : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_LEFT),
+    SDLK_DOWN : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_DOWN),
+    SDLK_UP : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_UP)
 }
