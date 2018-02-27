@@ -1,10 +1,10 @@
 
 
-def @{inline} test (T) (value : T) {
-    return;
-}// Bug
+// def @{inline} test (T) (value : T) {
+//     return;
+// }// Bug
 
-def main () {
-    test (["test"]);
-    return 0;
-}
+// def main () {
+//     test (["test"]);
+//     return 0;
+// }

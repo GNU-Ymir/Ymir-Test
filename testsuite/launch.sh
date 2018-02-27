@@ -1,0 +1,1 @@
+runtest --tool gyc --srcdir .
