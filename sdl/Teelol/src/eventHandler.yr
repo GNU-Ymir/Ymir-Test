@@ -44,18 +44,26 @@ def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyCode : S
 
 def handleEvents(ref eventHdl : EventHandler)
 {
-    let sdlEventPtr = &(eventHdl.sdlEvent);
-    while (SDL_PollEvent (sdlEventPtr) != 0)
-    {
-        match (*sdlEventPtr).type
-        {
-            SDL_EventType::Quit => eventHdl.handleClassicEvent ((*sdlEventPtr).type);
-            SDL_EventType::KeyUp => {
-                let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
-                eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);
-            }
-        }
-    }
+    SDL_PumpEvents();
+    let states = SDL_GetKeyboardState(null);
+
+    if (*(states + (SDL_Scancode::SDL_SCANCODE_RIGHT)) == 1ub)
+        eventHdl.handleKeyboardEvent (SDL_EventType::KeyDown, SDL_Keycode::SDLK_UP);
+
+    SDL_Delay (100u);
+    
+    // let sdlEventPtr = &(eventHdl.sdlEvent);
+    // while (SDL_PollEvent (sdlEventPtr) != 0)
+    // {
+    //     match (*sdlEventPtr).type
+    //     {
+    //         SDL_EventType::Quit => eventHdl.handleClassicEvent ((*sdlEventPtr).type);
+    //         SDL_EventType::KeyUp | SDL_EventType::KeyDown => {
+    //             let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
+    //             eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);
+    //         }
+    //     }
+    // }
 }
 
 def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)

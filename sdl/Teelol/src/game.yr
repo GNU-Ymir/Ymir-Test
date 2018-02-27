@@ -65,10 +65,10 @@ def initEvents (ref eventHdl : EventHandler)
     
     eventHdl.onEvent (SDL_EventType::Quit, quitSignal);
     eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_ESCAPE, quitSignal);
-    eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_UP, keyUpSignal);
-    eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_DOWN, keyDownSignal);
-    eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_RIGHT, keyRightSignal);
-    eventHdl.onEvent (SDL_EventType::KeyUp, SDL_Keycode::SDLK_LEFT, keyLeftSignal);
+    eventHdl.onEvent (SDL_EventType::KeyDown, SDL_Keycode::SDLK_UP, keyUpSignal);
+    eventHdl.onEvent (SDL_EventType::KeyDown, SDL_Keycode::SDLK_DOWN, keyDownSignal);
+    eventHdl.onEvent (SDL_EventType::KeyDown, SDL_Keycode::SDLK_RIGHT, keyRightSignal);
+    eventHdl.onEvent (SDL_EventType::KeyDown, SDL_Keycode::SDLK_LEFT, keyLeftSignal);
 }
 
 def onQuit (ref game : Game)

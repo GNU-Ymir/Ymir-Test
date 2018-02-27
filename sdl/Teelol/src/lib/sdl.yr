@@ -10,6 +10,9 @@ public {
     extern (C) SDL_RenderFillRect (renderer : p!SDL_Renderer, const rect : p!SDL_Rect) -> int;
     extern (C) SDL_RenderPresent (renderer : p!SDL_Renderer);
     extern (C) SDL_RenderClear (renderer : p!SDL_Renderer) -> int;
+    extern (C) SDL_GetKeyboardState(numkeys : p!int) -> const p!ubyte;
+    extern (C) SDL_PumpEvents ();
+    extern (C) SDL_Delay(ms : uint);
     extern (C) SDL_DestroyRenderer (renderer : p!SDL_Renderer);
     extern (C) SDL_DestroyWindow (window : p!SDL_Window);
     extern (C) SDL_GetError () -> const p!char;
