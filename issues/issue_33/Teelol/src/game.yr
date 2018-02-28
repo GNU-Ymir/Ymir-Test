@@ -3,6 +3,8 @@ mod src.game;
 import src.screen;
 import src.eventHandler;
 import src.lib.signal;
+import src.lib.sdl;
+import core.io;
 
 struct
 | screen : Screen
@@ -22,7 +24,7 @@ def createGame () -> Game
     let screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
     let eventHdl = createEventHandler ();
 
-    initEvents (eventHdl);
+    initEvent (eventHdl);
     
     return Game { screen, eventHdl, true };
 }

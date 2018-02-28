@@ -20,7 +20,7 @@ struct
 struct
 | classicEvents : List!ClassicEvent
 | keyboardEvents : List!KeyboardEvent
-| keyboardWithKeyRepeatEvents : List!KeyboardEvents // we must use a SDL_Scancode instead of a SDL_Keycode in this case
+| keyboardWithKeyRepeatEvents : List!KeyboardEvent // we must use a SDL_Scancode instead of a SDL_Keycode in this case
 | sdlEvent : SDL_Event
 | game : p!Game
 | delayKeyRepeat : bool
@@ -46,7 +46,7 @@ def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyCode : S
     eventHdl.keyboardEvents.push (KeyboardEvent { eventType, keyCode, signal });
 }
 
-def onEvent (ref eventHdl : EventHandler, eventType : SDL_EvenType, keyScanCode : SDL_Scancode, signal : Signal!(ref Game))
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyScanCode : SDL_Scancode, signal : Signal!(ref Game))
 {
     eventHdl.keyboardWithKeyRepeatEvents.push (KeyboardEvent { eventType, keyScanCode, signal });
 }

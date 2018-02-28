@@ -11,5 +11,5 @@ FILE (
 
 SET_SOURCE_FILES_PROPERTIES(main.yr ${SourceFiles} PROPERTIES LANGUAGE C)
 
-ADD_EXECUTABLE(../teelol main.yr ${SourceFiles})
+ADD_EXECUTABLE(teelol main.yr ${SourceFiles})
 include_directories (teelol ./)
