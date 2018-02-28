@@ -1,0 +1,49 @@
+import core.io;
+import core.string;
+
+def foo1 (a : [int ; 10U]) {
+    return 1;
+}
+
+def foo1 (a : [int]) {
+    return 2;
+}
+
+def test () {
+    let a = [int ; imut 10U];
+    assert (foo1 (a) == 1);
+    assert (foo1 ([1, 2]) == 2);
+
+    let b = [1, 2, 3];   
+    imut assert (is (b : [int; 3U]));
+    assert (!is (b : [int]));
+}
+
+def foo2 (a : const string) {
+    return 1;
+}
+
+def foo2 (a : string) {
+    return 2;
+}
+
+def foo2 (a : const [string]) {
+    return 3;
+}
+
+def test2 () {
+    assert (foo2 ("salut") == 1);
+    assert (foo2 ("salut".dup ()) == 2);
+    assert (foo2 (["salut"]) == 3);
+}
+
+def test3 () {
+    let a = 1;
+    let b = &a;
+    *b = 1;
+}
+
+def main () {
+    test ();
+    test2 ();
+}

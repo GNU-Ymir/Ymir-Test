@@ -38,6 +38,27 @@ def test2 () {
     imut assert (is (typeof (b) : uint));
 }
 
+
+def foo3 (T...) (a : T) {    
+    return a * 3;
+}
+
+mod i {
+    mod template {
+        def foo3 (a : int) {
+            return a * 3;
+        }
+    }
+}
+
+def test3 () {
+    assert (foo3 (10) == i::template::foo3 (10));
+    let b = foo3!(int);
+    let c = fn (int)-> int (foo3);
+    assert (b is c);
+}
+
+
 def main () {
     test1 ();
     test2 ();
