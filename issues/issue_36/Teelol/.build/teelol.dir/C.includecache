@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/main.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/eventHandler.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/game.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/lib/sdl.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/lib/signal.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/player.yr
+
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/src/screen.yr
+

@@ -1,0 +1,32 @@
+[ 12%] Building C object CMakeFiles/../teelol.dir/main.yr.o
+ymir1: erreur interne du compilateur : Erreur de segmentation
+0xc477af crash_signal
+        ../../gcc-src/gcc/toplev.c:325
+0x6a2580 semantic::ISymbol::isConst(bool)
+        ../../gcc-src/gcc/ymir/Symbol.cc:23
+0x75d9f8 semantic::IStructCstInfo::getScore(std::vector<syntax::IExpression*, std::allocator<syntax::IExpression*> > const&)
+        ../../gcc-src/gcc/ymir/StructInfo.cc:328
+0x680013 syntax::IVar::asType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:181
+0x684d55 syntax::ITypedVar::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:357
+0x6df5d7 semantic::IFrame::computeParams(std::vector<syntax::IVar*, std::allocator<syntax::IVar*> > const&)
+        ../../gcc-src/gcc/ymir/Frame.cc:215
+0x6e40ae semantic::IExternFrame::validate()
+        ../../gcc-src/gcc/ymir/ExternFrame.cc:62
+0x726dc8 Ymir::Parser::semantic_time(syntax::IProgram*)
+        ../../gcc-src/gcc/ymir/Parser.cc:79
+0x726f7f ymir_parse_file
+        ../../gcc-src/gcc/ymir/Parser.cc:119
+0x726f7f ymir_parse_files(int, char const**)
+        ../../gcc-src/gcc/ymir/Parser.cc:106
+Veuillez soumettre un rapport d’anomalies complet,
+avec la sortie du préprocesseur si nécessaire.
+Please include the complete backtrace with any bug report.
+Voir <https://gcc.gnu.org/bugs/> pour les instructions.
+CMakeFiles/../teelol.dir/build.make:62 : la recette pour la cible « CMakeFiles/../teelol.dir/main.yr.o » a échouée
+make[2]: *** [CMakeFiles/../teelol.dir/main.yr.o] Erreur 1
+CMakeFiles/Makefile2:67 : la recette pour la cible « CMakeFiles/../teelol.dir/all » a échouée
+make[1]: *** [CMakeFiles/../teelol.dir/all] Erreur 2
+Makefile:83 : la recette pour la cible « all » a échouée
+make: *** [all] Erreur 2
