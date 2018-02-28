@@ -1,0 +1,3 @@
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/.build/CMakeFiles/rebuild_cache.dir
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/.build/CMakeFiles/../teelol.dir
+/home/ggas/Documents/ymir/Ymir-Test/sdl/Teelol/.build/CMakeFiles/edit_cache.dir

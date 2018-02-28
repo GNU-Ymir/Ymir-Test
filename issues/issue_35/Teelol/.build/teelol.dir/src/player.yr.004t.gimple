@@ -1,0 +1,32 @@
+src.player.createPlayer (struct char[] name, signed int x, signed int y)
+{
+  {
+    struct src.lib.sdl.SDL_Rect rect;
+    struct src.lib.sdl.SDL_Rect _1_;
+    struct char[] n;
+    struct src.player.Player _2_;
+
+    try
+      {
+        _1_.x = x;
+        _1_.y = y;
+        _1_.w = 10;
+        _1_.h = 10;
+        rect = _1_;
+        n = name;
+        _2_.name = n;
+        _2_.rect = rect;
+        <retval> = _2_;
+        return <retval>;
+      }
+    finally
+      {
+        rect = {CLOBBER};
+        _1_ = {CLOBBER};
+        n = {CLOBBER};
+        _2_ = {CLOBBER};
+      }
+  }
+}
+
+

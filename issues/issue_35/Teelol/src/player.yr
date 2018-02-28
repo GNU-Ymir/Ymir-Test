@@ -1,0 +1,19 @@
+mod src.player;
+
+import src.lib.sdl;
+
+struct
+| name : string
+| rect : SDL_Rect
+ -> Player;
+
+// tmp
+imut Width = 10;
+imut Height = 10;
+
+def createPlayer (name : string, const x : int, const y : int) -> Player
+{
+    let rect = SDL_Rect { x, y, Width, Height };
+    let n = name;
+    return Player { n, rect };
+}

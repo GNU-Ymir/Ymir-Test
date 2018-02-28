@@ -1,0 +1,1 @@
+gyc  -g -fdump-tree-gimple  -rdynamic CMakeFiles/../teelol.dir/main.yr.o CMakeFiles/../teelol.dir/src/eventHandler.yr.o CMakeFiles/../teelol.dir/src/game.yr.o CMakeFiles/../teelol.dir/src/lib/sdl.yr.o CMakeFiles/../teelol.dir/src/lib/signal.yr.o CMakeFiles/../teelol.dir/src/player.yr.o CMakeFiles/../teelol.dir/src/screen.yr.o  -o ../teelol -lSDL2 -lSDL2main 

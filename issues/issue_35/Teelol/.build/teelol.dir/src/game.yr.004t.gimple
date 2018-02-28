@@ -1,0 +1,338 @@
+core.io.src.game.println (struct char[] i)
+{
+  {
+    core.io.print (i);
+    core.io.print (10);
+  }
+}
+
+
+src.game.onQuit (void * game)
+{
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+    struct char[] _1_;
+
+    try
+      {
+        MEM[(struct src.game.Game *)game].continue = 0;
+        _1_.len = 5;
+        _1_.ptr = &"Bye !"[0];
+        core.io.src.game.println (_1_);
+      }
+    finally
+      {
+        _1_ = {CLOBBER};
+      }
+  }
+}
+
+
+src.lib.signal.src.game.connect (void * sig, void (*<T8b>) (void *) foo)
+{
+  {
+    typedef struct fn(ref(src.game.Game))->void[] ;
+    typedef struct src.lib.signal.Signal!(ref(src.game.Game)) ;
+    void (*<T8b>) (void *) _1_[1];
+    struct fn(ref(src.game.Game))->void[] _2_;
+
+    try
+      {
+        _1_[0] = foo;
+        _1 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.len;
+        _2 = 1;
+        _3 = (unsigned long) _2;
+        _4 = _1 + _3;
+        _2_.len = _4;
+        _5 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.len;
+        _6 = 1;
+        _7 = (unsigned long) _6;
+        _8 = _5 + _7;
+        _9 = _8 * 8;
+        _10 = GC_malloc (_9);
+        _2_.ptr = _10;
+        _11 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.len;
+        _12 = _11 * 8;
+        _13 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.ptr;
+        _14 = _2_.ptr;
+        memcpy (_14, _13, _12);
+        _15 = 1;
+        _16 = (unsigned long) _15;
+        _17 = _16 * 8;
+        _18 = _2_.ptr;
+        _19 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.len;
+        _20 = _19 * 8;
+        _21 = _18 + _20;
+        memcpy (_21, &_1_, _17);
+        _22 = _2_.len;
+        MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.len = _22;
+        _23 = _2_.len;
+        _24 = _23 * 8;
+        _25 = GC_malloc (_24);
+        MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.ptr = _25;
+        _26 = _2_.len;
+        _27 = _26 * 8;
+        _28 = _2_.ptr;
+        _29 = MEM[(struct src.lib.signal.Signal!(ref(src.game.Game)) *)sig].func.ptr;
+        memcpy (_29, _28, _27);
+      }
+    finally
+      {
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+      }
+  }
+}
+
+
+src.game.onKeyUp (void * game)
+{
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+
+    _1 = MEM[(struct src.game.Game *)game].mainPlayer.rect.y;
+    _2 = _1 + -10;
+    MEM[(struct src.game.Game *)game].mainPlayer.rect.y = _2;
+  }
+}
+
+
+src.game.onKeyDown (void * game)
+{
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+
+    _1 = MEM[(struct src.game.Game *)game].mainPlayer.rect.y;
+    _2 = _1 + 10;
+    MEM[(struct src.game.Game *)game].mainPlayer.rect.y = _2;
+  }
+}
+
+
+src.game.onKeyRight (void * game)
+{
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+
+    _1 = MEM[(struct src.game.Game *)game].mainPlayer.rect.x;
+    _2 = _1 + 10;
+    MEM[(struct src.game.Game *)game].mainPlayer.rect.x = _2;
+  }
+}
+
+
+src.game.onKeyLeft (void * game)
+{
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+
+    _1 = MEM[(struct src.game.Game *)game].mainPlayer.rect.x;
+    _2 = _1 + -10;
+    MEM[(struct src.game.Game *)game].mainPlayer.rect.x = _2;
+  }
+}
+
+
+src.game.initEvents (void * eventHdl)
+{
+  {
+    typedef struct fn(ref(src.game.Game))->void[] ;
+    typedef struct src.lib.signal.Signal!(ref(src.game.Game)) ;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) quitSignal;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) _1_;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) keyUpSignal;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) _2_;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) keyDownSignal;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) _3_;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) keyRightSignal;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) _4_;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) keyLeftSignal;
+    struct src.lib.signal.Signal!(ref(src.game.Game)) _5_;
+
+    try
+      {
+        memset (&_1_, 0, 16);
+        quitSignal = _1_;
+        src.lib.signal.src.game.connect (&quitSignal, _Y3src4game6onQuitFRsrc46game46GameZv);
+        memset (&_2_, 0, 16);
+        keyUpSignal = _2_;
+        src.lib.signal.src.game.connect (&keyUpSignal, _Y3src4game7onKeyUpFRsrc46game46GameZv);
+        memset (&_3_, 0, 16);
+        keyDownSignal = _3_;
+        src.lib.signal.src.game.connect (&keyDownSignal, _Y3src4game9onKeyDownFRsrc46game46GameZv);
+        memset (&_4_, 0, 16);
+        keyRightSignal = _4_;
+        src.lib.signal.src.game.connect (&keyRightSignal, _Y3src4game10onKeyRightFRsrc46game46GameZv);
+        memset (&_5_, 0, 16);
+        keyLeftSignal = _5_;
+        src.lib.signal.src.game.connect (&keyLeftSignal, _Y3src4game9onKeyLeftFRsrc46game46GameZv);
+        src.eventHandler.onEvent (eventHdl, 256, quitSignal);
+        src.eventHandler.onEvent (eventHdl, 769, 27, quitSignal);
+        _1 = src.lib.sdl.SdlScanCodeToKeyCode (82);
+        src.eventHandler.onEvent (eventHdl, 768, _1, keyUpSignal);
+        _2 = src.lib.sdl.SdlScanCodeToKeyCode (81);
+        src.eventHandler.onEvent (eventHdl, 768, _2, keyDownSignal);
+        _3 = src.lib.sdl.SdlScanCodeToKeyCode (79);
+        src.eventHandler.onEvent (eventHdl, 768, _3, keyRightSignal);
+        _4 = src.lib.sdl.SdlScanCodeToKeyCode (80);
+        src.eventHandler.onEvent (eventHdl, 768, _4, keyLeftSignal);
+      }
+    finally
+      {
+        quitSignal = {CLOBBER};
+        _1_ = {CLOBBER};
+        keyUpSignal = {CLOBBER};
+        _2_ = {CLOBBER};
+        keyDownSignal = {CLOBBER};
+        _3_ = {CLOBBER};
+        keyRightSignal = {CLOBBER};
+        _4_ = {CLOBBER};
+        keyLeftSignal = {CLOBBER};
+        _5_ = {CLOBBER};
+      }
+  }
+}
+
+
+src.game.createGame (void * game)
+{
+  struct char[] D.357;
+
+  {
+    typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+    typedef struct src.lib.sdl.SDL_Rect ;
+    typedef struct src.screen.Screen ;
+    typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+    typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+    typedef struct src.lib.sdl.SDL_Event ;
+    typedef struct src.eventHandler.EventHandler ;
+    typedef struct char[] ;
+    typedef struct src.player.Player ;
+    typedef struct src.game.Game ;
+    struct char[] _1_;
+    struct char[] _2_;
+
+    try
+      {
+        _1_.len = 6;
+        _1_.ptr = &"Teelol"[0];
+        MEM[(struct src.game.Game *)game].screen = src.screen.createScreen (_1_, 600, 300, 100, 100);
+        MEM[(struct src.game.Game *)game].eventHdl = src.eventHandler.createEventHandler (game);
+        MEM[(struct src.game.Game *)game].continue = 1;
+        _2_.len = 7;
+        _2_.ptr = &"Abitbol"[0];
+        D.357 = core.string.dup (_2_);
+        MEM[(struct src.game.Game *)game].mainPlayer = src.player.createPlayer (D.357, 100, 100);
+        _1 = &MEM[(struct src.game.Game *)game].mainPlayer.rect;
+        _2 = &MEM[(struct src.game.Game *)game].screen;
+        src.screen.addRect (_2, _1);
+        _3 = &MEM[(struct src.game.Game *)game].eventHdl;
+        src.game.initEvents (_3);
+      }
+    finally
+      {
+        _1_ = {CLOBBER};
+        _2_ = {CLOBBER};
+      }
+  }
+}
+
+
+src.game.start (void * game)
+{
+  try
+    {
+      {
+        typedef struct std.list.List!(ptr!src.lib.sdl.SDL_Rect) ;
+        typedef struct src.lib.sdl.SDL_Rect ;
+        typedef struct src.screen.Screen ;
+        struct src.screen.Screen screen;
+        typedef struct std.list.List!(src.eventHandler.ClassicEvent) ;
+        typedef struct std.list.List!(src.eventHandler.KeyboardEvent) ;
+        typedef struct src.lib.sdl.SDL_Event ;
+        typedef struct src.eventHandler.EventHandler ;
+        typedef struct char[] ;
+        typedef struct src.player.Player ;
+        typedef struct src.game.Game ;
+
+        try
+          {
+            screen = MEM[(struct src.game.Game *)game].screen;
+            goto test;
+            begin:
+            {
+              src.screen.clear (&screen);
+              _1 = &MEM[(struct src.game.Game *)game].eventHdl;
+              src.eventHandler.handleEvents (_1);
+              src.screen.display (&screen);
+            }
+            goto test;
+            test:
+            _2 = MEM[(struct src.game.Game *)game].continue;
+            if (_2 != 0) goto <D.404>; else goto <D.405>;
+            <D.404>:
+            goto begin;
+            <D.405>:
+            goto end;
+            end:
+          }
+        finally
+          {
+            screen = {CLOBBER};
+          }
+      }
+    }
+  finally
+    {
+      {
+        src.screen.destroy (&screen);
+      }
+    }
+}
+
+
