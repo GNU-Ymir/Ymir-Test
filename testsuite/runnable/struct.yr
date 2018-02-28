@@ -1,0 +1,18 @@
+
+
+mod test (T) {
+    struct
+    | a : T
+     -> Test;
+}
+
+struct (T)   
+| a : T
+ -> Test;
+
+def main () {
+    let a = test!int::Test {10};
+    let b = test!char::Test {'t'};
+    let c = Test!int {34};
+    let d = Test!char {'y'};
+}
