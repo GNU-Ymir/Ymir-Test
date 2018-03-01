@@ -89,14 +89,14 @@ enum : uint
 
 // TODO : complete by using SDL_events.h
 enum : uint
-| Quit : 256U
-| KeyDown : 768U
-| KeyUp : 769U
-| MouseMotion : 1024U
-| MouseButtonDown : 1025U
-| MouseButtonUp : 1026U
-| MouseWheel : 1027U
-| Unknown : 0U // not used by the SDL
+| QUIT : 256U
+| KEYDOWN : 768U
+| KEYUP : 769U
+| MOUSEMOTION : 1024U
+| MOUSEBUTTONDOWN : 1025U
+| MOUSEBUTTONUP : 1026U
+| MOUSEWHEEL : 1027U
+| UNKNOWN : 0U // not used by the SDL
  -> SDL_EventType;
 
 imut SDLK_SCANCODE_MASK = (1 << 30);
@@ -111,7 +111,6 @@ enum SDL_Scancode {
     SDL_SCANCODE_DOWN : 81,
     SDL_SCANCODE_UP : 82
 }
-
 
 enum SDL_Keycode {
     SDLK_UNKNOWN : 0,
@@ -194,4 +193,10 @@ enum SDL_Keycode {
     SDLK_LEFT : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_LEFT),
     SDLK_DOWN : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_DOWN),
     SDLK_UP : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_UP)
+}
+
+enum SDL_Mousecode {
+    SDL_BUTTON_LEFT : 1ub,
+    SDL_BUTTON_MIDDLE : 2ub,
+    SDL_BUTTON_RIGHT : 3ub
 }
