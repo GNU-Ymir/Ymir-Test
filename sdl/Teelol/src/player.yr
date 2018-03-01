@@ -1,19 +1,22 @@
 mod src.player;
 
 import src.lib.sdl;
+import src.resource;
+import src.drawable;
 
 struct
 | name : string
-| rect : SDL_Rect
+| drawable : Drawable // Waiting for the inheritance feature...
  -> Player;
 
-// tmp
-imut Width = 10;
-imut Height = 10;
-
-def createPlayer (name : string, const x : int, const y : int) -> Player
+def createPlayer (name : string) -> Player
 {
-    let rect = SDL_Rect { x, y, Width, Height };
-    let n = name;
-    return Player { n, rect };
+    let res = generateResource (ResourceType::Player);
+    let d = Drawable { SDL_Rect { 10, 10, 10, 10 }, res };
+    return Player { name, d };
+}
+
+def getResource (ref player : Player) -> mut p!Resource
+{
+    return &(player.drawable.res);
 }

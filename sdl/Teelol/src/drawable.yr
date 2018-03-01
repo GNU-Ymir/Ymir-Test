@@ -1,0 +1,9 @@
+mod src.drawable;
+
+import src.lib.sdl;
+import src.resource;
+
+struct
+| pos : SDL_Rect
+| res : Resource
+ -> Drawable;

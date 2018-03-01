@@ -1,0 +1,29 @@
+mod src.resource;
+
+import src.lib.sdl;
+
+enum
+| Player : 0
+ -> ResourceType;
+
+// test
+enum
+| Red : 0
+| Green : 1
+| Blue : 2
+| White : 3
+ -> ResourceColor;
+
+// Will contain sprites...
+struct
+| type : ResourceType
+| color : ResourceColor
+ -> Resource;
+
+// test
+// imut gDefaultColor = ResourceColor::White;
+
+def generateResource (const type : ResourceType) -> mut Resource
+{
+    return Resource { type, ResourceColor::White };
+}

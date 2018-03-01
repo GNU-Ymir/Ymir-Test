@@ -29,9 +29,9 @@ def createGame (ref game : Game)
     game.screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
     game.eventHdl = createEventHandler (game);
     game.continue = true;
-    game.mainPlayer = createPlayer (PlayerName.dup(), 100, 100);
+    game.mainPlayer = createPlayer (PlayerName.dup());
 
-    game.screen.addRect (&(game.mainPlayer.rect));
+    game.screen.addDrawable (&(game.mainPlayer.drawable));
     
     initEvents (game.eventHdl);
 }
@@ -85,27 +85,33 @@ def onQuit (ref game : Game)
 
 def onKeyUp (ref game : Game)
 {
-    game.mainPlayer.rect.y -= 10;
+    game.mainPlayer.drawable.pos.y -= 10;
 }
 
 def onKeyDown (ref game : Game)
 {
-    game.mainPlayer.rect.y += 10;
+    game.mainPlayer.drawable.pos.y += 10;
 }
 
 def onKeyRight (ref game : Game)
 {
-    game.mainPlayer.rect.x += 10;
+    game.mainPlayer.drawable.pos.x += 10;
 }
 
 def onKeyLeft (ref game : Game)
 {
-    game.mainPlayer.rect.x -= 10;
+    game.mainPlayer.drawable.pos.x -= 10;
 }
 
 def onMouseLeftClick (ref game : Game/*, pos : t!(int, int)*/)
 {
-    println ("left click");
+    // Putain mais pourquoi ça marche pas
+    // let res = game.mainPlayer.getResource();
+    // let colorPtr = &((*res).color);
+    // if ((*colorPtr) == ResourceColor::White)
+    //     (*colorPtr) = ResourceColor::Red;
+    // else
+    //     (*colorPtr) = ResourceColor::White;
     // let (x, y) = pos;
     // game.mainPlayer.rect.x = x;
     // game.mainPlayer.rect.y = y;

@@ -6,11 +6,13 @@ import core.io;
 import std.abort;
 import std.list;
 import src.lib.sdl;
+import src.drawable;
+import src.resource;
 
 struct
 | window : p!SDL_Window
 | renderer : p!SDL_Renderer
-| rects : List!(p!SDL_Rect)
+| drawables : List!(p!Drawable)
 | background : SDL_Rect
  -> Screen;
 
@@ -52,7 +54,7 @@ def createScreen (const title : string, const windowWidth : int, const windowHei
 
     SDL_RenderSetLogicalSize (screen.renderer, windowWidth, windowHeight);
 
-    screen.rects = list!(p!SDL_Rect) ();
+    screen.drawables = list!(p!Drawable) ();
     
     return screen;
 }
@@ -65,12 +67,17 @@ def clear (ref screen : Screen)
 
 def display (ref screen : Screen)
 {
-    SDL_SetRenderDrawColor (screen.renderer, 255ub, 255ub, 255ub, 255ub);
-
-    let next_ = screen.rects.next ();
+    let next_ = screen.drawables.next ();
     while (next_ !is null)
     {
-        SDL_RenderFillRect (screen.renderer, (*next_).value);
+        let draw = *((*next_).value);
+        let res = draw.res;
+        let rect = draw.pos;
+        if (res.color == ResourceColor::Red)
+            SDL_SetRenderDrawColor (screen.renderer, 255ub, 0ub, 0ub, 255ub);
+        else
+            SDL_SetRenderDrawColor (screen.renderer, 255ub, 255ub, 255ub, 255ub);
+        SDL_RenderFillRect (screen.renderer, &rect);
         next_ = (*next_).next;
     }
     
@@ -86,7 +93,7 @@ def destroy (ref screen : Screen)
         SDL_DestroyWindow (screen.window);
 }
 
-def addRect (ref screen : Screen, rect : p!SDL_Rect)
+def addDrawable (ref screen : Screen, drawable : p!Drawable)
 {
-    screen.rects.push (rect);
+    screen.drawables.push (drawable);
 }
