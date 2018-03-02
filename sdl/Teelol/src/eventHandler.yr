@@ -20,7 +20,7 @@ struct
 struct
 | type : uint
 | buttonCode : ubyte
-| signal : Signal!(ref Game/*, t!(int, int)*/)
+| signal : Signal!(ref Game, t!(int, int))
  -> MouseEvent;
 
 struct
@@ -60,7 +60,7 @@ def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyScanCode
     eventHdl.keyboardWithKeyRepeatEvents.push (KeyboardEvent { eventType, keyScanCode, signal });
 }
 
-def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game/*, t!(int, int)*/))
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game, t!(int, int)))
 {
     eventHdl.mouseEvents.push (MouseEvent { eventType, buttonCode, signal });
 }
@@ -166,7 +166,7 @@ def handleMouseEvent (ref eventHdl : EventHandler, eventType : uint, buttonCode 
         if ((*next_).value.type == eventType && (*next_).value.buttonCode == buttonCode)
         {
             let sig = (*next_).value.signal;
-            sig.call (*(eventHdl.game)/*, pos*/);
+            sig.call (*(eventHdl.game), pos);
         }
         next_ = next_.next();
     }    
