@@ -102,10 +102,6 @@ def onKeyDown (ref game : Game)
 def onKeyRight (ref game : Game)
 {
     game.mainPlayer.drawable.pos.x += 10;
-    println ("posX : ", game.mainPlayer.drawable.pos.x, ", posY : ", game.mainPlayer.drawable.pos.y);
-        let ptr = &game;
-    extern (C) printf (const c : p!char, ...);
-    printf ("%p\n".ptr, cast!(p!Game) (ptr));
 }
 
 def onKeyLeft (ref game : Game)
@@ -115,22 +111,9 @@ def onKeyLeft (ref game : Game)
 
 def onMouseLeftClick (ref game : Game, pos : t!(int, int))
 {
-    let ptr = &game;
-    extern (C) printf (const c : p!char, ...);
-    printf ("%p\n".ptr, cast!(p!Game) (ptr));    
-    // Putain mais pourquoi ça marche pas
-    // let res = game.mainPlayer.getResource();
-    // let colorPtr = &((*res).color);
-    // if ((*colorPtr) == ResourceColor::White)
-    //     (*colorPtr) = ResourceColor::Red;
-    // else
-    //     (*colorPtr) = ResourceColor::White;
-//     let (x, y) = pos;
-//     println ("mposX : ", game.mainPlayer.drawable.pos.x, ", mposY : ", game.mainPlayer.drawable.pos.y); 
-//     game.mainPlayer.drawable.pos.x += x;
-//     game.mainPlayer.drawable.pos.y += y;
-//     println ("x = ", x, ", y = ", y);
-//     println ("mposX : ", game.mainPlayer.drawable.pos.x, ", mposY : ", game.mainPlayer.drawable.pos.y);
+    let (x, y) = pos;
+    game.mainPlayer.drawable.pos.x = x;
+    game.mainPlayer.drawable.pos.y = y;
 }
 
 def onMouseRightClick (ref game : Game, pos : t!(int, int))
