@@ -1,12 +1,16 @@
 mod src.resource;
 
+import std.list;
+import core.string;
 import src.lib.sdl;
+import src.lib.sdlImage;
+import src.screen;
 
 enum
-| Player : 0
+| Tee : 0
  -> ResourceType;
 
-// test
+// // test
 enum
 | Red : 0
 | Green : 1
@@ -17,13 +21,65 @@ enum
 // Will contain sprites...
 struct
 | type : ResourceType
+| texture : p!SDL_Texture
+| width : int
+| height : int
 | color : ResourceColor
  -> Resource;
+
+private
+{
+    struct
+    | surface : const p!SDL_Surface
+    | renderingContext : p!SDL_Renderer
+    | filePath : string
+    | resType : ResourceType
+     -> SurfaceRes;
+}
+
+// may be replaced by a map instead of a linked list ?
+struct
+| surfacesList : List!SurfaceRes
+ -> ResourcesManager;
 
 // test
 // imut gDefaultColor = ResourceColor::White;
 
-def generateResource (const type : ResourceType) -> mut Resource
+// global test surface
+imut gTeeFilePath = "img/tee.png";
+
+def createResourcesManager (ref screen : Screen) -> ResourcesManager
 {
-    return Resource { type, ResourceColor::White };
+    let surfList = list!SurfaceRes ();
+    // we will use a map of filePath/ResourceType
+    // tmp
+    let renderingContext = screen.renderer;
+    // TODO : handle sdl_image error !
+    let surfRes = SurfaceRes { IMG_Load (gTeeFilePath.ptr), renderingContext, gTeeFilePath.dup(), ResourceType::Tee };
+    surfList.push (surfRes);
+    
+    return ResourcesManager { surfList };
+}
+
+def generateResource (ref resManager : ResourcesManager, const type : ResourceType) -> mut Resource
+{
+    let resList = resManager.surfacesList;
+    let res = Resource::init;
+    
+    let next_ = resList.next ();
+    while (next_ !is null)
+    {
+        let surfRes = (*next_).value;
+        if (surfRes.resType == type)
+        {
+            res.type = type;
+            // handle errors !
+            res.texture = SDL_CreateTextureFromSurface (surfRes.renderingContext, surfRes.surface);
+            SDL_QueryTexture (res.texture, null, null, &res.width, &res.height);
+            
+            return res;
+        }
+    }
+
+    return res;
 }

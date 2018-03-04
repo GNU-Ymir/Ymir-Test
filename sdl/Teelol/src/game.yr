@@ -8,12 +8,15 @@ import src.lib.sdl;
 import src.screen;
 import src.eventHandler;
 import src.player;
+import src.resource;
 
 struct
 | screen : Screen
 | eventHdl : EventHandler
 | continue : bool
 | mainPlayer : Player
+| testPlayer : Player
+| resourcesManager : ResourcesManager
  -> Game;
 
 // for now...
@@ -29,9 +32,12 @@ def createGame (ref game : Game)
     game.screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
     game.eventHdl = createEventHandler (game);
     game.continue = true;
-    game.mainPlayer = createPlayer (PlayerName.dup());
-
+    game.resourcesManager = createResourcesManager (game.screen);
+    game.mainPlayer = createPlayer (PlayerName.dup(), 10, 10, &(game.resourcesManager));
+    game.testPlayer = createPlayer ("test".dup(), 50, 50, &(game.resourcesManager));
+    
     game.screen.addDrawable (&(game.mainPlayer.drawable));
+    game.screen.addDrawable (&(game.testPlayer.drawable));
     
     initEvents (game.eventHdl);
 }

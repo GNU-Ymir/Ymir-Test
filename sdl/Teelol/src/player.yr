@@ -9,10 +9,10 @@ struct
 | drawable : Drawable // Waiting for the inheritance feature...
  -> Player;
 
-def createPlayer (name : string) -> Player
+def createPlayer (name : string, const posX : int, const posY : int, resManager : p!ResourcesManager) -> Player
 {
-    let res = generateResource (ResourceType::Player);
-    let d = Drawable { SDL_Rect { 10, 10, 10, 10 }, res };
+    let res = (*resManager).generateResource (ResourceType::Tee);
+    let d = Drawable { SDL_Rect { posX, posY, 0, 0 }, res };
     return Player { name, d };
 }
 
