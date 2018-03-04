@@ -1,0 +1,107 @@
+mod src.resource;
+
+import std.list;
+import core.io;
+import core.string;
+import src.lib.sdl;
+import src.lib.sdlImage;
+import src.screen;
+
+enum
+| Tee : 0
+| OtherTee : 1
+ -> ResourceType;
+
+struct
+| type : ResourceType
+| texture : p!SDL_Texture
+| width : int
+| height : int
+ -> Resource;
+
+// may be replaced by a map instead of a linked list ?
+struct
+| surfacesList : List!SurfaceRes
+ -> ResourcesManager;
+
+private
+{
+    struct
+    | surface : const p!SDL_Surface
+    | renderingContext : p!SDL_Renderer
+    | filePath : string
+    | resType : ResourceType
+     -> SurfaceRes;
+
+    // we be replaced by a map
+    struct
+    | type : ResourceType
+    | filePath : string
+     -> ImageRes;
+
+    def createSurfacesList (renderingContext : p!SDL_Renderer)
+    {
+        let mlist = list!SurfaceRes ();
+
+        let next_ = gImagesPathList.next ();
+        while (next_ !is null)
+        {
+            let imageRes = (*next_).value;
+            // TODO : handle error
+            let surf = IMG_Load (imageRes.filePath.ptr);
+
+            if (surf is null)
+                println ("File not found !");
+            
+            mlist.push (SurfaceRes { surf, renderingContext, imageRes.filePath.dup(), imageRes.type });
+            next_ = next_.next();
+        }
+
+        return mlist;
+    }
+}
+
+static gImagesPathList : List!ImageRes;
+
+// global test surface
+imut gTeeFilePath = "img/tee.png";
+imut gOtherTeeFile = "img/otherTee.png";
+
+// static constructor
+self ()
+{
+    /* Pourquoi il me fait autant chier avec ces const ? */
+    gImagesPathList = list!ImageRes ();
+    let resType = ResourceType::Tee;
+    gImagesPathList.push (ImageRes { resType, gTeeFilePath.dup() });
+    resType = ResourceType::OtherTee;
+    gImagesPathList.push (ImageRes { resType, gOtherTeeFile.dup() });
+}
+
+def createResourcesManager (ref screen : Screen) -> ResourcesManager
+{
+    return ResourcesManager { createSurfacesList (screen.renderer) };
+}
+
+def generateResource (ref resManager : ResourcesManager, const type : ResourceType) -> mut Resource
+{
+    let resList = resManager.surfacesList;
+    let res = Resource::init;
+    
+    let next_ = resList.next ();
+    while (next_ !is null)
+    {
+        let surfRes = (*next_).value;
+        if (surfRes.resType == type)
+        {
+            res.type = type;
+            // handle errors !
+            res.texture = SDL_CreateTextureFromSurface (surfRes.renderingContext, surfRes.surface);
+            SDL_QueryTexture (res.texture, null, null, &res.width, &res.height);
+            
+            return res;
+        }
+    }
+
+    return res;
+}
