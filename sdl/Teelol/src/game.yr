@@ -16,7 +16,7 @@ struct
 | continue : bool
 | mainPlayer : Player
 | testPlayer : Player
-| resourcesManager : ResourcesManager
+| resourcesManager : p!ResourcesManager
  -> Game;
 
 // for now...
@@ -36,8 +36,8 @@ def createGame (ref game : Game)
     game.continue = true;
     game.resourcesManager = createResourcesManager (game.screen);
 
-    game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee, &(game.resourcesManager));
-    game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee, &(game.resourcesManager));
+    game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee);
+    game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee);
     
     game.screen.addDrawable (&(game.mainPlayer.drawable));
     game.screen.addDrawable (&(game.testPlayer.drawable));
@@ -120,5 +120,5 @@ def onMouseLeftClick (ref game : Game, pos : t!(int, int))
 
 def onMouseRightClick (ref game : Game, pos : t!(int, int))
 {
-    println ("right click");
+    game.mainPlayer.setResource (ResourceType::OtherTee);
 }
