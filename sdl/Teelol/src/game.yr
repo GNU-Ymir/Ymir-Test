@@ -20,21 +20,24 @@ struct
  -> Game;
 
 // for now...
-imut WindowWidth = 600;
-imut WindowHeight = 300;
-imut WindowPosX = 100;
-imut WindowPosY = 100;
-imut Title = "Teelol";
-imut PlayerName = "Abitbol";
+imut gWindowWidth = 600;
+imut gWindowHeight = 300;
+imut gWindowPosX = 100;
+imut gWindowPosY = 100;
+imut gTitle = "Teelol";
+imut gPlayerName = "Abitbol";
+imut gDefaultPosX = 10;
+imut gDefaultPosY = 10;
 
 def createGame (ref game : Game) 
 {
-    game.screen = createScreen (Title, WindowWidth, WindowHeight, WindowPosX, WindowPosY);
+    game.screen = createScreen (gTitle, gWindowWidth, gWindowHeight, gWindowPosX, gWindowPosY);
     game.eventHdl = createEventHandler (game);
     game.continue = true;
     game.resourcesManager = createResourcesManager (game.screen);
-    game.mainPlayer = createPlayer (PlayerName.dup(), 10, 10, &(game.resourcesManager));
-    game.testPlayer = createPlayer ("test".dup(), 50, 50, &(game.resourcesManager));
+
+    game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee, &(game.resourcesManager));
+    game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee, &(game.resourcesManager));
     
     game.screen.addDrawable (&(game.mainPlayer.drawable));
     game.screen.addDrawable (&(game.testPlayer.drawable));
@@ -91,29 +94,28 @@ def onQuit (ref game : Game)
 
 def onKeyUp (ref game : Game)
 {
-    game.mainPlayer.drawable.pos.y -= 10;
+    game.mainPlayer.goUp ();
 }
 
 def onKeyDown (ref game : Game)
 {
-    game.mainPlayer.drawable.pos.y += 10;
+    game.mainPlayer.goDown ();
 }
 
 def onKeyRight (ref game : Game)
 {
-    game.mainPlayer.drawable.pos.x += 10;
+    game.mainPlayer.goRight ();
 }
 
 def onKeyLeft (ref game : Game)
 {
-    game.mainPlayer.drawable.pos.x -= 10;
+    game.mainPlayer.goLeft ();
 }
 
 def onMouseLeftClick (ref game : Game, pos : t!(int, int))
 {
     let (x, y) = pos;
-    game.mainPlayer.drawable.pos.x = x;
-    game.mainPlayer.drawable.pos.y = y;
+    game.mainPlayer.goTo (x, y);
 }
 
 def onMouseRightClick (ref game : Game, pos : t!(int, int))

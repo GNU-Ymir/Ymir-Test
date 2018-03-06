@@ -13,7 +13,6 @@ struct
 | window : p!SDL_Window
 | renderer : p!SDL_Renderer
 | drawables : List!(p!Drawable)
-| background : SDL_Rect
  -> Screen;
 
 private
@@ -72,13 +71,17 @@ def display (ref screen : Screen)
     {
         let draw = *((*next_).value);
         let res = draw.res;
-        let rect = draw.pos;
 
-        let spriteRect = SDL_Rect { rect.x, rect.y, res.width, res.height };
-        if (SDL_RenderCopy (screen.renderer, res.texture, null, &spriteRect) < 0)
+        if (res.texture !is null)
         {
-            printErr ("SDL_RenderCopy() error");
-            abort ();
+            let rect = draw.pos;
+
+            let spriteRect = SDL_Rect { rect.x, rect.y, res.width, res.height };
+            if (SDL_RenderCopy (screen.renderer, res.texture, null, &spriteRect) < 0)
+            {
+                printErr ("SDL_RenderCopy() error");
+                abort ();
+            }
         }
 
         next_ = (*next_).next;
