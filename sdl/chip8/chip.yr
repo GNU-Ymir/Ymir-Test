@@ -1,0 +1,27 @@
+mod chip;
+
+struct Chip {
+    opcode: ushort,
+    memory: [ubyte ; 4096U],
+    V: [ubyte; 16U],
+    I: short,
+    pc: short,
+    sp: short,
+    stack: [short; 16U]
+}
+
+static myChip: Chip;
+
+self(){
+    myChip.pc = 0x200S;
+}
+
+def cycle(){
+   myChip.opcode = myChip.memory[myChip.pc] << 8US | myChip.memory[myChip.pc + 1]; 
+    match (myChip.opcode & 0xF000US){
+        0xA000US => {
+
+        }
+        
+    }
+}

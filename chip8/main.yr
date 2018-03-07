@@ -1,0 +1,15 @@
+import core.io;
+import chip;
+
+struct Hardware {
+gfx: [char; 2048U],
+delay_timer: char,
+    sound_timer: char
+}
+
+
+
+def main(){
+    init();
+    println("Test");
+}
