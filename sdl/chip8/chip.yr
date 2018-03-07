@@ -1,0 +1,21 @@
+mod chip;
+
+struct Chip {
+    opcode: ushort,
+    memory: [char ; 4096U],
+    V: [char; 16U],
+    I: short,
+    pc: short,
+    sp: short,
+    stack: [short; 16U]
+}
+
+static myChip: Chip;
+
+self(){
+    myChip.pc = 0x200S;
+}
+
+def cycle(){
+   myChip.opcode = myChip.memory[myChip.pc] << 8 | myChip.memory[myChip.pc + 1]; 
+}
