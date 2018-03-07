@@ -2,8 +2,8 @@ mod chip;
 
 struct Chip {
     opcode: ushort,
-    memory: [char ; 4096U],
-    V: [char; 16U],
+    memory: [ubyte ; 4096U],
+    V: [ubyte; 16U],
     I: short,
     pc: short,
     sp: short,
@@ -17,5 +17,11 @@ self(){
 }
 
 def cycle(){
-   myChip.opcode = myChip.memory[myChip.pc] << 8 | myChip.memory[myChip.pc + 1]; 
+   myChip.opcode = myChip.memory[myChip.pc] << 8US | myChip.memory[myChip.pc + 1]; 
+    match (myChip.opcode & 0xF000US){
+        0xA000US => {
+
+        }
+        
+    }
 }
