@@ -134,7 +134,7 @@ def onKeyRightKeyDown (ref game : Game)
 
 def onKeyRightKeyUp (ref game : Game)
 {
-    game.mainPlayer.stopMoveX ();
+    // game.mainPlayer.stopMoveX ();
 }
 
 def onKeyLeftKeyDown (ref game : Game)
@@ -144,7 +144,7 @@ def onKeyLeftKeyDown (ref game : Game)
 
 def onKeyLeftKeyUp (ref game : Game)
 {
-    game.mainPlayer.stopMoveX ();
+    // game.mainPlayer.stopMoveX ();
 }
 
 def onMouseLeftClick (ref game : Game, pos : t!(int, int))

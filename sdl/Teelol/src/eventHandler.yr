@@ -74,9 +74,14 @@ def handleEvents(ref eventHdl : EventHandler)
     // SDL_PumpEvents();
 
     let sdlEventPtr = &(eventHdl.sdlEvent);
+    let pollEvent = SDL_PollEvent (sdlEventPtr);
+    
+    // Then we handle keyboard events with keys that need to be repeated
+    let states = SDL_GetKeyboardState(null);
+    let handledKeyRepeat = eventHdl.handleKeyboardWithKeyRepeatEvent ((*sdlEventPtr).type, states);
 
-    // We first handle non-keyboard events
-    if (SDL_PollEvent (sdlEventPtr) != 0)
+    // We first handle non-keyrepeat and non-keyboard events
+    if (pollEvent != 0)
     {
         match ((*sdlEventPtr).type)
         {
@@ -87,29 +92,15 @@ def handleEvents(ref eventHdl : EventHandler)
                 let mouseEvent = cast!(p!SDL_MouseButtonEvent) (sdlEventPtr);
                 eventHdl.handleMouseEvent ((*sdlEventPtr).type, (*mouseEvent).button, ((*mouseEvent).x, (*mouseEvent).y));
             }
+            SDL_EventType::KEYDOWN | SDL_EventType::KEYUP => {
+                let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
+                eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);                
+            }
             // SDL_EventType::MOUSEMOTION => {
             //     let mouseEvent = cast!(p!SDL_MouseButtonEvent) (sdlEventPtr);
             //     eventHdl.handleMouseMotionEvent ((*sdlEventPtr).type, ((*mouseEvent).x, (*mouseEvent).y));
             // }
         }
-    }
-    else
-    {
-        let test = false;
-        if (/*!handledKeyRepeat &&*/ (*sdlEventPtr).type == SDL_EventType::KEYDOWN || (*sdlEventPtr).type == SDL_EventType::KEYUP)
-        {
-            let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
-            test = eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);
-        }
-
-        if (!test)
-        {
-            // Then we handle keyboard events with keys that need to be repeated
-            let states = SDL_GetKeyboardState(null);
-            let handledKeyRepeat = eventHdl.handleKeyboardWithKeyRepeatEvent ((*sdlEventPtr).type, states);
-            // If no one was detected, we handle classic keyboard events
-        }
-
     }
 }
 

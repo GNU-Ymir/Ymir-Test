@@ -71,4 +71,8 @@ def goTo (ref player : Player, posX : int, posY : int)
 def passRow (ref player : Player)
 {
     player.drawable.pos.x += player.speedX;
+    if (player.speedX > 0)
+        player.speedX -= 1;
+    else if (player.speedX < 0)
+        player.speedX += 1;
 }
