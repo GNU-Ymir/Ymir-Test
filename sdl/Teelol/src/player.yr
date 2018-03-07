@@ -4,18 +4,26 @@ import src.lib.sdl;
 import src.resource;
 import src.drawable;
 
+import core.io;
+
 struct
 | name : string
 | drawable : Drawable // Waiting for the inheritance feature...
+| speedX : int
+| speedY : int
  -> Player;
 
-imut gShiftSize = 5;
+private {
+    imut gHorizontalSpeed = 5;
+    imut gVerticalSpeed = 7;
+}
 
-def createPlayer (name : string, const posX : int, const posY : int, resType : ResourceType, resManager : p!ResourcesManager) -> Player
+def createPlayer (name : string, const posX : int, const posY : int, resType : ResourceType) -> Player
 {
-    let res = (*resManager).generateResource (resType);
+    let resManager = getResourcesManager ();
+    let res = resManager.getResource (resType);
     let d = Drawable { Position { posX, posY }, res };
-    return Player { name, d };
+    return Player { name, d , 0, 0};
 }
 
 def getResource (ref player : Player) -> mut p!Resource
@@ -23,28 +31,44 @@ def getResource (ref player : Player) -> mut p!Resource
     return &(player.drawable.res);
 }
 
+def setResource (ref player : Player, resType : ResourceType)
+{
+    let resManager = getResourcesManager ();
+    player.drawable.res = resManager.getResource (resType);
+}
+
 def goUp (ref player : Player)
 {
-    player.drawable.pos.y -= gShiftSize;
+    
 }
 
 def goDown (ref player : Player)
 {
-    player.drawable.pos.y += gShiftSize; 
+    
 }
 
 def goRight (ref player : Player)
 {
-    player.drawable.pos.x += gShiftSize;
+    player.speedX = gHorizontalSpeed;
 }
 
 def goLeft (ref player : Player)
 {
-    player.drawable.pos.x -= gShiftSize;
+    player.speedX = -gHorizontalSpeed;
+}
+
+def stopMoveX (ref player : Player)
+{
+    player.speedX = 0;
 }
 
 def goTo (ref player : Player, posX : int, posY : int)
 {
     player.drawable.pos.x = posX;
     player.drawable.pos.y = posY;
+}
+
+def passRow (ref player : Player)
+{
+    player.drawable.pos.x += player.speedX;
 }

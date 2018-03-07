@@ -2,7 +2,9 @@ mod src.game;
 
 import core.io;
 import core.string;
+
 import std.memory;
+
 import src.lib.signal;
 import src.lib.sdl;
 import src.screen;
@@ -16,12 +18,12 @@ struct
 | continue : bool
 | mainPlayer : Player
 | testPlayer : Player
-| resourcesManager : ResourcesManager
+| resourcesManager : p!ResourcesManager
  -> Game;
 
 // for now...
-imut gWindowWidth = 600;
-imut gWindowHeight = 300;
+imut gWindowWidth = 640;
+imut gWindowHeight = 480;
 imut gWindowPosX = 100;
 imut gWindowPosY = 100;
 imut gTitle = "Teelol";
@@ -36,8 +38,8 @@ def createGame (ref game : Game)
     game.continue = true;
     game.resourcesManager = createResourcesManager (game.screen);
 
-    game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee, &(game.resourcesManager));
-    game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee, &(game.resourcesManager));
+    game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee);
+    game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee);
     
     game.screen.addDrawable (&(game.mainPlayer.drawable));
     game.screen.addDrawable (&(game.testPlayer.drawable));
@@ -54,23 +56,40 @@ def start (ref game : Game)
     while (game.continue)
     {
         screen.clear();
+        
         game.eventHdl.handleEvents ();
+        game.passRow ();
+        
         screen.display();
+        SDL_Delay (50u);
     }
+}
+
+def passRow (ref game : Game)
+{
+    game.mainPlayer.passRow ();
 }
 
 def initEvents (ref eventHdl : EventHandler)
 {
     let quitSignal = Signal!(ref Game)::init;
     quitSignal.connect (onQuit);
+    
     let keyUpSignal = Signal!(ref Game)::init;
     keyUpSignal.connect (onKeyUp);
     let keyDownSignal = Signal!(ref Game)::init;
     keyDownSignal.connect (onKeyDown);
-    let keyRightSignal = Signal!(ref Game)::init;
-    keyRightSignal.connect (onKeyRight);
-    let keyLeftSignal = Signal!(ref Game)::init;
-    keyLeftSignal.connect (onKeyLeft);
+
+    let keyRightSignalKeyDown = Signal!(ref Game)::init;
+    keyRightSignalKeyDown.connect (onKeyRightKeyDown);
+    let keyRightSignalKeyUp  = Signal!(ref Game)::init;
+    keyRightSignalKeyUp.connect (onKeyRightKeyUp);
+
+    let keyLeftSignalKeyDown = Signal!(ref Game)::init;
+    keyLeftSignalKeyDown.connect (onKeyLeftKeyDown);
+    let keyLeftSignalKeyUp = Signal!(ref Game)::init;
+    keyLeftSignalKeyUp.connect (onKeyLeftKeyUp);
+
     let mouseLeftClickSignal = Signal!(ref Game, t!(int, int))::init;
     mouseLeftClickSignal.connect (onMouseLeftClick);
     let mouseRightClickSignal = Signal!(ref Game, t!(int, int))::init;
@@ -78,10 +97,16 @@ def initEvents (ref eventHdl : EventHandler)
     
     eventHdl.onEvent (SDL_EventType::QUIT, quitSignal);
     eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_ESCAPE, quitSignal);
+
     eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_UP, keyUpSignal);
     eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_DOWN, keyDownSignal);
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignal);
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignal);
+
+    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignalKeyDown);
+    eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_RIGHT, keyRightSignalKeyUp);
+
+    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignalKeyDown);
+    eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_LEFT, keyLeftSignalKeyUp);
+
     eventHdl.onEvent (SDL_EventType::MOUSEBUTTONUP, SDL_Mousecode::SDL_BUTTON_LEFT, mouseLeftClickSignal);
     eventHdl.onEvent (SDL_EventType::MOUSEBUTTONDOWN, SDL_Mousecode::SDL_BUTTON_RIGHT, mouseRightClickSignal);
 }
@@ -102,14 +127,24 @@ def onKeyDown (ref game : Game)
     game.mainPlayer.goDown ();
 }
 
-def onKeyRight (ref game : Game)
+def onKeyRightKeyDown (ref game : Game)
 {
     game.mainPlayer.goRight ();
 }
 
-def onKeyLeft (ref game : Game)
+def onKeyRightKeyUp (ref game : Game)
+{
+    game.mainPlayer.stopMoveX ();
+}
+
+def onKeyLeftKeyDown (ref game : Game)
 {
     game.mainPlayer.goLeft ();
+}
+
+def onKeyLeftKeyUp (ref game : Game)
+{
+    game.mainPlayer.stopMoveX ();
 }
 
 def onMouseLeftClick (ref game : Game, pos : t!(int, int))
@@ -120,5 +155,5 @@ def onMouseLeftClick (ref game : Game, pos : t!(int, int))
 
 def onMouseRightClick (ref game : Game, pos : t!(int, int))
 {
-    println ("right click");
+    game.mainPlayer.setResource (ResourceType::OtherTee);
 }

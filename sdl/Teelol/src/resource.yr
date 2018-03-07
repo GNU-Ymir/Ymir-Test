@@ -3,7 +3,7 @@ mod src.resource;
 extern (C) printf (const c : p!char, ...);
 
 import std.list;
-import std.abort;
+import std.memory;
 import core.io;
 import core.string;
 import src.lib.sdl;
@@ -50,14 +50,12 @@ private
         while (next_ !is null)
         {
             let imageRes = (*next_).value;
-            // TODO : handle error
             let surf = IMG_Load (imageRes.filePath.ptr);
 
             if (surf is null)
             {
+                // will be logged
                 println ("File not found !");
-                // abort ();
-                // assert (false);
             }
             else
             {
@@ -75,30 +73,44 @@ private
         print (message, " : ");
         printf ("%s".ptr, SDL_GetError());
     }
+
+    static gResourcesManagerInstance : p!ResourcesManager;
+    static gImagesPathList : List!ImageRes;
+
+    // global test surface
+    imut gTeeFilePath = "img/tee.png";
+    imut gOtherTeeFile = "img/otherTee.png";
+
+    // static constructor
+    self ()
+    {
+        gResourcesManagerInstance = null;
+        gImagesPathList = list!ImageRes ();
+        gImagesPathList.push (ImageRes { ResourceType::Tee, gTeeFilePath.dup() });
+        gImagesPathList.push (ImageRes { ResourceType::OtherTee, gOtherTeeFile.dup() });
+    }
 }
 
-static gImagesPathList : List!ImageRes;
-
-// global test surface
-imut gTeeFilePath = "img/tee.png";
-imut gOtherTeeFile = "img/otherTee.png";
-
-// static constructor
-self ()
+def createResourcesManager (ref screen : Screen) -> p!ResourcesManager
 {
-    gImagesPathList = list!ImageRes ();
-    gImagesPathList.push (ImageRes { ResourceType::Tee, gTeeFilePath.dup() });
-    gImagesPathList.push (ImageRes { ResourceType::OtherTee, gOtherTeeFile.dup() });
+    if (gResourcesManagerInstance is null)
+        gResourcesManagerInstance = alloc (ResourcesManager { createSurfacesList (screen.renderer) });
+    return gResourcesManagerInstance;
 }
 
-def createResourcesManager (ref screen : Screen) -> ResourcesManager
+def getResourcesManager () -> p!ResourcesManager
 {
-    return ResourcesManager { createSurfacesList (screen.renderer) };
+    if (gResourcesManagerInstance is null)
+    {
+        println ("The resources manager must be initialized by using the createResourcesManager function.");
+        assert (false);
+    }
+    return gResourcesManagerInstance;
 }
 
-def generateResource (ref resManager : ResourcesManager, const type : ResourceType) -> mut Resource
+def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> mut Resource
 {
-    let resList = resManager.surfacesList;
+    let resList = (*resManager).surfacesList;
     let res = Resource::init;
     
     let next_ = resList.next ();
@@ -112,15 +124,14 @@ def generateResource (ref resManager : ResourcesManager, const type : ResourceTy
 
             if (res.texture is null)
             {
-                // printSdlErro ("SDL_CreateTextureFromSurface error");
                 printSdlErr ("SDL_CreateTextureFromSurface error");
-                abort ();
+                assert (false);
             }
 
             if (SDL_QueryTexture (res.texture, null, null, &res.width, &res.height) < 0)
             {
                 printSdlErr ("SDL_QueryTexture error");
-                abort();
+                assert (false);
             }
             
             return res;
