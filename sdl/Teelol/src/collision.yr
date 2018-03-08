@@ -1,0 +1,86 @@
+mod src.collision;
+
+import core.io;
+
+import std.memory;
+import std.list;
+
+import src.lib.sdl;
+import src.drawable;
+import src.player;
+
+struct
+| background : SDL_Rect
+| objects : List!(p!Drawable)
+ -> CollisionManager;
+
+private
+{
+    static gCollisionManagerInstance : p!CollisionManager;
+
+    self ()
+    {
+        gCollisionManagerInstance = null;
+    }
+}
+
+def createCollisionManager (screenWidth : int, screenHeight : int) -> mut p!CollisionManager
+{
+    if (gCollisionManagerInstance is null)
+    {
+        let colManager = CollisionManager { SDL_Rect { 0, 0, screenWidth, screenHeight }, list!(p!Drawable) () };
+        gCollisionManagerInstance = alloc (colManager);
+        return gCollisionManagerInstance;
+    }
+    else
+    {
+        println ("You cannot create two instances of a CollisionManager !");
+        assert (false);
+    }
+}
+
+def getCollisionManager () -> mut p!CollisionManager
+{
+    if (gCollisionManagerInstance is null)
+    {
+        println ("The collision manager must be created by using the createCollisionManager function !");
+        assert (false);
+    }
+
+    return gCollisionManagerInstance;
+}
+
+// tmp
+def addObject (colManager : p!CollisionManager, drawable : p!Drawable)
+{
+    (*colManager).objects.push (drawable);
+}
+
+// tmp
+def canGoRight (colManager : p!CollisionManager, ref player : Player) -> bool
+{
+    // il se trouve que pour le moment on a que notre joueur dans la liste...
+    let test = (*colManager).objects;
+    let node = test.next ();
+    let drawable = (*node).value;
+    let background = (*colManager).background;
+    
+    return (((*drawable).pos.x + (*drawable).res.width) < background.w);
+}
+
+def canGoLeft (colManager : p!CollisionManager, ref player : Player) -> bool
+{
+    let node = (*colManager).objects.next ();
+    let drawable = (*node).value;
+
+    return ((*drawable).pos.x > 0);
+}
+
+def canGoDown (colManager : p!CollisionManager, ref player : Player) -> bool
+{
+    let node = (*colManager).objects.next ();
+    let drawable = (*node).value;
+    let background = (*colManager).background;
+    
+    return (((*drawable).pos.y + (*drawable).res.height) < background.h);
+}

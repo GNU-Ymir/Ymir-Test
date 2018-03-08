@@ -4,8 +4,10 @@ extern (C) printf (const c : p!char, ...);
 
 import std.list;
 import std.memory;
+
 import core.io;
 import core.string;
+
 import src.lib.sdl;
 import src.lib.sdlImage;
 import src.screen;
@@ -94,8 +96,15 @@ private
 def createResourcesManager (ref screen : Screen) -> p!ResourcesManager
 {
     if (gResourcesManagerInstance is null)
+    {
         gResourcesManagerInstance = alloc (ResourcesManager { createSurfacesList (screen.renderer) });
-    return gResourcesManagerInstance;
+        return gResourcesManagerInstance;
+    }
+    else
+    {
+        println ("You cannot have two instances of a ResourcesManager !");
+        assert (false);
+    }  
 }
 
 def getResourcesManager () -> p!ResourcesManager

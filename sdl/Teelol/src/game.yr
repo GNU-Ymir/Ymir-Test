@@ -11,6 +11,7 @@ import src.screen;
 import src.eventHandler;
 import src.player;
 import src.resource;
+import src.collision;
 
 struct
 | screen : Screen
@@ -18,7 +19,6 @@ struct
 | continue : bool
 | mainPlayer : Player
 | testPlayer : Player
-| resourcesManager : p!ResourcesManager
  -> Game;
 
 // for now...
@@ -36,13 +36,19 @@ def createGame (ref game : Game)
     game.screen = createScreen (gTitle, gWindowWidth, gWindowHeight, gWindowPosX, gWindowPosY);
     game.eventHdl = createEventHandler (game);
     game.continue = true;
-    game.resourcesManager = createResourcesManager (game.screen);
 
+    createResourcesManager (game.screen);
+    createCollisionManager (gWindowWidth, gWindowHeight);
+    
     game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee);
     game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee);
     
     game.screen.addDrawable (&(game.mainPlayer.drawable));
     game.screen.addDrawable (&(game.testPlayer.drawable));
+
+    let colManager = getCollisionManager ();
+    colManager.addObject (&(game.mainPlayer.drawable));
+    // colManager.addObject (&(game.testPlayer.drawable));
     
     initEvents (game.eventHdl);
 }

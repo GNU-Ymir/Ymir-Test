@@ -3,6 +3,7 @@ mod src.player;
 import src.lib.sdl;
 import src.resource;
 import src.drawable;
+import src.collision;
 
 import core.io;
 
@@ -44,22 +45,39 @@ def goUp (ref player : Player)
 
 def goDown (ref player : Player)
 {
-    
+    let colManager = getCollisionManager ();
+    if (colManager.canGoDown (player))
+        player.speedY = gVerticalSpeed;
+    else
+        player.stopMoveY ();
 }
 
 def goRight (ref player : Player)
 {
-    player.speedX = gHorizontalSpeed;
+    let colManager = getCollisionManager ();
+    if (colManager.canGoRight (player))
+        player.speedX = gHorizontalSpeed;
+    else
+        player.stopMoveX ();
 }
 
 def goLeft (ref player : Player)
 {
-    player.speedX = -gHorizontalSpeed;
+    let colManager = getCollisionManager ();
+    if (colManager.canGoLeft (player))
+        player.speedX = -gHorizontalSpeed;
+    else
+        player.stopMoveX ();
 }
 
 def stopMoveX (ref player : Player)
 {
     player.speedX = 0;
+}
+
+def stopMoveY (ref player : Player)
+{
+    player.speedY = 0;
 }
 
 def goTo (ref player : Player, posX : int, posY : int)
@@ -71,8 +89,11 @@ def goTo (ref player : Player, posX : int, posY : int)
 def passRow (ref player : Player)
 {
     player.drawable.pos.x += player.speedX;
+    player.drawable.pos.y += player.speedY;
     if (player.speedX > 0)
         player.speedX -= 1;
     else if (player.speedX < 0)
         player.speedX += 1;
+    
+    player.goDown ();
 }
