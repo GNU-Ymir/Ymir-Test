@@ -15,8 +15,8 @@ struct
  -> Player;
 
 private {
-    imut gHorizontalSpeed = 5;
-    imut gVerticalSpeed = 7;
+    imut gHorizontalSpeed = 1;
+    imut gVerticalSpeed = 1;
 }
 
 def createPlayer (name : string, const posX : int, const posY : int, resType : ResourceType) -> Player
@@ -38,15 +38,19 @@ def setResource (ref player : Player, resType : ResourceType)
     player.drawable.res = resManager.getResource (resType);
 }
 
-def goUp (ref player : Player)
-{
-    
-}
-
-def goDown (ref player : Player)
+def jump (ref player : Player)
 {
     let colManager = getCollisionManager ();
-    if (colManager.canGoDown (player))
+    if (colManager.canGoUp (player, gVerticalSpeed))
+        player.speedY = -gVerticalSpeed;
+    else
+        player.stopMoveY ();
+}
+
+def fall (ref player : Player)
+{
+    let colManager = getCollisionManager ();
+    if (colManager.canGoDown (player, gVerticalSpeed))
         player.speedY = gVerticalSpeed;
     else
         player.stopMoveY ();
@@ -55,7 +59,7 @@ def goDown (ref player : Player)
 def goRight (ref player : Player)
 {
     let colManager = getCollisionManager ();
-    if (colManager.canGoRight (player))
+    if (colManager.canGoRight (player, gHorizontalSpeed))
         player.speedX = gHorizontalSpeed;
     else
         player.stopMoveX ();
@@ -64,7 +68,7 @@ def goRight (ref player : Player)
 def goLeft (ref player : Player)
 {
     let colManager = getCollisionManager ();
-    if (colManager.canGoLeft (player))
+    if (colManager.canGoLeft (player, gHorizontalSpeed))
         player.speedX = -gHorizontalSpeed;
     else
         player.stopMoveX ();
@@ -90,10 +94,12 @@ def passRow (ref player : Player)
 {
     player.drawable.pos.x += player.speedX;
     player.drawable.pos.y += player.speedY;
+
     if (player.speedX > 0)
         player.speedX -= 1;
     else if (player.speedX < 0)
         player.speedX += 1;
     
-    player.goDown ();
+    // the player has to fall if he's not on the ground or an other object
+    player.fall ();
 }

@@ -48,7 +48,7 @@ def createGame (ref game : Game)
 
     let colManager = getCollisionManager ();
     colManager.addObject (&(game.mainPlayer.drawable));
-    // colManager.addObject (&(game.testPlayer.drawable));
+    colManager.addObject (&(game.testPlayer.drawable));
     
     initEvents (game.eventHdl);
 }
@@ -67,13 +67,14 @@ def start (ref game : Game)
         game.passRow ();
         
         screen.display();
-        SDL_Delay (50u);
+        SDL_Delay (7u);
     }
 }
 
 def passRow (ref game : Game)
 {
     game.mainPlayer.passRow ();
+    game.testPlayer.passRow ();
 }
 
 def initEvents (ref eventHdl : EventHandler)
@@ -83,18 +84,15 @@ def initEvents (ref eventHdl : EventHandler)
     
     let keyUpSignal = Signal!(ref Game)::init;
     keyUpSignal.connect (onKeyUp);
+
     let keyDownSignal = Signal!(ref Game)::init;
     keyDownSignal.connect (onKeyDown);
+    
+    let keyRightSignal = Signal!(ref Game)::init;
+    keyRightSignal.connect (onKeyRight);
 
-    let keyRightSignalKeyDown = Signal!(ref Game)::init;
-    keyRightSignalKeyDown.connect (onKeyRightKeyDown);
-    let keyRightSignalKeyUp  = Signal!(ref Game)::init;
-    keyRightSignalKeyUp.connect (onKeyRightKeyUp);
-
-    let keyLeftSignalKeyDown = Signal!(ref Game)::init;
-    keyLeftSignalKeyDown.connect (onKeyLeftKeyDown);
-    let keyLeftSignalKeyUp = Signal!(ref Game)::init;
-    keyLeftSignalKeyUp.connect (onKeyLeftKeyUp);
+    let keyLeftSignal = Signal!(ref Game)::init;
+    keyLeftSignal.connect (onKeyLeft);
 
     let mouseLeftClickSignal = Signal!(ref Game, t!(int, int))::init;
     mouseLeftClickSignal.connect (onMouseLeftClick);
@@ -106,12 +104,8 @@ def initEvents (ref eventHdl : EventHandler)
 
     eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_UP, keyUpSignal);
     eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_DOWN, keyDownSignal);
-
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignalKeyDown);
-    eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_RIGHT, keyRightSignalKeyUp);
-
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignalKeyDown);
-    eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_LEFT, keyLeftSignalKeyUp);
+    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignal);
+    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignal);
 
     eventHdl.onEvent (SDL_EventType::MOUSEBUTTONUP, SDL_Mousecode::SDL_BUTTON_LEFT, mouseLeftClickSignal);
     eventHdl.onEvent (SDL_EventType::MOUSEBUTTONDOWN, SDL_Mousecode::SDL_BUTTON_RIGHT, mouseRightClickSignal);
@@ -125,32 +119,22 @@ def onQuit (ref game : Game)
 
 def onKeyUp (ref game : Game)
 {
-    game.mainPlayer.goUp ();
+    game.mainPlayer.jump ();
 }
 
 def onKeyDown (ref game : Game)
 {
-    game.mainPlayer.goDown ();
+    game.mainPlayer.fall ();
 }
 
-def onKeyRightKeyDown (ref game : Game)
+def onKeyRight (ref game : Game)
 {
     game.mainPlayer.goRight ();
 }
 
-def onKeyRightKeyUp (ref game : Game)
-{
-    // game.mainPlayer.stopMoveX ();
-}
-
-def onKeyLeftKeyDown (ref game : Game)
+def onKeyLeft (ref game : Game)
 {
     game.mainPlayer.goLeft ();
-}
-
-def onKeyLeftKeyUp (ref game : Game)
-{
-    // game.mainPlayer.stopMoveX ();
 }
 
 def onMouseLeftClick (ref game : Game, pos : t!(int, int))

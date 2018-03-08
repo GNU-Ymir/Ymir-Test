@@ -14,13 +14,59 @@ struct
 | objects : List!(p!Drawable)
  -> CollisionManager;
 
-private
-{
-    static gCollisionManagerInstance : p!CollisionManager;
+enum
+| Up : 0
+| Down : 1
+| Right : 2
+| Left : 3
+ -> Direction;
 
+
+private
+{    
+    static gCollisionManagerInstance : p!CollisionManager;
+    
     self ()
     {
         gCollisionManagerInstance = null;
+    }
+
+    def collidesWithSomething (colManager : p!CollisionManager, ref player : Player, speed : int, direction : Direction) -> bool
+    {
+        let next_ = (*colManager).objects.next ();
+        while (next_ !is null)
+        {
+            if ((*next_).value !is &(player.drawable))
+            {
+                if (collides (&(player.drawable), speed, direction, (*next_).value))
+                    return true;
+            }
+            
+            next_ = next_.next ();
+        }
+
+        return false;
+    }
+
+    def collides (objectA : p!Drawable, speed : int, const direction : Direction, objectB : p!Drawable) -> bool
+    {
+        let rectA = SDL_Rect { (*objectA).pos.x, (*objectA).pos.y, (*objectA).res.width, (*objectA).res.height };
+        let rectB = SDL_Rect { (*objectB).pos.x, (*objectB).pos.y, (*objectB).res.width, (*objectB).res.height };
+
+        match (direction)
+        {
+            Direction::Up => rectA.y -= speed;
+            Direction::Down => rectA.y += speed;
+            Direction::Right => rectA.x += speed;
+            Direction::Left => rectA.x -= speed;
+        }
+
+        let left = (rectA.x + rectA.w) < rectB.x;
+        let right = rectA.x > (rectB.x + rectB.w);
+        let top = (rectA.y + rectA.h) < rectB.y;
+        let bottom = rectA.y > (rectB.y + rectB.h);
+
+        return !(left || right || top || bottom);
     }
 }
 
@@ -50,37 +96,51 @@ def getCollisionManager () -> mut p!CollisionManager
     return gCollisionManagerInstance;
 }
 
-// tmp
 def addObject (colManager : p!CollisionManager, drawable : p!Drawable)
 {
     (*colManager).objects.push (drawable);
 }
 
-// tmp
-def canGoRight (colManager : p!CollisionManager, ref player : Player) -> bool
+def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
-    // il se trouve que pour le moment on a que notre joueur dans la liste...
-    let test = (*colManager).objects;
-    let node = test.next ();
-    let drawable = (*node).value;
     let background = (*colManager).background;
+    let drawable = player.drawable;
+
+    let nextPosX = drawable.pos.x + speed;
     
-    return (((*drawable).pos.x + (*drawable).res.width) < background.w);
+    if ((nextPosX + drawable.res.width) >= background.w)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Right);
 }
 
-def canGoLeft (colManager : p!CollisionManager, ref player : Player) -> bool
+def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
-    let node = (*colManager).objects.next ();
-    let drawable = (*node).value;
+    let background = (*colManager).background;
+    let drawable = player.drawable;
 
-    return ((*drawable).pos.x > 0);
+    let nextPosX = drawable.pos.x - speed;
+    
+    if (nextPosX <= 0)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Left);
 }
 
-def canGoDown (colManager : p!CollisionManager, ref player : Player) -> bool
+def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
-    let node = (*colManager).objects.next ();
-    let drawable = (*node).value;
     let background = (*colManager).background;
+    let drawable = player.drawable;
+
+    let nextPosY = drawable.pos.y + 1;
     
-    return (((*drawable).pos.y + (*drawable).res.height) < background.h);
+    if ((nextPosY + drawable.res.height) >= background.h)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Down);
+}
+
+def canGoUp (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+{   
+    return !colManager.collidesWithSomething (player, speed, Direction::Up);
 }

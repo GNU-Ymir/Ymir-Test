@@ -74,9 +74,9 @@ def display (ref screen : Screen)
 
         if (res.texture !is null)
         {
-            let rect = draw.pos;
+            let pos = draw.pos;
 
-            let spriteRect = SDL_Rect { rect.x, rect.y, res.width, res.height };
+            let spriteRect = SDL_Rect { pos.x, pos.y, res.width, res.height };
             if (SDL_RenderCopy (screen.renderer, res.texture, null, &spriteRect) < 0)
             {
                 printErr ("SDL_RenderCopy() error");
