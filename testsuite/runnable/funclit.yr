@@ -1,17 +1,17 @@
 import core.io;
 import core.string;
 
-def una (DG : FN, FN, T) (n : T) 
-    return DG (n);
+def una (CALL : FN, FN, T) (n : T) 
+    return CALL (n);
 
-def namedUna (DG : fn (T)-> U, T, U) (n : T)
-    return DG (n);
+def namedUna (CALL : fn (T)-> U, T, U) (n : T)
+    return CALL (n);
 
-def bin (DG : FN, FN, T) (a : T, b : T)
-    return DG (a, b);
+def bin (CALL : FN, FN, T) (a : T, b : T)
+    return CALL (a, b);
 
-def namedBin (DG : fn (T, T) -> U, T, U) (a : T, b : T)
-    return DG (a, b);
+def namedBin (CALL : fn (T, T) -> U, T, U) (a : T, b : T)
+    return CALL (a, b);
 
 def test () {
     assert (una!((a) => a * 2) (2) == 4);
@@ -51,12 +51,12 @@ def test3 () {
     // Bug
 }
 
-def foo4 (dg : fn (int) -> int) {
-    return dg (10);
+def foo4 (call : fn (int) -> int) {
+    return call (10);
 }
 
-def foo4 (dg : fn (int, int) -> int) {
-    return dg (10, 20);
+def foo4 (call : fn (int, int) -> int) {
+    return call (10, 20);
 }
 
 def nbar4fp (fp : fn (int)-> void) { }

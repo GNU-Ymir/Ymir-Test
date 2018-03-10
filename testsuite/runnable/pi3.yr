@@ -1,0 +1,21 @@
+import core.io;
+
+def fact (n : uint) {
+    let res = 1U;
+    for it in  n .. 1U {
+        res = res * it;
+    }
+    return res;
+}
+
+def pow (n : uint, val : uint) {
+    let res = n;
+    for it in 1U .. val {
+        res = res * n;
+    }
+    return res;
+}
+
+
+def main () {
+}

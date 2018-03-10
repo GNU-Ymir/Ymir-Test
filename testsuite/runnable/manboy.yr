@@ -1,17 +1,24 @@
+import core.io;
 
-// import core.io;
+def a (k : int, x1 : dg ()-> int, x2 : int, x3 : int, x4 : int, x5 : int) -> int {
+    let b = dg ()-> int;
+    
+    b = () {
+        k -= 1;
+        let x = x1 ();
+        println (k, " ", x);        
+        return a (k, b, x, x2, x3, x4); 
+    };
+    
+    if (k <= 0)
+        return x4 + x5;
+    else
+        return b ();
+}
 
-// // def a (k, x1, x2, x3, x4, x5) {
-// //     let imut b = (k, b, x1, x2, x3, x4) {
-// //         k -= 1;
-// //         return a (k, b (k, cast!(p!void) (b), x1, x2, x3, x4), x1, x2, x3, x4); 
-// //     };
-// //     if (k <= 0)
-// //         return x4 + x5;
-// //     else
-// //         return b(k, cast!(p!void)(b), x1, x2, x3, x4);
-// // }
-
-// def main () {
-//     assert (a (10, 1, -1, -1, 1, 0) == -67);
-// }
+def main () {
+    let c = 1;
+    let func = () { println ("ici"); c = 1; return 1; };
+    
+    println (a (10, func, -1, -1, 1, 0) );
+}

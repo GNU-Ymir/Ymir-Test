@@ -16,7 +16,7 @@ def test2 () {
     assert (l.ptr is null);
     assert (l.len == 0UL);
     
-    let m = const [int]::init;
+    let m = [int]::init;
     m = null;
     assert (m.ptr is null);
     assert (m.len == 0UL);    
