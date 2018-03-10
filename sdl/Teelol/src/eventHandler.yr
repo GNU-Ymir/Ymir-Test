@@ -20,7 +20,7 @@ struct
 struct
 | type : uint
 | buttonCode : ubyte
-| signal : Signal!(ref Game/*, t!(int, int)*/)
+| signal : Signal!(ref Game, t!(int, int))
  -> MouseEvent;
 
 struct
@@ -30,10 +30,7 @@ struct
 | mouseEvents : List!MouseEvent
 | sdlEvent : SDL_Event
 | game : p!Game
-| delayKeyRepeat : uint
  -> EventHandler;
-
-imut gDefaultKeyRepeatDelay = 100u;
 
 def createEventHandler (ref game : Game) -> mut EventHandler
 {
@@ -42,7 +39,7 @@ def createEventHandler (ref game : Game) -> mut EventHandler
     let listKeyboardWithKeyRepeatEvent = list!KeyboardEvent ();
     let listMouseEvents = list!MouseEvent ();
     let sdlEvent = SDL_Event::init;
-    return EventHandler { listClassicEvent, listKeyboardEvent, listKeyboardWithKeyRepeatEvent, listMouseEvents, sdlEvent, &game, gDefaultKeyRepeatDelay };
+    return EventHandler { listClassicEvent, listKeyboardEvent, listKeyboardWithKeyRepeatEvent, listMouseEvents, sdlEvent, &game };
 }
 
 def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, signal : Signal!(ref Game))
@@ -60,7 +57,7 @@ def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyScanCode
     eventHdl.keyboardWithKeyRepeatEvents.push (KeyboardEvent { eventType, keyScanCode, signal });
 }
 
-def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game/*, t!(int, int)*/))
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game, t!(int, int)))
 {
     eventHdl.mouseEvents.push (MouseEvent { eventType, buttonCode, signal });
 }
@@ -77,37 +74,32 @@ def handleEvents(ref eventHdl : EventHandler)
     // SDL_PumpEvents();
 
     let sdlEventPtr = &(eventHdl.sdlEvent);
+    let pollEvent = SDL_PollEvent (sdlEventPtr);
+    
+    // Then we handle keyboard events with keys that need to be repeated
+    let states = SDL_GetKeyboardState(null);
+    let handledKeyRepeat = eventHdl.handleKeyboardWithKeyRepeatEvent (sdlEventPtr.type, states);
 
-    // We first handle non-keyboard events
-    if (SDL_PollEvent (sdlEventPtr) != 0)
+    // We first handle non-keyrepeat and non-keyboard events
+    if (pollEvent != 0)
     {
-        match ((*sdlEventPtr).type)
+        match (sdlEventPtr.type)
         {
             SDL_EventType::QUIT => {
                 eventHdl.handleClassicEvent ((*sdlEventPtr).type);
             }
             SDL_EventType::MOUSEBUTTONUP | SDL_EventType::MOUSEBUTTONDOWN => {
                 let mouseEvent = cast!(p!SDL_MouseButtonEvent) (sdlEventPtr);
-                eventHdl.handleMouseEvent ((*sdlEventPtr).type, (*mouseEvent).button, ((*mouseEvent).x, (*mouseEvent).y));
+                eventHdl.handleMouseEvent (sdlEventPtr.type, mouseEvent.button, (mouseEvent.x, mouseEvent.y));
+            }
+            SDL_EventType::KEYDOWN | SDL_EventType::KEYUP => {
+                let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
+                eventHdl.handleKeyboardEvent (sdlEventPtr.type, keyCode.sym);                
             }
             // SDL_EventType::MOUSEMOTION => {
             //     let mouseEvent = cast!(p!SDL_MouseButtonEvent) (sdlEventPtr);
             //     eventHdl.handleMouseMotionEvent ((*sdlEventPtr).type, ((*mouseEvent).x, (*mouseEvent).y));
             // }
-        }
-    }
-    else
-    {
-        // Then we handle keyboard events with keys that need to be repeated
-        let states = SDL_GetKeyboardState(null);
-        let handledKeyRepeat = eventHdl.handleKeyboardWithKeyRepeatEvent ((*sdlEventPtr).type, states);
-        SDL_Delay (eventHdl.delayKeyRepeat);
-
-        // If no one was detected, we handle classic keyboard events
-        if (!handledKeyRepeat && (*sdlEventPtr).type == SDL_EventType::KEYDOWN || (*sdlEventPtr).type == SDL_EventType::KEYUP)
-        {
-            let keyCode = cast!(p!SDL_KeyboardEvent) (sdlEventPtr);
-            eventHdl.handleKeyboardEvent ((*sdlEventPtr).type, (*keyCode).sym);
         }
     }
 }
@@ -119,25 +111,28 @@ def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
     {
         if ((*next_).value.type == eventType)
         {
-            let sig = (*next_).value.signal;
+            let sig = next_.value.signal;
             sig.call (*(eventHdl.game));
         }
-        next_ = next_.next();
+        next_ = next_.next;
     }
 }
 
-def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode : int)
+def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode : int) -> bool
 {
+    let res = false;
     let next_ = eventHdl.keyboardEvents.next();
     while (next_ !is null)
     {
-        if ((*next_).value.type == eventType && (*next_).value.keyCode == keyCode)
+        if (next_.value.type == eventType && next_.value.keyCode == keyCode)
         {
-            let sig = (*next_).value.signal;
+            let sig = next_.value.signal;
             sig.call (*(eventHdl.game));
+            res = true;
         }
-        next_ = next_.next();
+        next_ = next_.next;
     }
+    return res;
 }
 
 // Returns true if an keyboard event was handled
@@ -147,13 +142,13 @@ def handleKeyboardWithKeyRepeatEvent (ref eventHdl : EventHandler, eventType : u
     let ret = false;
     while (next_ !is null)
     {
-        if (*(keyboardState + ((*next_).value.keyCode)) == 1ub)
+        if (*(keyboardState + (next_.value.keyCode)) == 1ub)
         {
-            let sig = (*next_).value.signal;
+            let sig = next_.value.signal;
             sig.call (*(eventHdl.game));
             ret = true;
         }
-        next_ = next_.next();
+        next_ = next_.next;
     }
     return ret;
 }
@@ -163,11 +158,11 @@ def handleMouseEvent (ref eventHdl : EventHandler, eventType : uint, buttonCode 
     let next_ = eventHdl.mouseEvents.next();
     while (next_ !is null)
     {
-        if ((*next_).value.type == eventType && (*next_).value.buttonCode == buttonCode)
+        if (next_.value.type == eventType && next_.value.buttonCode == buttonCode)
         {
-            let sig = (*next_).value.signal;
-            sig.call (*(eventHdl.game)/*, pos*/);
+            let sig = next_.value.signal;
+            sig.call (*(eventHdl.game), pos);
         }
-        next_ = next_.next();
+        next_ = next_.next;
     }    
 }

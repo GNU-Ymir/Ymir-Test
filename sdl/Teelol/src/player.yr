@@ -3,20 +3,103 @@ mod src.player;
 import src.lib.sdl;
 import src.resource;
 import src.drawable;
+import src.collision;
+
+import core.io;
 
 struct
 | name : string
 | drawable : Drawable // Waiting for the inheritance feature...
+| speedX : int
+| speedY : int
  -> Player;
 
-def createPlayer (name : string) -> Player
+private {
+    imut gHorizontalSpeed = 1;
+    imut gVerticalSpeed = 1;
+}
+
+def createPlayer (name : string, const posX : int, const posY : int, resType : ResourceType) -> Player
 {
-    let res = generateResource (ResourceType::Player);
-    let d = Drawable { SDL_Rect { 10, 10, 10, 10 }, res };
-    return Player { name, d };
+    let resManager = getResourcesManager ();
+    let res = resManager.getResource (resType);
+    let d = Drawable { Position { posX, posY }, res };
+    return Player { name, d , 0, 0};
 }
 
 def getResource (ref player : Player) -> mut p!Resource
 {
     return &(player.drawable.res);
+}
+
+def setResource (ref player : Player, resType : ResourceType)
+{
+    let resManager = getResourcesManager ();
+    player.drawable.res = resManager.getResource (resType);
+}
+
+def jump (ref player : Player)
+{
+    let colManager = getCollisionManager ();
+    if (colManager.canGoUp (player, gVerticalSpeed))
+        player.speedY = -gVerticalSpeed;
+    else
+        player.stopMoveY ();
+}
+
+def fall (ref player : Player)
+{
+    let colManager = getCollisionManager ();
+    if (colManager.canGoDown (player, gVerticalSpeed))
+        player.speedY = gVerticalSpeed;
+    else
+        player.stopMoveY ();
+}
+
+def goRight (ref player : Player)
+{
+    let colManager = getCollisionManager ();
+    if (colManager.canGoRight (player, gHorizontalSpeed))
+        player.speedX = gHorizontalSpeed;
+    else
+        player.stopMoveX ();
+}
+
+def goLeft (ref player : Player)
+{
+    let colManager = getCollisionManager ();
+    if (colManager.canGoLeft (player, gHorizontalSpeed))
+        player.speedX = -gHorizontalSpeed;
+    else
+        player.stopMoveX ();
+}
+
+def stopMoveX (ref player : Player)
+{
+    player.speedX = 0;
+}
+
+def stopMoveY (ref player : Player)
+{
+    player.speedY = 0;
+}
+
+def goTo (ref player : Player, posX : int, posY : int)
+{
+    player.drawable.pos.x = posX;
+    player.drawable.pos.y = posY;
+}
+
+def passRow (ref player : Player)
+{
+    player.drawable.pos.x += player.speedX;
+    player.drawable.pos.y += player.speedY;
+
+    if (player.speedX > 0)
+        player.speedX -= 1;
+    else if (player.speedX < 0)
+        player.speedX += 1;
+    
+    // the player has to fall if he's not on the ground or an other object
+    player.fall ();
 }

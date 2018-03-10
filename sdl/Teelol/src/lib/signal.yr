@@ -13,14 +13,3 @@ def call (T...) (ref sig : Signal!T, elems : T) {
         sig.func [it] (elems.expand);
     }
 }
-
-// def main () {
-//     let a = Signal!(int, int)::init;
-//     a.connect ((a : int, b : int) {
-//         println (a + b);
-//     });
-
-//     a.connect (test2);    
-//     a.call (1, 2);
-    
-// }

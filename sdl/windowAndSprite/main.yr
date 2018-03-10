@@ -1,0 +1,91 @@
+mod main;
+
+import core.io;
+import src.sdl;
+
+extern (C) printf (const c : p!char, ...);
+
+imut WindowWidth = 640;
+imut WindowHeight = 480;
+imut WindowPosX = 100;
+imut WindowPosY = 100;
+
+def main() -> int
+{
+    if (SDL_Init (SDLInitFlag::Video) != 0)
+    {
+        printf ("SDL_Init() error : %s\n".ptr, SDL_GetError());
+        return -1;
+    }
+
+    let window = SDL_CreateWindow ("Test SDL with Ymir !".ptr, WindowPosX, WindowPosY, WindowWidth, WindowHeight, SDLWindowFlag::Shown);
+
+    if (window is null)
+    {
+        printf ("SDL_CreateWindow() error : %s\n".ptr, SDL_GetError());
+        return -1;
+    }
+
+    let renderer = SDL_CreateRenderer (window, -1, SDLRendererFlag::Accelerated);
+
+    if (renderer is null)
+    {
+        printf ("SDL_CreateRenderer() error : %s\n".ptr, SDL_GetError());
+        return -1;
+    }
+
+    SDL_RenderSetLogicalSize (renderer, WindowWidth, WindowHeight);
+
+    let spriteSurface = IMG_Load ("tee.png".ptr);
+
+    if (spriteSurface is null)
+    {
+        printf ("IMG_Load() error\n".ptr);
+        return -1;
+    }
+
+    let spriteTexture = SDL_CreateTextureFromSurface (renderer, spriteSurface);
+    SDL_FreeSurface (spriteSurface); // SDL_CreateTextureFromSurface copie les données, on peut libérer la surface
+
+    let format = uint::init;
+    let access = int::init, w = int::init, h = int::init;
+
+    if (SDL_QueryTexture (spriteTexture, &format, &access, &w, &h) < 0)
+    {
+        printf ("SDL_QueryTexture() error : %s\n".ptr, SDL_GetError());
+        return -1;
+    }
+    
+    let spriteRect = SDLRect { 10, 10, w, h }; // les deux premiers param sont utils pour positionner le sprite, osef des deux autres
+    if (SDL_RenderCopy (renderer, spriteTexture, cast!(p!SDLRect) (null), &spriteRect) < 0)
+    {
+        printf ("SDL_RenderCopy() error : %s\n".ptr, SDL_GetError());
+        return -1;
+    }
+    
+    let stop = false;
+    let event = SDLEvent::init;
+
+    while (!stop)
+    {
+        while (SDL_PollEvent (&event) != 0)
+        {
+            match event.type {
+                SDLEventType::Quit => stop = true;
+                SDLEventType::KeyUp => {
+                    let keyEvent = cast!(p!SDLKeyboardEvent) (&event);
+                    if ((*keyEvent).sym == SDL_Keycode::SDLK_ESCAPE)
+                        stop = true;
+                }
+            }
+        }
+        
+        SDL_RenderPresent (renderer);
+    }
+
+    SDL_DestroyTexture (spriteTexture);
+    SDL_DestroyRenderer (renderer);
+    SDL_DestroyWindow (window);
+
+    return 0;
+}

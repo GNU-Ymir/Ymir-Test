@@ -13,9 +13,17 @@ public {
     extern (C) SDL_GetKeyboardState(numkeys : p!int) -> const p!ubyte;
     extern (C) SDL_PumpEvents ();
     extern (C) SDL_Delay(ms : uint);
+    extern (C) SDL_CreateTextureFromSurface (const renderer : p!SDL_Renderer, const surface : p!SDL_Surface) -> p!SDL_Texture;
+    extern (C) SDL_GetWindowSurface (const window : p!SDL_Window) -> p!SDL_Surface;
+    extern (C) SDL_FreeSurface (const surface : p!SDL_Surface);
+    extern (C) SDL_QueryTexture (const texture : p!SDL_Texture, format : p!uint, access : p!int, w : p!int, h : p!int) -> int;
+    extern (C) SDL_RenderCopy (const renderer : p!SDL_Renderer, const texture : p!SDL_Texture, const srcRect : p!SDL_Rect, dstRect : p!SDL_Rect) -> int;
+    extern (C) SDL_DestroyTexture (const texture : p!SDL_Texture);
     extern (C) SDL_DestroyRenderer (renderer : p!SDL_Renderer);
     extern (C) SDL_DestroyWindow (window : p!SDL_Window);
     extern (C) SDL_GetError () -> const p!char;
+
+    // SDL_GetWindowSize () could be usefull    
 }
 
 struct
@@ -25,6 +33,14 @@ struct
 struct
 | data : p!void
  -> SDL_Renderer;
+
+struct
+| data : p!void
+ -> SDL_Texture;
+
+struct
+| data : p!void
+ -> SDL_Surface;
 
 struct
 | type : uint

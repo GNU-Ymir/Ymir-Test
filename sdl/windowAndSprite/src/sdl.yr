@@ -1,31 +1,53 @@
-mod sdl;
+mod src.sdl;
 
 public {
+    // SDL2
     extern (C) SDL_Init (flags : uint) -> int;
-    extern (C) SDL_CreateWindow (const title : p!char, x : int, y : int, w : int, h : int, flags : uint) -> p!SDL_Window;
-    extern (C) SDL_CreateRenderer (window : p!SDL_Window, index : int, flags : uint) -> p!SDL_Renderer;
-    extern (C) SDL_RenderSetLogicalSize(renderer : p!SDL_Renderer, w : int, h : int) -> int;
-    extern (C) SDL_PollEvent (event : p!SDL_Event) -> int;
-    extern (C) SDL_SetRenderDrawColor (renderer : p!SDL_Renderer, r : ubyte, g : ubyte, b : ubyte, a : ubyte) -> int;
-    extern (C) SDL_RenderFillRect (renderer : p!SDL_Renderer, const rect : p!SDL_Rect) -> int;
-    extern (C) SDL_RenderPresent (renderer : p!SDL_Renderer);
-    extern (C) SDL_DestroyRenderer (renderer : p!SDL_Renderer);
-    extern (C) SDL_DestroyWindow (window : p!SDL_Window);
-    extern (C) SDL_GetError () -> const p!char;
+    extern (C) SDL_CreateWindow (const title : p!char, x : int, y : int, w : int, h : int, flags : uint) -> p!SDLWindow;
+    extern (C) SDL_CreateRenderer (const window : p!SDLWindow, const index : int, const flags : SDLRendererFlag) -> p!SDLRenderer;
+    extern (C) SDL_RenderSetLogicalSize(const renderer : p!SDLRenderer, const w : int, const h : int) -> int;
+    extern (C) SDL_PollEvent (event : p!SDLEvent) -> int;
+    extern (C) SDL_SetRenderDrawColor (const renderer : p!SDLRenderer, const r : ubyte, const g : ubyte, const b : ubyte, const a : ubyte) -> int;
+    extern (C) SDL_RenderFillRect (const renderer : p!SDLRenderer, const rect : p!SDLRect) -> int;
+    extern (C) SDL_RenderPresent (const renderer : p!SDLRenderer);
+    extern (C) SDL_DestroyRenderer (const renderer : p!SDLRenderer);
+    extern (C) SDL_DestroyWindow (const window : p!SDLWindow);
+    extern (C) SDL_CreateTextureFromSurface (const renderer : p!SDLRenderer, const surface : p!SDLSurface) -> p!SDLTexture;
+    extern (C) SDL_GetWindowSurface (const window : p!SDLWindow) -> p!SDLSurface;
+    extern (C) SDL_FreeSurface (const surface : p!SDLSurface);
+    extern (C) SDL_QueryTexture (const texture : p!SDLTexture, format : p!uint, access : p!int, w : p!int, h : p!int) -> int;
+    extern (C) SDL_RenderCopy (const renderer : p!SDLRenderer, const texture : p!SDLTexture, const srcRect : p!SDLRect, dstRect : p!SDLRect) -> int;
+    extern (C) SDL_DestroyTexture (const texture : p!SDLTexture);
+    extern (C) SDL_GetError() -> const p!char;
+
+    // SDL_GetWindowSize () pourrait être utile
+    
+    // SDL2_Image
+    extern (C) IMG_Load (const file : p!char) -> p!SDLSurface;
+    // extern (C) IMG_GetError () -> p!char;
 }
 
 struct
 | data : p!void
- -> SDL_Window;
+ -> SDLWindow;
 
 struct
 | data : p!void
- -> SDL_Renderer;
+ -> SDLRenderer;
+
+struct
+| data : p!void
+ -> SDLTexture;
+
+// ce serait cool d'avoir accès aux valeurs w et h quand même...
+struct
+| data : p!void
+ -> SDLSurface;
 
 struct
 | type : uint
 | data : [ubyte ; 52U] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
- -> SDL_Event;
+ -> SDLEvent;
 
 struct
 | type : uint
@@ -38,7 +60,7 @@ struct
 | padding1 : ubyte
 | x : int
 | y : int
--> SDL_MouseButtonEvent;
+-> SDLMouseButtonEvent;
 
 struct
 | type : int
@@ -52,20 +74,20 @@ struct
 | sym : int
 | mode : ushort
 | unicode : uint    
--> SDL_KeyboardEvent;
+-> SDLKeyboardEvent;
 
 struct
 | x : int
 | y : int
 | w : int
 | h : int
- -> SDL_Rect;
+ -> SDLRect;
 
 // TODO : complete by using SDL.h
 enum : uint
 | Audio : 16u
 | Video : 32u
- -> SDL_InitFlag;
+ -> SDLInitFlag;
 
 // TODO : complete by using SDL_video.h
 enum : uint
@@ -74,14 +96,14 @@ enum : uint
 | Shown : 4u
 | Hidden : 8u
 | Borderless : 16u
- -> SDL_WindowFlag;
+ -> SDLWindowFlag;
 
 enum : uint
 | Software : 1u
 | Accelerated : 2u
 | PresentVSync : 4u
 | TargetTexture : 8u
- -> SDL_RendererFlag;
+ -> SDLRendererFlag;
 
 // TODO : complete by using SDL_events.h
 enum : uint
@@ -93,7 +115,7 @@ enum : uint
 | MouseButtonUp : 1026U
 | MouseWheel : 1027U
 | Unknown : 0U // not used by the SDL
- -> SDL_EventType;
+ -> SDLEventType;
 
 enum SDL_Keycode {
     SDLK_UNKNOWN : 0,

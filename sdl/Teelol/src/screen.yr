@@ -13,7 +13,6 @@ struct
 | window : p!SDL_Window
 | renderer : p!SDL_Renderer
 | drawables : List!(p!Drawable)
-| background : SDL_Rect
  -> Screen;
 
 private
@@ -70,15 +69,22 @@ def display (ref screen : Screen)
     let next_ = screen.drawables.next ();
     while (next_ !is null)
     {
-        let draw = *((*next_).value);
+        let draw = *(next_.value);
         let res = draw.res;
-        let rect = draw.pos;
-        if (res.color == ResourceColor::Red)
-            SDL_SetRenderDrawColor (screen.renderer, 255ub, 0ub, 0ub, 255ub);
-        else
-            SDL_SetRenderDrawColor (screen.renderer, 255ub, 255ub, 255ub, 255ub);
-        SDL_RenderFillRect (screen.renderer, &rect);
-        next_ = (*next_).next;
+
+        if (res.texture !is null)
+        {
+            let pos = draw.pos;
+
+            let spriteRect = SDL_Rect { pos.x, pos.y, res.width, res.height };
+            if (SDL_RenderCopy (screen.renderer, res.texture, null, &spriteRect) < 0)
+            {
+                printErr ("SDL_RenderCopy() error");
+                abort ();
+            }
+        }
+
+        next_ = next_.next;
     }
     
     SDL_RenderPresent (screen.renderer);

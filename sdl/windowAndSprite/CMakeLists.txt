@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(Teelol C)
+PROJECT(Test C)
 SET(CMAKE_C_COMPILER "gyc")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -fdump-tree-gimple")
 
@@ -11,6 +11,6 @@ FILE (
 
 SET_SOURCE_FILES_PROPERTIES(main.yr ${SourceFiles} PROPERTIES LANGUAGE C)
 
-ADD_EXECUTABLE(teelol main.yr ${SourceFiles})
-target_link_libraries (teelol -lSDL2 -lSDL2main)
-include_directories (teelol ./)
+ADD_EXECUTABLE(../test main.yr ${SourceFiles})
+target_link_libraries (../test -lSDL2 -lSDL2main -lSDL2_image)
+include_directories (test ./)

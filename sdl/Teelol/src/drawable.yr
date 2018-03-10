@@ -3,7 +3,15 @@ mod src.drawable;
 import src.lib.sdl;
 import src.resource;
 
+// TODO : write free mem function
+
 struct
-| pos : SDL_Rect
+| x : int
+| y : int
+ -> Position;
+
+struct
+| pos : Position
 | res : Resource
  -> Drawable;
+

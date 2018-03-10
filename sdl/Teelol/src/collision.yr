@@ -1,0 +1,146 @@
+mod src.collision;
+
+import core.io;
+
+import std.memory;
+import std.list;
+
+import src.lib.sdl;
+import src.drawable;
+import src.player;
+
+struct
+| background : SDL_Rect
+| objects : List!(p!Drawable)
+ -> CollisionManager;
+
+enum
+| Up : 0
+| Down : 1
+| Right : 2
+| Left : 3
+ -> Direction;
+
+
+private
+{    
+    static gCollisionManagerInstance : p!CollisionManager;
+    
+    self ()
+    {
+        gCollisionManagerInstance = null;
+    }
+
+    def collidesWithSomething (colManager : p!CollisionManager, ref player : Player, speed : int, direction : Direction) -> bool
+    {
+        let next_ = colManager.objects.next ();
+        while (next_ !is null)
+        {
+            if (next_.value !is &(player.drawable))
+            {
+                if (collides (&(player.drawable), speed, direction, next_.value))
+                    return true;
+            }
+            
+            next_ = next_.next;
+        }
+
+        return false;
+    }
+
+    def collides (objectA : p!Drawable, speed : int, const direction : Direction, objectB : p!Drawable) -> bool
+    {
+        let rectA = SDL_Rect { objectA.pos.x, objectA.pos.y, objectA.res.width, objectA.res.height };
+        let rectB = SDL_Rect { objectB.pos.x, objectB.pos.y, objectB.res.width, objectB.res.height };
+
+        match (direction)
+        {
+            Direction::Up => rectA.y -= speed;
+            Direction::Down => rectA.y += speed;
+            Direction::Right => rectA.x += speed;
+            Direction::Left => rectA.x -= speed;
+        }
+
+        let left = (rectA.x + rectA.w) < rectB.x;
+        let right = rectA.x > (rectB.x + rectB.w);
+        let top = (rectA.y + rectA.h) < rectB.y;
+        let bottom = rectA.y > (rectB.y + rectB.h);
+
+        return !(left || right || top || bottom);
+    }
+}
+
+def createCollisionManager (screenWidth : int, screenHeight : int) -> mut p!CollisionManager
+{
+    if (gCollisionManagerInstance is null)
+    {
+        let colManager = CollisionManager { SDL_Rect { 0, 0, screenWidth, screenHeight }, list!(p!Drawable) () };
+        gCollisionManagerInstance = alloc (colManager);
+        return gCollisionManagerInstance;
+    }
+    else
+    {
+        println ("You cannot create two instances of a CollisionManager !");
+        assert (false);
+    }
+}
+
+def getCollisionManager () -> mut p!CollisionManager
+{
+    if (gCollisionManagerInstance is null)
+    {
+        println ("The collision manager must be created by using the createCollisionManager function !");
+        assert (false);
+    }
+
+    return gCollisionManagerInstance;
+}
+
+def addObject (colManager : p!CollisionManager, drawable : p!Drawable)
+{
+    colManager.objects.push (drawable);
+}
+
+def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+{
+    let background = colManager.background;
+    let drawable = player.drawable;
+
+    let nextPosX = drawable.pos.x + speed;
+    
+    if ((nextPosX + drawable.res.width) >= background.w)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Right);
+}
+
+def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+{
+    let background = colManager.background;
+    let drawable = player.drawable;
+
+    let nextPosX = drawable.pos.x - speed;
+    
+    if (nextPosX <= 0)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Left);
+}
+
+def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+{
+    let background = colManager.background;
+    let drawable = player.drawable;
+
+    let nextPosY = drawable.pos.y + 1;
+    
+    if ((nextPosY + drawable.res.height) >= background.h)
+        return false;
+    
+    return !colManager.collidesWithSomething (player, speed, Direction::Down);
+}
+
+def canGoUp (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+{   
+    return !colManager.collidesWithSomething (player, speed, Direction::Up);
+}

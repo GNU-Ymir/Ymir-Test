@@ -12,5 +12,5 @@ FILE (
 SET_SOURCE_FILES_PROPERTIES(main.yr ${SourceFiles} PROPERTIES LANGUAGE C)
 
 ADD_EXECUTABLE(../teelol main.yr ${SourceFiles})
-target_link_libraries (../teelol -lSDL2 -lSDL2main)
+target_link_libraries (../teelol -lSDL2 -lSDL2main -lSDL2_image)
 include_directories (teelol ./)
