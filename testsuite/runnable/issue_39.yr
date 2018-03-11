@@ -28,6 +28,6 @@ def main()
     while (next_ !is null)
     {
         println ((*next_).value);
-        next_ = next_.next();
+        next_ = next(next_);
     }
 }

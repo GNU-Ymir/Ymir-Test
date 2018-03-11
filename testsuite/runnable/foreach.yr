@@ -112,6 +112,16 @@ def test6 () {
     assert (sum == 21L + 22L + 23L);
 }
 
+def test7 () {
+    imut for i in 0 .. 10 {
+        imut assert (i < 10);
+    }
+
+    imut for i in (1, [1, 2]) {
+        imut assert (is (typeof (i) : int) || is (typeof (i) : [int ; 2U]));
+    }
+}
+
 
 def main () {
     test1 ();
@@ -120,6 +130,6 @@ def main () {
     test4 ();
     test5 ();
     test6 ();
-    
+    test7 ();
     println ("Success !!");
 }

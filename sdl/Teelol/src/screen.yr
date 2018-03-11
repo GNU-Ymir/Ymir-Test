@@ -69,7 +69,7 @@ def display (ref screen : Screen)
     let next_ = screen.drawables.next ();
     while (next_ !is null)
     {
-        let draw = *((*next_).value);
+        let draw = *(next_.value);
         let res = draw.res;
 
         if (res.texture !is null)
@@ -84,7 +84,7 @@ def display (ref screen : Screen)
             }
         }
 
-        next_ = (*next_).next;
+        next_ = next_.next;
     }
     
     SDL_RenderPresent (screen.renderer);

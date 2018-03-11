@@ -51,7 +51,7 @@ private
         let next_ = gImagesPathList.next ();
         while (next_ !is null)
         {
-            let imageRes = (*next_).value;
+            let imageRes = next_.value;
             let surf = IMG_Load (imageRes.filePath.ptr);
 
             if (surf is null)
@@ -64,7 +64,7 @@ private
                 mlist.push (SurfaceRes { surf, renderingContext, imageRes.filePath.dup(), imageRes.type });
                 
             }
-            next_ = next_.next();
+            next_ = next_.next;
         }
 
         return mlist;
@@ -119,13 +119,13 @@ def getResourcesManager () -> p!ResourcesManager
 
 def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> mut Resource
 {
-    let resList = (*resManager).surfacesList;
+    let resList = resManager.surfacesList;
     let res = Resource::init;
     
     let next_ = resList.next ();
     while (next_ !is null)
     {
-        let surfRes = (*next_).value;
+        let surfRes = next_.value;
         if (surfRes.resType == type)
         {
             res.type = type;
@@ -145,7 +145,7 @@ def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> 
             
             return res;
         }
-        next_ = next_.next();
+        next_ = next_.next;
     }
 
     // the corresponding ressource was not found
