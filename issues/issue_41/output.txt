@@ -1,0 +1,53 @@
+Scanning dependencies of target teelol
+[  8%] Building C object CMakeFiles/../teelol.dir/src/player.yr.o
+ymir1: erreur interne du compilateur : Erreur de segmentation
+0xc5302f crash_signal
+        ../../gcc-src/gcc/toplev.c:325
+0x70bcbc semantic::IFloatValue* semantic::IValue::to<semantic::IFloatValue>()
+        ../../gcc-src/gcc/ymir/semantic/value/Value.hh:53
+0x70bcbc semantic::IFloatValue::mul(semantic::IValue*)
+        ../../gcc-src/gcc/ymir/FloatInfo.cc:562
+0x70c668 semantic::IFloatValue::BinaryOp(Word, semantic::IValue*)
+        ../../gcc-src/gcc/ymir/FloatInfo.cc:502
+0x70a5c8 semantic::IFloatInfo::opNorm(Word, syntax::IExpression*)
+        ../../gcc-src/gcc/ymir/FloatInfo.cc:324
+0x70ad70 semantic::IFloatInfo::BinaryOp(Word, syntax::IExpression*)
+        ../../gcc-src/gcc/ymir/FloatInfo.cc:43
+0x70b0d2 semantic::IFloatInfo::BinaryOp(Word, syntax::IExpression*)
+        /usr/include/c++/7/ext/new_allocator.h:125
+0x684ba8 syntax::IBinary::normal()
+        ../../gcc-src/gcc/ymir/astExpression.cc:629
+0x685054 syntax::IBinary::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:507
+0x6850b8 syntax::IBinary::expression()
+        /usr/include/c++/7/bits/basic_string.h:220
+0x684ade syntax::IBinary::normal()
+        ../../gcc-src/gcc/ymir/astExpression.cc:621
+0x685054 syntax::IBinary::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:507
+0x6850b8 syntax::IBinary::expression()
+        /usr/include/c++/7/bits/basic_string.h:220
+0x684ade syntax::IBinary::normal()
+        ../../gcc-src/gcc/ymir/astExpression.cc:621
+0x685054 syntax::IBinary::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:507
+0x6850b8 syntax::IBinary::expression()
+        /usr/include/c++/7/bits/basic_string.h:220
+0x684aee syntax::IBinary::normal()
+        ../../gcc-src/gcc/ymir/astExpression.cc:621
+0x685054 syntax::IBinary::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:507
+0x6850b8 syntax::IBinary::expression()
+        /usr/include/c++/7/bits/basic_string.h:220
+0x6886e9 syntax::ICast::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:816
+Veuillez soumettre un rapport d’anomalies complet,
+avec la sortie du préprocesseur si nécessaire.
+Please include the complete backtrace with any bug report.
+Voir <https://gcc.gnu.org/bugs/> pour les instructions.
+CMakeFiles/../teelol.dir/build.make:254 : la recette pour la cible « CMakeFiles/../teelol.dir/src/player.yr.o » a échouée
+make[2]: *** [CMakeFiles/../teelol.dir/src/player.yr.o] Erreur 1
+CMakeFiles/Makefile2:67 : la recette pour la cible « CMakeFiles/../teelol.dir/all » a échouée
+make[1]: *** [CMakeFiles/../teelol.dir/all] Erreur 2
+Makefile:83 : la recette pour la cible « all » a échouée
+make: *** [all] Erreur 2

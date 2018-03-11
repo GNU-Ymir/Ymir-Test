@@ -1,0 +1,17 @@
+mod src.drawable;
+
+import src.lib.sdl;
+import src.resource;
+
+// TODO : write free mem function
+
+struct
+| x : int
+| y : int
+ -> Position;
+
+struct
+| pos : Position
+| res : Resource
+ -> Drawable;
+
