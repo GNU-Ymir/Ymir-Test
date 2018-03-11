@@ -1,0 +1,118 @@
+mod src.movement;
+
+import std.math;
+
+enum
+| Right : 0
+| Left : 1
+| Down : 2
+ -> MoveDirection;
+
+struct
+| vX : float
+| vY : float
+| speedInit : int
+| angleInit : float
+| timer : int   
+| startPosX : int
+| startPosY : int
+| lastPosY : int
+| test : int
+ -> ParabolicMovement;
+
+struct
+| posX : int
+| posY : int
+| speedX : int
+| speedY : int
+ -> LinearMovement;
+
+imut gG = 9.81f;
+
+/* ### Linear Movement Management  */
+
+def createLinearMovement (posX : int, posY : int) -> mut LinearMovement
+{
+    let mvt = LinearMovement::init;
+    mvt.start (posX, posY);
+    
+    return mvt;
+}
+
+def start (ref movement : LinearMovement, posX : int, posY : int)
+{
+    movement.posX = posX;
+    movement.posY = posY;
+}
+
+def move (ref movement : LinearMovement, const speed : int, const direction : MoveDirection)
+{
+    match (direction)
+    {
+        MoveDirection::Right => movement.speedX = speed;
+        MoveDirection::Left  => movement.speedX = -(abs (speed));
+        MoveDirection::Down  => movement.speedY = speed;
+    }
+}
+
+def stop (ref movement : LinearMovement, const direction : MoveDirection)
+{
+    match (direction)
+    {
+        MoveDirection::Right | MoveDirection::Left => movement.speedX = 0;
+        MoveDirection::Down => movement.speedY = 0;
+    }
+}
+
+def nextPosition (ref movement : LinearMovement) -> mut t!(int, int)
+{
+    movement.posX += movement.speedX;
+    movement.posY += movement.speedY;
+
+    if (movement.speedX > 0)
+        movement.speedX--;
+    else if (movement.speedX < 0)
+        movement.speedX++;
+
+    return (movement.posX, movement.posY);
+}
+
+/* ### Parabolic Movement Management  */
+
+def start (ref movement : ParabolicMovement, posX : int, posY : int, speedInit : int, angleInit : float)
+{
+    movement.speedInit = speedInit;
+    movement.angleInit = angleInit;
+    
+    // TODO : +1, better idea ?
+    movement.vX = cosf (angleInit) * (abs (movement.speedInit) + 1);
+    movement.vY = sinf (angleInit) * (abs (movement.speedInit) + 1);
+
+    movement.startPosX = posX;
+    movement.startPosY = posY;
+
+    movement.timer = 0;
+}
+
+def nextPosition (ref movement : ParabolicMovement) -> t!(int, int)
+{
+    // Relative position
+    let relX = cast!int ((movement.vX * movement.timer) - ((movement.test * pow (movement.timer, 2)) / 2000));
+    let relY = cast!int ((movement.vY * movement.timer) - ((gG * pow (movement.timer, 2)) / 2000));
+
+    // Aboslute position
+    let absX = int::init;
+    let absY = int::init;
+
+    if (movement.speedInit < 0)
+        absX = movement.startPosX - relX;
+    else
+        absX = movement.startPosX + relX;
+
+    absY = movement.startPosY - relY;
+
+    // TODO : better idea ?
+    movement.timer += 2;
+
+    return (absX, absY);
+}
