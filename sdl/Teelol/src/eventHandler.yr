@@ -86,7 +86,7 @@ def handleEvents(ref eventHdl : EventHandler)
         match (sdlEventPtr.type)
         {
             SDL_EventType::QUIT => {
-                eventHdl.handleClassicEvent ((*sdlEventPtr).type);
+                eventHdl.handleClassicEvent (sdlEventPtr.type);
             }
             SDL_EventType::MOUSEBUTTONUP | SDL_EventType::MOUSEBUTTONDOWN => {
                 let mouseEvent = cast!(p!SDL_MouseButtonEvent) (sdlEventPtr);
@@ -109,12 +109,12 @@ def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
     let next_ = eventHdl.classicEvents.next ();
     while (next_ !is null)
     {
-        if ((*next_).value.type == eventType)
+        if (next_.value.type == eventType)
         {
             let sig = next_.value.signal;
             sig.call (*(eventHdl.game));
         }
-        next_ = next_.next;
+        next_ = next(next_);
     }
 }
 
@@ -130,7 +130,7 @@ def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode 
             sig.call (*(eventHdl.game));
             res = true;
         }
-        next_ = next_.next;
+        next_ = next(next_);
     }
     return res;
 }
@@ -148,7 +148,7 @@ def handleKeyboardWithKeyRepeatEvent (ref eventHdl : EventHandler, eventType : u
             sig.call (*(eventHdl.game));
             ret = true;
         }
-        next_ = next_.next;
+        next_ = next(next_);
     }
     return ret;
 }
@@ -163,6 +163,6 @@ def handleMouseEvent (ref eventHdl : EventHandler, eventType : uint, buttonCode 
             let sig = next_.value.signal;
             sig.call (*(eventHdl.game), pos);
         }
-        next_ = next_.next;
+        next_ = next(next_);
     }    
 }

@@ -6,72 +6,133 @@ import src.drawable;
 import src.collision;
 
 import core.io;
+import std.list;
+
+extern (C) sinf (value : float) -> float;
+extern (C) cosf (value : float) -> float;
+extern (C) abs (value : int) -> int;
 
 struct
+| vX : float
+| vY : float
+| speedInit : int
+| timer : int
+| jumpsCount : int    
+| g : float // tmp because immutable floats are not implemented yet !
+| pi : float
+| startPosX : int
+| startPosY : int
+| lastPosY : int
+ -> JumpInfo;
+    
+struct
 | name : string
-| drawable : Drawable // Waiting for the inheritance feature...
+| body : Drawable
+| eyes : Drawable
 | speedX : int
 | speedY : int
+| isJumping : bool
+| jumpInfo : JumpInfo // The field is filled when isJumping is true
  -> Player;
 
-private {
+private
+{
     imut gHorizontalSpeed = 1;
     imut gVerticalSpeed = 1;
+    imut gMaxJumpsCount = 2;
+    // imut gG = 9.81f;
+    // imut gPi = 3.14f;
 }
 
 def createPlayer (name : string, const posX : int, const posY : int, resType : ResourceType) -> Player
 {
     let resManager = getResourcesManager ();
-    let res = resManager.getResource (resType);
-    let d = Drawable { Position { posX, posY }, res };
-    return Player { name, d , 0, 0};
+    let bodyRes = resManager.getResource (resType);
+    let eyesRes = resManager.getResource (ResourceType::Eyes);
+    let body = Drawable { Position { posX, posY }, bodyRes };
+    let eyes = Drawable { Position { posX + 4, posY + 4 }, eyesRes };
+    return Player { name, body, eyes, int::init, int::init, false, JumpInfo::init };
 }
 
-def getResource (ref player : Player) -> mut p!Resource
+def getDrawables (ref player : Player) -> mut List!(p!Drawable)
 {
-    return &(player.drawable.res);
-}
-
-def setResource (ref player : Player, resType : ResourceType)
-{
-    let resManager = getResourcesManager ();
-    player.drawable.res = resManager.getResource (resType);
+    let res = list!(p!Drawable) ();
+    res.push (&(player.body));
+    res.push (&(player.eyes));
+    return res;
 }
 
 def jump (ref player : Player)
 {
-    let colManager = getCollisionManager ();
-    if (colManager.canGoUp (player, gVerticalSpeed))
-        player.speedY = -gVerticalSpeed;
-    else
-        player.stopMoveY ();
+    if (player.jumpInfo.jumpsCount < gMaxJumpsCount)
+    {
+        player.isJumping = true;
+        player.jumpInfo.timer = 0;
+
+        // Tmp
+        player.jumpInfo.g = 9.81f;
+        player.jumpInfo.pi = 3.14f;
+        
+        let angleInit = float::init;
+        
+        if (player.speedX > 0 || player.speedX < 0)
+        {
+            player.jumpInfo.speedInit = player.speedX;
+            angleInit = player.jumpInfo.pi / 3;
+        }
+        else
+        {
+            player.jumpInfo.speedInit = gVerticalSpeed;
+            angleInit = player.jumpInfo.pi / 2;
+        }
+
+        player.jumpInfo.vX = cosf (angleInit) * abs(player.jumpInfo.speedInit);
+        player.jumpInfo.vY = sinf (angleInit) * abs(player.jumpInfo.speedInit);
+        player.jumpInfo.startPosX = player.body.pos.x;
+        player.jumpInfo.startPosY = player.body.pos.y;
+
+        player.jumpInfo.lastPosY = player.jumpInfo.startPosY;
+        
+        player.jumpInfo.jumpsCount++;
+    }
 }
 
 def fall (ref player : Player)
 {
     let colManager = getCollisionManager ();
     if (colManager.canGoDown (player, gVerticalSpeed))
-        player.speedY = gVerticalSpeed;
+    {
+        player.speedY = gVerticalSpeed;;
+    }
     else
+    {
+        player.jumpInfo.jumpsCount = 0;
         player.stopMoveY ();
+    }
 }
 
 def goRight (ref player : Player)
 {
-    let colManager = getCollisionManager ();
-    if (colManager.canGoRight (player, gHorizontalSpeed))
-        player.speedX = gHorizontalSpeed;
-    else
-        player.stopMoveX ();
+    if (!player.isJumping)
+    {
+        let colManager = getCollisionManager ();
+        if (colManager.canGoRight (player, gHorizontalSpeed))
+            player.speedX = gHorizontalSpeed;
+        else
+            player.stopMoveX ();
+    }
 }
 
 def goLeft (ref player : Player)
 {
-    let colManager = getCollisionManager ();
-    if (colManager.canGoLeft (player, gHorizontalSpeed))
-        player.speedX = -gHorizontalSpeed;
-    else
-        player.stopMoveX ();
+    if (!player.isJumping)
+    {
+        let colManager = getCollisionManager ();
+        if (colManager.canGoLeft (player, gHorizontalSpeed))
+            player.speedX = -gHorizontalSpeed;
+        else
+            player.stopMoveX ();
+    }
 }
 
 def stopMoveX (ref player : Player)
@@ -86,20 +147,77 @@ def stopMoveY (ref player : Player)
 
 def goTo (ref player : Player, posX : int, posY : int)
 {
-    player.drawable.pos.x = posX;
-    player.drawable.pos.y = posY;
+    player.body.pos.x = posX;
+    player.body.pos.y = posY;
+    player.eyes.pos.x = posX + 4;
+    player.eyes.pos.y = posY + 4;
 }
 
 def passRow (ref player : Player)
-{
-    player.drawable.pos.x += player.speedX;
-    player.drawable.pos.y += player.speedY;
+{    
+    if (player.isJumping)
+    {
+        passRowJump (player);
+    }
+    else
+    {    
+    // if (!player.isJumping)
+    // {
+        player.body.pos.x += player.speedX;
+        player.body.pos.y += player.speedY;
+        player.eyes.pos.x += player.speedX;
+        player.eyes.pos.y += player.speedY;
 
-    if (player.speedX > 0)
-        player.speedX -= 1;
-    else if (player.speedX < 0)
-        player.speedX += 1;
+        if (player.speedX > 0)
+            player.speedX -= 1;
+        else if (player.speedX < 0)
+            player.speedX += 1;
+
+        player.fall ();
+    }
+}
+
+def passRowJump (ref player : Player)
+{
+    let relX = cast!int (player.jumpInfo.vX * player.jumpInfo.timer);
+    let relY = cast!int ((player.jumpInfo.vY * player.jumpInfo.timer) - ((player.jumpInfo.g * player.jumpInfo.timer * player.jumpInfo.timer) / 2000));
+
+    let absX = int::init;
+    let absY = int::init;
     
-    // the player has to fall if he's not on the ground or an other object
-    player.fall ();
+    if (player.jumpInfo.speedInit < 0)
+        absX = player.jumpInfo.startPosX - relX;
+    else
+        absX = player.jumpInfo.startPosX + relX;
+    
+    absY = player.jumpInfo.startPosY - relY;
+
+    player.goTo (absX, absY);
+    
+    player.jumpInfo.timer += 3;
+
+    let colManager = getCollisionManager ();
+    if ((player.jumpInfo.lastPosY - player.body.pos.y) < 0)
+    {
+        if (!colManager.canGoDown (player, 1))
+        {
+            player.stopMoveY ();
+            player.isJumping = false;
+            player.jumpInfo.jumpsCount = 0;
+        }
+    }
+
+    if (!colManager.canGoRight (player, gHorizontalSpeed) && player.jumpInfo.speedInit > 0)
+    {
+        player.stopMoveX ();
+        player.isJumping = false;
+    }
+
+    if (!colManager.canGoLeft (player, gHorizontalSpeed) && player.jumpInfo.speedInit < 0)
+    {
+        player.stopMoveX ();
+        player.isJumping = false;
+    }
+    
+    player.jumpInfo.lastPosY = player.body.pos.y;
 }

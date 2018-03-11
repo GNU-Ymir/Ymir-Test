@@ -15,6 +15,7 @@ import src.screen;
 enum
 | Tee : 0
 | OtherTee : 1
+| Eyes : 2
  -> ResourceType;
 
 struct
@@ -64,7 +65,7 @@ private
                 mlist.push (SurfaceRes { surf, renderingContext, imageRes.filePath.dup(), imageRes.type });
                 
             }
-            next_ = next_.next;
+            next_ = next(next_);
         }
 
         return mlist;
@@ -81,15 +82,17 @@ private
 
     // global test surface
     imut gTeeFilePath = "img/tee.png";
-    imut gOtherTeeFile = "img/otherTee.png";
-
+    imut gOtherTeeFilePath = "img/otherTee.png";
+    imut gTeeEyesFilePath = "img/eyes.png";
+    
     // static constructor
     self ()
     {
         gResourcesManagerInstance = null;
         gImagesPathList = list!ImageRes ();
         gImagesPathList.push (ImageRes { ResourceType::Tee, gTeeFilePath.dup() });
-        gImagesPathList.push (ImageRes { ResourceType::OtherTee, gOtherTeeFile.dup() });
+        gImagesPathList.push (ImageRes { ResourceType::OtherTee, gOtherTeeFilePath.dup() });
+        gImagesPathList.push (ImageRes { ResourceType::Eyes, gTeeEyesFilePath.dup () });
     }
 }
 
@@ -145,7 +148,7 @@ def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> 
             
             return res;
         }
-        next_ = next_.next;
+        next_ = next(next_);
     }
 
     // the corresponding ressource was not found

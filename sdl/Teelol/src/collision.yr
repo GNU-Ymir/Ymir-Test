@@ -21,7 +21,6 @@ enum
 | Left : 3
  -> Direction;
 
-
 private
 {    
     static gCollisionManagerInstance : p!CollisionManager;
@@ -36,13 +35,13 @@ private
         let next_ = colManager.objects.next ();
         while (next_ !is null)
         {
-            if (next_.value !is &(player.drawable))
+            if (next_.value !is &(player.body))
             {
-                if (collides (&(player.drawable), speed, direction, next_.value))
+                if (collides (&(player.body), speed, direction, next_.value))
                     return true;
             }
             
-            next_ = next_.next;
+            next_ = next (next_);
         }
 
         return false;
@@ -104,7 +103,7 @@ def addObject (colManager : p!CollisionManager, drawable : p!Drawable)
 def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
     let background = colManager.background;
-    let drawable = player.drawable;
+    let drawable = player.body;
 
     let nextPosX = drawable.pos.x + speed;
     
@@ -117,7 +116,7 @@ def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : in
 def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
     let background = colManager.background;
-    let drawable = player.drawable;
+    let drawable = player.body;
 
     let nextPosX = drawable.pos.x - speed;
     
@@ -130,9 +129,9 @@ def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int
 def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
 {
     let background = colManager.background;
-    let drawable = player.drawable;
+    let drawable = player.body;
 
-    let nextPosY = drawable.pos.y + 1;
+    let nextPosY = drawable.pos.y + speed;
     
     if ((nextPosY + drawable.res.height) >= background.h)
         return false;

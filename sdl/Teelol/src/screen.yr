@@ -84,7 +84,7 @@ def display (ref screen : Screen)
             }
         }
 
-        next_ = next_.next;
+        next_ = next (next_);
     }
     
     SDL_RenderPresent (screen.renderer);
@@ -99,7 +99,17 @@ def destroy (ref screen : Screen)
         SDL_DestroyWindow (screen.window);
 }
 
-def addDrawable (ref screen : Screen, drawable : p!Drawable)
+def addDrawable (ref screen : Screen, ref drawable : p!Drawable)
 {
     screen.drawables.push (drawable);
+}
+
+def addDrawables (ref screen : Screen, ref drawables : List!(p!Drawable))
+{
+    let next_ = drawables.next ();
+    while (next_ !is null)
+    {
+        screen.drawables.push (next_.value);
+        next_ = next(next_);
+    }
 }
