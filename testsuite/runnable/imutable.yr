@@ -1,0 +1,47 @@
+import core.io;
+
+def test1 () {
+    let imut a = 12;
+    let imut b = (a++) + 7;
+    imut assert (a == 13);
+    imut assert (b == 20);
+}
+
+def fibo (n : ulong) () -> ulong {
+    imut if n < 2U
+        return n;
+    else return fibo!(n - 1U)() + fibo!(n - 2U)();
+}
+
+def test2 () {
+    let imut a = fibo!93UL ();
+    imut assert (a == 12200160415121876738UL);
+}
+
+def equals (left : string, right : string) () {
+    imut if left.len != right.len
+        return false;
+    else return left [0] == right [0] && equals!(left, right, 1);
+}
+
+def equals (left : string, right : string, i : int) () {
+    imut if i < left.len
+        return left [i] == right [i] && equals!(left, right, i + 1);
+    else return true;
+}
+
+def test3 () {
+    imut assert (equals!("test", "test"));
+    imut assert (!equals!("test", "tect"));
+    imut assert (equals!(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud",
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"));
+
+    imut assert (equals!("test" ~ "truc", "testtruc"));
+}
+
+def main () {
+    test1 ();
+    test2 ();
+    test3 ();
+}

@@ -1,0 +1,58 @@
+import core.io;
+
+static current = 0;
+
+def log (x) {
+    for it in 0 .. current
+        print (" ");
+    println (x);
+}
+
+__macro json {
+    
+    ($z: expr ":" "{" *x: ($y: token) "}") {
+        log (z);
+        current += 4;
+        json: { $(x) };
+        current -= 4;
+    }
+
+    ($z: expr ":" "[" *x: ($y: expr, ",") "]") {
+        log (z);
+        current += 4;
+        imut for it in x {
+            log (it.y);
+        }
+        current -= 4;
+    }
+
+    
+    ($x: expr) {
+        log (x);
+    }
+
+    () {}
+
+    ("{" *elem: ($y: token) "}") {
+        json: { $(elem) };
+    }
+    
+    (*x: (*elem: ($y: token), ",")) {
+        imut for it in x {
+            json: { $(it.elem) };
+        }
+    }
+    
+}
+
+
+def main () {
+    let a = 2;
+    json: {
+        "salut": {
+            "test" : {},
+            "array" : [1, 2, 3]
+        },        
+        "test": {}    
+    };
+}
