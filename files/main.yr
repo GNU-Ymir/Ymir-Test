@@ -1,0 +1,68 @@
+mod main;
+
+import core.io;
+
+extern (C) fopen (const path : p!char, const mode : p!char) -> p!int;
+extern (C) fclose (file : p!int) -> int;
+extern (C) fgetc (file : p!int) -> int;
+extern (C) fgets (buf : p!char, n : int, file : p!int) -> p!char;
+
+struct
+| handle : p!int
+ -> File;
+
+imut Eof = -1;
+
+def open (ref file : File, filePath : const string, mode : const string) -> bool
+{
+    file.handle = fopen (filePath.ptr, mode.ptr);
+    
+    if (file.handle is null)
+        return false;
+    return true;
+}
+
+def close (ref file : File) -> bool
+{
+    if (file.handle is null)
+        return false;
+    return fclose (file.handle) == 0;
+}
+
+def readChar (ref file : File) -> mut char
+{
+    return cast!char (fgetc (file.handle));
+}
+
+def readString (ref file : File, n : uint) -> mut string
+{
+    let buf = [char ; n];
+    fgets (buf.ptr, cast!int (n), file.handle);
+    return string { n, buf.ptr };
+}
+
+def main()
+{
+    let file = File::init;
+    if (!file.open ("test.txt", "r"))
+    {
+        println ("File open error");
+        assert (false);
+    }
+
+    // let c = char::init;
+    // while (c != cast!char (Eof))
+    // {
+    //     c = file.readChar ();
+    //     if (c != cast!char (Eof))
+    //         print (c);
+    // }
+
+    let str = file.readString (10u);
+    println (str);
+    
+    on exit => {
+        if (!file.close ())
+            println ("File close error");
+    }
+}
