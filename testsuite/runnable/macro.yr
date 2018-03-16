@@ -1,4 +1,6 @@
 import core.io;
+import core.string;
+import std.math;
 
 static current = 0;
 
@@ -45,14 +47,83 @@ __macro json {
     
 }
 
-
-def main () {
-    let a = 2;
-    json: {
+def test () {
+   json: {
         "salut": {
             "test" : {},
             "array" : [1, 2, 3]
         },        
         "test": {}    
     };
+}
+
+
+__macro stringify {
+    (*elem: ($i: token)) {
+        let res = [char ; 0U];
+        imut for it in elem
+            res = res ~ it.i;
+        res;
+    }
+}
+
+def test2 () {
+    let a = stringify: {salut comment ça va ?};
+    assert (a == "salut comment ça va ?");
+}
+
+__macro comp {
+    ($x: expr "|" $y: ident "in" $z: expr) {
+        let res;
+        {
+            imut if (!is (z : [int])) {
+                let y = z.fst;
+                res = [ typeof (x); 0U ];
+            } else {
+                let y = z [0];
+                res = [ typeof (x) ; 0U ];
+            }
+        }
+        
+        for y in z {
+            res = res ~ [x];
+        }
+        res;
+    }
+
+    ($x: expr "|" $y: ident "in" $z: expr "if" $test: expr) {
+        let res;
+        {
+            imut if (!is (z : [int])) {
+                let y = z.fst;
+                res = [ typeof (x); 0U ];
+            } else {
+                let y = z [0];
+                res = [ typeof (x) ; 0U ];
+            }
+        }
+        
+        for y in z {
+            if (test) 
+                res = res ~ [x];
+        }
+        res;
+    }   
+}
+
+def test3 () {
+    let x = comp: [i | i in 0 .. 10];
+    assert (x == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    let S = comp: [x.pow (2U) | x in 0 .. 10];
+    let V = comp: [(2).pow (i) | i in 0U .. 13U];
+    let M = comp: [x | x in S if x % 2 == 0];
+}
+
+
+def main () {
+    test ();
+    test2 ();
+    test3 ();
+    println ("success !!");
 }
