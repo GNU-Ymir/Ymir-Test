@@ -6,5 +6,7 @@ mod cat1 (T) {
 }
 
 def test1 () {
-    let a = cat1!(int)::cat1 (1);
+    let a = cat1!(i32)::cat1 (1);
 }
+
+def main () {}

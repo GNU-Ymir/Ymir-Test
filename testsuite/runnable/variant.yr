@@ -20,7 +20,7 @@ def get (T) (a : Variant) -> mut T {
 
 def main () {
     let a = variant (10);
-    let b = a.get!int;
+    let b = a.get!i32;
     println (b);
 }
 

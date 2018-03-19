@@ -21,7 +21,7 @@ def test2 () {
 }
 
 def test3 () {
-    let x = [int ; 0U];
+    let x = [i32 ; 0U];
     for i in {
         for j in 0 .. 10 {
             x = x ~ [j];

@@ -15,33 +15,33 @@ def namedBin (CALL : fn (T, T) -> U, T, U) (a : T, b : T)
 
 def test () {
     assert (una!((a) => a * 2) (2) == 4);
-    assert (una!((a : int) => a * 2) (2) == 4);
-    assert (namedUna!((a : int) => a * 2) (2) == 4);
+    assert (una!((a : i32) => a * 2) (2) == 4);
+    assert (namedUna!((a : i32) => a * 2) (2) == 4);
     assert (una!((a) { return a * 2; }) (2) == 4);
 
     assert (bin ! ((a, b) => a*2 + b) (2, 1) == 5);
-    assert (bin ! ((a : int, b) => a*2 + b) (2, 1) == 5);
-    assert (bin ! ((a, b : int) => a*2 + b) (2, 1) == 5);
-    assert (bin ! ((a : int, b : int) => a*2 + b) (2, 1) == 5);
-    assert (namedBin ! ((a : int, b : int) => a*2 + b) (2, 1) == 5);
-    assert (namedBin ! ((a : int, b) => a*2 + b) (2, 1) == 5);        
+    assert (bin ! ((a : i32, b) => a*2 + b) (2, 1) == 5);
+    assert (bin ! ((a, b : i32) => a*2 + b) (2, 1) == 5);
+    assert (bin ! ((a : i32, b : i32) => a*2 + b) (2, 1) == 5);
+    assert (namedBin ! ((a : i32, b : i32) => a*2 + b) (2, 1) == 5);
+    assert (namedBin ! ((a : i32, b) => a*2 + b) (2, 1) == 5);        
 }
 
 def test2 () {
-    let fn1 = fn (int)-> int ((a) => a * 2);
+    let fn1 = fn (i32)-> i32 ((a) => a * 2);
     assert (fn1 (2) == 4);
 
     let imut fn2 = (a) => a * 2;
     assert (fn2 (2) == 4);
 
-    let fn3 = (a : int) => a * 2;
+    let fn3 = (a : i32) => a * 2;
     assert (fn3 (2) == 4);
 }
 
 def test3 () {
-    // let foo = (a : int) {
-    //     return fn (int) -> int (
-    //         (x : int) {
+    // let foo = (a : i32) {
+    //     return fn (i32) -> i32 (
+    //         (x : i32) {
     //             return a * x;
     //         }
     //         );
@@ -51,15 +51,15 @@ def test3 () {
     // Bug
 }
 
-def foo4 (call : fn (int) -> int) {
+def foo4 (call : fn (i32) -> i32) {
     return call (10);
 }
 
-def foo4 (call : fn (int, int) -> int) {
+def foo4 (call : fn (i32, i32) -> i32) {
     return call (10, 20);
 }
 
-def nbar4fp (fp : fn (int)-> void) { }
+def nbar4fp (fp : fn (i32)-> void) { }
 def tbar4fp (T, R) (fp : fn (T) -> R) { }
 def nbaz4fp (a : fn ()-> void) { return 1; }
 def tbaz4fp (R) (a : fn ()-> R) { imut assert (is (R : void)); return 1; }
@@ -68,8 +68,8 @@ def test4 () {
     assert (foo4 ((a) => a * 2) == 20);
     assert (foo4 ((a, b) => a * 2 + b) == 40);
 
-    nbar4fp ((x : int) {});
-    tbar4fp ((x : int) {});
+    nbar4fp ((x : i32) {});
+    tbar4fp ((x : i32) {});
 
     assert (nbaz4fp ((){}) == 1);
     assert (tbaz4fp ((){}) == 1);    
@@ -78,14 +78,14 @@ def test4 () {
 def test5 () {
     assert (((a) => a*2)(10) == 20);
     assert (((a, s) { return s ~ s; }) (10, "str") == "strstr");
-    assert (((a : int, s) { return s ~ s; }) (10, "str") == "strstr");
+    assert (((a : i32, s) { return s ~ s; }) (10, "str") == "strstr");
     assert (((a, s : const string) { return s ~ s; }) (10, "str") == "strstr");
-    assert (((a : int, s : const string) { return s ~ s; }) (10, "str") == "strstr");
+    assert (((a : i32, s : const string) { return s ~ s; }) (10, "str") == "strstr");
 }
 
 def test6 () {
-    // let fp = fn (ref int) -> int;
-    // fp = (ref a : int) => a;
+    // let fp = fn (ref i32) -> i32;
+    // fp = (ref a : i32) => a;
     // assert (fp (10) == 10);
     // Bug
 }
@@ -93,7 +93,7 @@ def test6 () {
 def test7 () {
 
     struct
-    | foo : fn (int) -> int
+    | foo : fn (i32) -> i32
      -> S;
 
     let s1 = S {(a) => a*2};    
@@ -101,25 +101,25 @@ def test7 () {
 }
 
 def test8 () {
-    //let a2 = [fn (int)-> int ; 0UL];
+    //let a2 = [fn (i32)-> i32 ; 0UL];
     //a2 = a2 ~ [(x) => x];
     // Bug
 }
 
 def test9 () {
-    //let a1 = [(x : int) => x, (x : int) => x * 2];
+    //let a1 = [(x : i32) => x, (x : i32) => x * 2];
     // Bug
 
     // let fp = match true {
-    //     true => (x : int) => x;
-    //     _ => (x : int) => x * 2;
+    //     true => (x : i32) => x;
+    //     _ => (x : i32) => x * 2;
     // };
     // Bug 2
 }
 
-def foo10 (a : fn (int, int)-> int) {}
-def bar10 (a : fn (int, int)-> double) { return 1; }
-def bar10 (a : fn (int, int)-> int) { return 2; }
+def foo10 (a : fn (i32, i32)-> i32) {}
+def bar10 (a : fn (i32, i32)-> f64) { return 1; }
+def bar10 (a : fn (i32, i32)-> i32) { return 2; }
 
 def test10 () {
     foo10 ((a, b) { return a + b; });

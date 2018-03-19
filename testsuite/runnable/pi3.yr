@@ -1,6 +1,6 @@
 import core.io;
 
-def fact (n : uint) {
+def fact (n : u32) {
     let res = 1U;
     for it in  n .. 1U {
         res = res * it;
@@ -8,7 +8,7 @@ def fact (n : uint) {
     return res;
 }
 
-def pow (n : uint, val : uint) {
+def pow (n : u32, val : u32) {
     let res = n;
     for it in 1U .. val {
         res = res * n;

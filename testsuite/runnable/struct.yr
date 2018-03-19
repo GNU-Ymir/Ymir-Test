@@ -7,9 +7,9 @@ mod foo (T) {
 }
 
 def test () {
-    let a = foo!int::Test {10};
+    let a = foo!i32::Test {10};
     let b = foo!char::Test {'t'};
-    let c = Test!int {34};
+    let c = Test!i32 {34};
     let d = Test!char {'y'};
 }
 
@@ -22,18 +22,18 @@ struct (T...)
  -> Signal;
 
 def test2 () {
-    let sig = Signal!(ref Test!(int), t!(int, int))::init;
+    let sig = Signal!(ref Test!(i32), t!(i32, i32))::init;
     let imut foo = (a, b) {
         a.a = b.0 + b.1;        
     };
 
-    let test = Test!(int)::init;
+    let test = Test!(i32)::init;
     sig.a = foo;
     sig.a (test, (1, 2));
     assert (test.a == 3);
 }
 
-def foo2 (A : int, T...) (a : T) {
+def foo2 (A : i32, T...) (a : T) {
     struct
     | a : T
      -> Foo2Test;

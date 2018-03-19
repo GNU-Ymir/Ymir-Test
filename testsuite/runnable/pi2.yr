@@ -1,10 +1,10 @@
 
     
-extern (C) printf (const c : p!(char), ...)-> int;
-extern (C) sscanf (const x : p!(char), const y : p!char, ...)-> int;
-extern (C) time (x : p!ulong)-> int;
+extern (C) printf (const c : p!(char), ...)-> i32;
+extern (C) sscanf (const x : p!(char), const y : p!char, ...)-> i32;
+extern (C) time (x : p!u64)-> i32;
 
-def sum (a : [double]) {
+def sum (a : [f64]) {
     let total = 0.;
     for it in 0U .. a.len {
         total = total + a [it];
@@ -12,8 +12,8 @@ def sum (a : [double]) {
     return total;
 }
 
-def map (n : uint) {
-    let array = [double ; n];
+def map (n : u32) {
+    let array = [f64 ; n];
     for i in 0U .. array.len {
         array [i] = (4.0 / n) / (1. + ((i - 0.5) * (1. / n)) * ((i - 0.5) * (1. / n)));
     }

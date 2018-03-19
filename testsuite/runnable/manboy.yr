@@ -1,7 +1,7 @@
 import core.io;
 
-def a (k : int, x1 : dg ()-> int, x2 : int, x3 : int, x4 : int, x5 : int) -> int {
-    let b = dg ()-> int;
+def a (k : i32, x1 : dg ()-> i32, x2 : i32, x3 : i32, x4 : i32, x5 : i32) -> i32 {
+    let b = dg ()-> i32;
     
     b = () {
         k -= 1;

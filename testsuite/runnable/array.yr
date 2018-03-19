@@ -1,22 +1,22 @@
 import core.io;
 import core.string;
 
-def foo1 (a : [int ; 10U]) {
+def foo1 (a : [i32 ; 10U]) {
     return 1;
 }
 
-def foo1 (a : [int]) {
+def foo1 (a : [i32]) {
     return 2;
 }
 
 def test () {
-    let a = [int ; imut 10U];
+    let a = [i32 ; imut 10U];
     assert (foo1 (a) == 1);
     assert (foo1 ([1, 2]) == 2);
 
     let b = [1, 2, 3];   
-    imut assert (is (b : [int; 3U]));
-    assert (!is (b : [int]));
+    imut assert (is (b : [i32; 3U]));
+    assert (!is (b : [i32]));
 }
 
 def foo2 (a : const string) {

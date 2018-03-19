@@ -7,7 +7,7 @@ def test1 () {
     imut assert (b == 20);
 }
 
-def fibo (n : ulong) () -> ulong {
+def fibo (n : u64) () -> u64 {
     imut if n < 2U
         return n;
     else return fibo!(n - 1U)() + fibo!(n - 2U)();
@@ -24,7 +24,7 @@ def equals (left : string, right : string) () {
     else return left [0] == right [0] && equals!(left, right, 1);
 }
 
-def equals (left : string, right : string, i : int) () {
+def equals (left : string, right : string, i : i32) () {
     imut if i < left.len
         return left [i] == right [i] && equals!(left, right, i + 1);
     else return true;

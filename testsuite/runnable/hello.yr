@@ -1,5 +1,5 @@
 
-extern (C) printf (const c : p!char, ...) -> int;
+extern (C) printf (const c : p!char, ...) -> i32;
 
 def main (args : [[char]]) {
     printf ("Hello world\n".ptr);

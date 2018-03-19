@@ -76,7 +76,7 @@ __macro comp {
     ($x: expr "|" $y: ident "in" $z: expr) {
         let res;
         {
-            imut if (!is (z : [int])) {
+            imut if (!is (z : [i32])) {
                 let y = z.fst;
                 res = [ typeof (x); 0U ];
             } else {
@@ -94,7 +94,7 @@ __macro comp {
     ($x: expr "|" $y: ident "in" $z: expr "if" $test: expr) {
         let res;
         {
-            imut if (!is (z : [int])) {
+            imut if (!is (z : [i32])) {
                 let y = z.fst;
                 res = [ typeof (x); 0U ];
             } else {

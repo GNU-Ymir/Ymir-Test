@@ -1,14 +1,14 @@
 import core.io;
 
-extern (C) printf (const c : p!(char), ...)-> int;
-extern (C) sscanf (const x : p!(char), const y : p!char, ...)-> int;
-extern (C) time (x : p!ulong)-> int;
+extern (C) printf (const c : p!(char), ...)-> i32;
+extern (C) sscanf (const x : p!(char), const y : p!char, ...)-> i32;
+extern (C) time (x : p!u64)-> i32;
 
 
 imut LONG_TIME = 4000;
-static p_ : [int];
-static t_ : [int];
-static q : int;
+static p_ : [i32];
+static t_ : [i32];
+static q : i32;
 
 def main (args : [string]) {
 
@@ -31,8 +31,8 @@ def main (args : [string]) {
     }
 
     q ++;
-    p_ = [int ; cast!uint (q + 1)];
-    t_ = [int ; cast!uint (q + 1)];
+    p_ = [i32 ; cast!u32 (q + 1)];
+    t_ = [i32 ; cast!u32 (q + 1)];
 
     time (&starttime);
     arctan (2);
@@ -48,7 +48,7 @@ def main (args : [string]) {
     return 0;    
 }
 
-def arctan (s : int) {
+def arctan (s : i32) {
     let n;
     t_ [0] = 1;
     div (s);
@@ -86,7 +86,7 @@ def sub () {
     }
 }
 
-def mul (mult : int) {
+def mul (mult : i32) {
     let b, carry = 0, digit = 0;
     for i in q .. -1 {
         b = (t_ [i] * mult + carry);
@@ -96,7 +96,7 @@ def mul (mult : int) {
     }
 }
 
-def div (divis : int) {
+def div (divis : i32) {
     let b, quotient, remainder = 0;
     for x in t_ {
         b = (10 * remainder + x);

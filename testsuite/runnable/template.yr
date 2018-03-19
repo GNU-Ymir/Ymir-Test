@@ -10,13 +10,13 @@ mod cat1 (T) {
 }
 
 def test1 () {
-    let a = cat1!(int)::cat1 (1);
+    let a = cat1!(i32)::cat1 (1);
     assert (a == 2);
     
     let i = 1;
-    let b = cat1!int::cat2(&i);
+    let b = cat1!i32::cat2(&i);
     assert (b == 2);
-    imut assert (is (typeof (b) : int));    
+    imut assert (is (typeof (b) : i32));    
 }    
 
 
@@ -31,11 +31,11 @@ def test2 () {
     let x = 2;
     let a = cat3!7 (x);
     assert (a == 14);
-    imut assert (is (typeof (a) : int));
+    imut assert (is (typeof (a) : i32));
 
     let b = cat3!8U (2U);
     assert (b == 15U);
-    imut assert (is (typeof (b) : uint));
+    imut assert (is (typeof (b) : u32));
 }
 
 
@@ -45,7 +45,7 @@ def foo3 (T...) (a : T) {
 
 mod i {
     mod template {
-        def foo3 (a : int) {
+        def foo3 (a : i32) {
             return a * 3;
         }
     }
@@ -53,8 +53,8 @@ mod i {
 
 def test3 () {
     assert (foo3 (10) == i::template::foo3 (10));
-    let b = foo3!(int);
-    let c = fn (int)-> int (foo3);
+    let b = foo3!(i32);
+    let c = fn (i32)-> i32 (foo3);
     assert (b is c);
 }
 

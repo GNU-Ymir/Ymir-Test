@@ -2,7 +2,7 @@ import core.io;
 
 def test () {
     let x = [1, 2];
-    let y = cast!([int ; 1U]) (x); // no error
+    let y = cast!([i32 ; 1U]) (x); // no error
 }
 
 def test2 () {
@@ -11,17 +11,17 @@ def test2 () {
     assert (k.ptr is null);
     assert (k.len == 0UL);
 
-    let l = [double]::init;
+    let l = [f64]::init;
     l = null;
     assert (l.ptr is null);
     assert (l.len == 0UL);
     
-    let m = [int]::init;
+    let m = [i32]::init;
     m = null;
     assert (m.ptr is null);
     assert (m.len == 0UL);    
 
-    let c = create ([int]::init, [char]::init);
+    let c = create ([i32]::init, [char]::init);
     assert (c.k.ptr is null);
     assert (c.k.len == 0UL);
     assert (c.l.ptr is null);
@@ -29,7 +29,7 @@ def test2 () {
 }
 
 struct
-| k : [int]
+| k : [i32]
 | l : [char]
  -> C;
 
@@ -47,7 +47,7 @@ def test3 () {
 }
 
 struct
-| i : int
+| i : i32
  -> RealFoo;
 
 mod Test (F, T) {
@@ -70,9 +70,9 @@ mod Test (F, T) {
 }
 
 def test4 () {
-    assert (Test!(byte, long)::test ());
-    assert (Test!(short, long)::test ());
-    assert (Test!(int, long)::test ());
+    assert (Test!(i8, i64)::test ());
+    assert (Test!(i16, i64)::test ());
+    assert (Test!(i32, i64)::test ());
 }
 
 

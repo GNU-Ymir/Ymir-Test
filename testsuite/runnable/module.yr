@@ -2,7 +2,7 @@ import core.io;
 
 static glob = 0U;
 
-use test!int;
+use test!i32;
 
 self () {
     assert (glob == 0U);
@@ -17,7 +17,7 @@ mod test (T) {
     }
 
     def foo () {
-        imut assert (is (T : int));
+        imut assert (is (T : i32));
     }
     
 }
