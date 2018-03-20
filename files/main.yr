@@ -1,14 +1,18 @@
 mod main;
 
 import core.io;
+import std.outbuffer;
+import std.conv;
+import std.traits;
 
-extern (C) fopen (const path : p!char, const mode : p!char) -> p!int;
-extern (C) fclose (file : p!int) -> int;
-extern (C) fgetc (file : p!int) -> int;
-extern (C) fgets (buf : p!char, n : int, file : p!int) -> p!char;
+extern (C) fopen (const path : p!char, const mode : p!char) -> p!i32;
+extern (C) fclose (file : p!i32) -> i32;
+extern (C) fgetc (file : p!i32) -> i32;
+extern (C) fgets (buf : p!char, n : i32, file : p!i32) -> p!char;
+extern (C) feof (file : p!i32) -> i32;
 
 struct
-| handle : p!int
+| handle : p!i32
  -> File;
 
 imut Eof = -1;
@@ -34,11 +38,30 @@ def readChar (ref file : File) -> mut char
     return cast!char (fgetc (file.handle));
 }
 
-def readString (ref file : File, n : uint) -> mut string
+def read if (isIntegral!T) (T) (ref file : File) -> mut T
 {
-    let buf = [char ; n];
-    fgets (buf.ptr, cast!int (n), file.handle);
-    return string { n, buf.ptr };
+    let strValue = file.readString ();
+    return to!T (strValue);
+}
+
+def readString (ref file : File) -> mut string
+{
+    let outbuf = OutBuffer ();
+    let c = file.readChar ();
+    while (c != ' ' && c != '\0' && c != cast!char (Eof) && c != '\n')
+    {
+        if (c != ' ' && c != '\0' && c != cast!char (Eof) && c != '\n')
+        {
+            outbuf.write (c);
+            c = file.readChar ();
+        }
+    }
+    return to!string (outbuf);
+}
+
+def isEof (ref file : File) -> bool
+{
+    return feof (file.handle) == 1;
 }
 
 def main()
@@ -50,16 +73,19 @@ def main()
         assert (false);
     }
 
-    // let c = char::init;
-    // while (c != cast!char (Eof))
-    // {
-    //     c = file.readChar ();
-    //     if (c != cast!char (Eof))
-    //         print (c);
-    // }
+    // let str = file.readString ();
+    // println (str);
 
-    let str = file.readString (10u);
-    println (str);
+        if (file.isEof ())
+        println ("ok");
+    let a = file.read!i32 ();
+    println (a);
+    let b = file.read!i32 ();
+    println (b);
+    b = file.read!i32 ();
+    println (b);
+    if (file.isEof ())
+        println ("ok");
     
     on exit => {
         if (!file.close ())
