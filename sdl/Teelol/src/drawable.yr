@@ -6,8 +6,8 @@ import src.resource;
 // TODO : write free mem function
 
 struct
-| x : int
-| y : int
+| x : i32
+| y : i32
  -> Position;
 
 struct

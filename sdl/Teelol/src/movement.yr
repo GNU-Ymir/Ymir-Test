@@ -9,29 +9,37 @@ enum
  -> MoveDirection;
 
 struct
-| vX : float
-| vY : float
-| speedInit : int
-| angleInit : float
-| timer : int   
-| startPosX : int
-| startPosY : int
-| lastPosY : int
-| test : int
+| vX : f32
+| vY : f32
+| speedInit : i32
+| angleInit : f32
+| timer : i32   
+| startPosX : i32
+| startPosY : i32
+| lastPosY : i32
+| horizontalForce : f32
+| verticalForce : f32
  -> ParabolicMovement;
 
 struct
-| posX : int
-| posY : int
-| speedX : int
-| speedY : int
+| posX : i32
+| posY : i32
+| speedX : i32
+| speedY : i32
  -> LinearMovement;
 
 imut gG = 9.81f;
 
+def abs (T) (value : T) -> T
+{
+    if (value < 0)
+        return (value * -1);
+    return value;
+}
+
 /* ### Linear Movement Management  */
 
-def createLinearMovement (posX : int, posY : int) -> mut LinearMovement
+def createLinearMovement (posX : i32, posY : i32) -> mut LinearMovement
 {
     let mvt = LinearMovement::init;
     mvt.start (posX, posY);
@@ -39,13 +47,13 @@ def createLinearMovement (posX : int, posY : int) -> mut LinearMovement
     return mvt;
 }
 
-def start (ref movement : LinearMovement, posX : int, posY : int)
+def start (ref movement : LinearMovement, posX : i32, posY : i32)
 {
     movement.posX = posX;
     movement.posY = posY;
 }
 
-def move (ref movement : LinearMovement, const speed : int, const direction : MoveDirection)
+def move (ref movement : LinearMovement, const speed : i32, const direction : MoveDirection)
 {
     match (direction)
     {
@@ -64,7 +72,7 @@ def stop (ref movement : LinearMovement, const direction : MoveDirection)
     }
 }
 
-def nextPosition (ref movement : LinearMovement) -> mut t!(int, int)
+def nextPosition (ref movement : LinearMovement) -> mut t!(i32, i32)
 {
     movement.posX += movement.speedX;
     movement.posY += movement.speedY;
@@ -79,14 +87,17 @@ def nextPosition (ref movement : LinearMovement) -> mut t!(int, int)
 
 /* ### Parabolic Movement Management  */
 
-def start (ref movement : ParabolicMovement, posX : int, posY : int, speedInit : int, angleInit : float)
+def start (ref movement : ParabolicMovement, posX : i32, posY : i32, speedInit : i32, angleInit : f32)
 {
     movement.speedInit = speedInit;
     movement.angleInit = angleInit;
+    movement.verticalForce = 4.0f;
+
+    extern (C) cosf (value : f32) -> f32;
+    extern (C) sinf (value : f32) -> f32;
     
-    // TODO : +1, better idea ?
-    movement.vX = cosf (angleInit) * (abs (movement.speedInit) + 1);
-    movement.vY = sinf (angleInit) * (abs (movement.speedInit) + 1);
+    movement.vX = cosf (angleInit) * (abs (movement.speedInit));
+    movement.vY = sin (angleInit) * (abs (movement.speedInit));
 
     movement.startPosX = posX;
     movement.startPosY = posY;
@@ -94,15 +105,15 @@ def start (ref movement : ParabolicMovement, posX : int, posY : int, speedInit :
     movement.timer = 0;
 }
 
-def nextPosition (ref movement : ParabolicMovement) -> t!(int, int)
+def nextPosition (ref movement : ParabolicMovement) -> t!(i32, i32)
 {
     // Relative position
-    let relX = cast!int ((movement.vX * movement.timer) - ((movement.test * pow (movement.timer, 2)) / 2000));
-    let relY = cast!int ((movement.vY * movement.timer) - ((gG * pow (movement.timer, 2)) / 2000));
+    let relX = cast!i32 ((movement.vX * movement.timer) - ((movement.horizontalForce * pow (movement.timer, 2u)) / 2000));
+    let relY = cast!i32 ((movement.vY * movement.timer) - (((gG + movement.horizontalForce) * pow (movement.timer, 2u)) / 2000));
 
     // Aboslute position
-    let absX = int::init;
-    let absY = int::init;
+    let absX = i32::init;
+    let absY = i32::init;
 
     if (movement.speedInit < 0)
         absX = movement.startPosX - relX;

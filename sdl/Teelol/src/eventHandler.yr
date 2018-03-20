@@ -7,20 +7,20 @@ import src.lib.signal;
 import src.game;
 
 struct
-| type : uint
+| type : u32
 | signal : Signal!(ref Game)
  -> ClassicEvent;
 
 struct
-| type : uint
-| keyCode : int
+| type : u32
+| keyCode : i32
 | signal : Signal!(ref Game)
  -> KeyboardEvent;
 
 struct
-| type : uint
-| buttonCode : ubyte
-| signal : Signal!(ref Game, t!(int, int))
+| type : u32
+| buttonCode : u8
+| signal : Signal!(ref Game, t!(i32, i32))
  -> MouseEvent;
 
 struct
@@ -57,7 +57,7 @@ def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, keyScanCode
     eventHdl.keyboardWithKeyRepeatEvents.push (KeyboardEvent { eventType, keyScanCode, signal });
 }
 
-def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game, t!(int, int)))
+def onEvent (ref eventHdl : EventHandler, eventType : SDL_EventType, buttonCode : SDL_Mousecode, signal : Signal!(ref Game, t!(i32, i32)))
 {
     eventHdl.mouseEvents.push (MouseEvent { eventType, buttonCode, signal });
 }
@@ -104,7 +104,7 @@ def handleEvents(ref eventHdl : EventHandler)
     }
 }
 
-def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
+def handleClassicEvent (ref eventHdl : EventHandler, eventType : u32)
 {
     let next_ = eventHdl.classicEvents.next ();
     while (next_ !is null)
@@ -118,7 +118,7 @@ def handleClassicEvent (ref eventHdl : EventHandler, eventType : uint)
     }
 }
 
-def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode : int) -> bool
+def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : u32, keyCode : i32) -> bool
 {
     let res = false;
     let next_ = eventHdl.keyboardEvents.next();
@@ -136,7 +136,7 @@ def handleKeyboardEvent (ref eventHdl : EventHandler, eventType : uint, keyCode 
 }
 
 // Returns true if an keyboard event was handled
-def handleKeyboardWithKeyRepeatEvent (ref eventHdl : EventHandler, eventType : uint, const keyboardState : p!ubyte) -> bool
+def handleKeyboardWithKeyRepeatEvent (ref eventHdl : EventHandler, eventType : u32, const keyboardState : p!u8) -> bool
 {
     let next_ = eventHdl.keyboardWithKeyRepeatEvents.next();
     let ret = false;
@@ -153,7 +153,7 @@ def handleKeyboardWithKeyRepeatEvent (ref eventHdl : EventHandler, eventType : u
     return ret;
 }
 
-def handleMouseEvent (ref eventHdl : EventHandler, eventType : uint, buttonCode : ubyte, pos : t!(int, int))
+def handleMouseEvent (ref eventHdl : EventHandler, eventType : u32, buttonCode : u8, pos : t!(i32, i32))
 {
     let next_ = eventHdl.mouseEvents.next();
     while (next_ !is null)

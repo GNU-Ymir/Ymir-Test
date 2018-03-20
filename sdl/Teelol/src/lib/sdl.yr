@@ -1,23 +1,23 @@
 mod src.lib.sdl;
 
 public {
-    extern (C) SDL_Init (flags : uint) -> int;
-    extern (C) SDL_CreateWindow (const title : p!char, x : int, y : int, w : int, h : int, flags : uint) -> p!SDL_Window;
-    extern (C) SDL_CreateRenderer (window : p!SDL_Window, index : int, flags : uint) -> p!SDL_Renderer;
-    extern (C) SDL_RenderSetLogicalSize(renderer : p!SDL_Renderer, w : int, h : int) -> int;
-    extern (C) SDL_PollEvent (event : p!SDL_Event) -> int;
-    extern (C) SDL_SetRenderDrawColor (renderer : p!SDL_Renderer, r : ubyte, g : ubyte, b : ubyte, a : ubyte) -> int;
-    extern (C) SDL_RenderFillRect (renderer : p!SDL_Renderer, const rect : p!SDL_Rect) -> int;
+    extern (C) SDL_Init (flags : u32) -> i32;
+    extern (C) SDL_CreateWindow (const title : p!char, x : i32, y : i32, w : i32, h : i32, flags : u32) -> p!SDL_Window;
+    extern (C) SDL_CreateRenderer (window : p!SDL_Window, index : i32, flags : u32) -> p!SDL_Renderer;
+    extern (C) SDL_RenderSetLogicalSize(renderer : p!SDL_Renderer, w : i32, h : i32) -> i32;
+    extern (C) SDL_PollEvent (event : p!SDL_Event) -> i32;
+    extern (C) SDL_SetRenderDrawColor (renderer : p!SDL_Renderer, r : u8, g : u8, b : u8, a : u8) -> i32;
+    extern (C) SDL_RenderFillRect (renderer : p!SDL_Renderer, const rect : p!SDL_Rect) -> i32;
     extern (C) SDL_RenderPresent (renderer : p!SDL_Renderer);
-    extern (C) SDL_RenderClear (renderer : p!SDL_Renderer) -> int;
-    extern (C) SDL_GetKeyboardState(numkeys : p!int) -> const p!ubyte;
+    extern (C) SDL_RenderClear (renderer : p!SDL_Renderer) -> i32;
+    extern (C) SDL_GetKeyboardState(numkeys : p!i32) -> const p!u8;
     extern (C) SDL_PumpEvents ();
-    extern (C) SDL_Delay(ms : uint);
+    extern (C) SDL_Delay(ms : u32);
     extern (C) SDL_CreateTextureFromSurface (const renderer : p!SDL_Renderer, const surface : p!SDL_Surface) -> p!SDL_Texture;
     extern (C) SDL_GetWindowSurface (const window : p!SDL_Window) -> p!SDL_Surface;
     extern (C) SDL_FreeSurface (const surface : p!SDL_Surface);
-    extern (C) SDL_QueryTexture (const texture : p!SDL_Texture, format : p!uint, access : p!int, w : p!int, h : p!int) -> int;
-    extern (C) SDL_RenderCopy (const renderer : p!SDL_Renderer, const texture : p!SDL_Texture, const srcRect : p!SDL_Rect, dstRect : p!SDL_Rect) -> int;
+    extern (C) SDL_QueryTexture (const texture : p!SDL_Texture, format : p!u32, access : p!i32, w : p!i32, h : p!i32) -> i32;
+    extern (C) SDL_RenderCopy (const renderer : p!SDL_Renderer, const texture : p!SDL_Texture, const srcRect : p!SDL_Rect, dstRect : p!SDL_Rect) -> i32;
     extern (C) SDL_DestroyTexture (const texture : p!SDL_Texture);
     extern (C) SDL_DestroyRenderer (renderer : p!SDL_Renderer);
     extern (C) SDL_DestroyWindow (window : p!SDL_Window);
@@ -43,52 +43,52 @@ struct
  -> SDL_Surface;
 
 struct
-| type : uint
-| data : [ubyte ; 52U] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
+| type : u32
+| data : [u8 ; 52U] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
  -> SDL_Event;
 
 struct
-| type : uint
-| timestamp : uint
-| windowId : uint
-| which : uint
-| button : ubyte
-| state : ubyte
-| clicks : ubyte
-| padding1 : ubyte
-| x : int
-| y : int
+| type : u32
+| timestamp : u32
+| windowId : u32
+| which : u32
+| button : u8
+| state : u8
+| clicks : u8
+| padding1 : u8
+| x : i32
+| y : i32
 -> SDL_MouseButtonEvent;
 
 struct
-| type : int
-| timestamp : uint
-| windowId : uint
-| state : ubyte
-| repeat : ubyte
-| padding2 : ubyte
-| padding3 : ubyte
-| scancode : uint //SDL_Scancode
-| sym : int
-| mode : ushort
-| unicode : uint    
+| type : i32
+| timestamp : u32
+| windowId : u32
+| state : u8
+| repeat : u8
+| padding2 : u8
+| padding3 : u8
+| scancode : u32 //SDL_Scancode
+| sym : i32
+| mode : u16
+| unicode : u32    
 -> SDL_KeyboardEvent;
 
 struct
-| x : int
-| y : int
-| w : int
-| h : int
+| x : i32
+| y : i32
+| w : i32
+| h : i32
  -> SDL_Rect;
 
 // TODO : complete by using SDL.h
-enum : uint
+enum : u32
 | Audio : 16u
 | Video : 32u
  -> SDL_InitFlag;
 
 // TODO : complete by using SDL_video.h
-enum : uint
+enum : u32
 | FullScreen : 1u
 | OpenGL : 2u
 | Shown : 4u
@@ -96,7 +96,7 @@ enum : uint
 | Borderless : 16u
  -> SDL_WindowFlag;
 
-enum : uint
+enum : u32
 | Software : 1u
 | Accelerated : 2u
 | PresentVSync : 4u
@@ -104,7 +104,7 @@ enum : uint
  -> SDL_RendererFlag;
 
 // TODO : complete by using SDL_events.h
-enum : uint
+enum : u32
 | QUIT : 256U
 | KEYDOWN : 768U
 | KEYUP : 769U
@@ -117,7 +117,7 @@ enum : uint
 
 imut SDLK_SCANCODE_MASK = (1 << 30);
 
-def SdlScanCodeToKeyCode (code : int) -> int {
+def SdlScanCodeToKeyCode (code : i32) -> i32 {
     return (code | SDLK_SCANCODE_MASK);
 }
 
@@ -131,78 +131,78 @@ enum SDL_Scancode {
 enum SDL_Keycode {
     SDLK_UNKNOWN : 0,
     
-    SDLK_RETURN : cast!int ('\r'),
-    SDLK_ESCAPE : cast!int ('\033'),
-    SDLK_BACKSPACE : cast!int ('\b'),
-    SDLK_TAB : cast!int ('\t'),
-    SDLK_SPACE : cast!int (' '),
-    SDLK_EXCLAIM : cast!int ('!'),
-    SDLK_QUOTEDBL : cast!int ('"'),
-    SDLK_HASH : cast!int ('#'),
-    SDLK_PERCENT : cast!int ('%'),
-    SDLK_DOLLAR : cast!int ('$'),
-    SDLK_AMPERSAND : cast!int ('&'),
+    SDLK_RETURN : cast!i32 ('\r'),
+    SDLK_ESCAPE : cast!i32 ('\033'),
+    SDLK_BACKSPACE : cast!i32 ('\b'),
+    SDLK_TAB : cast!i32 ('\t'),
+    SDLK_SPACE : cast!i32 (' '),
+    SDLK_EXCLAIM : cast!i32 ('!'),
+    SDLK_QUOTEDBL : cast!i32 ('"'),
+    SDLK_HASH : cast!i32 ('#'),
+    SDLK_PERCENT : cast!i32 ('%'),
+    SDLK_DOLLAR : cast!i32 ('$'),
+    SDLK_AMPERSAND : cast!i32 ('&'),
     SDLK_QUOTE : 39,
-    SDLK_LEFTPAREN : cast!int ('('),
-    SDLK_RIGHTPAREN : cast!int (')'),
-    SDLK_ASTERISK : cast!int ('*'),
-    SDLK_PLUS : cast!int ('+'),
-    SDLK_COMMA : cast!int (','),
-    SDLK_MINUS : cast!int ('-'),
-    SDLK_PERIOD : cast!int ('.'),
-    SDLK_SLASH : cast!int ('/'),
-    SDLK_0 : cast!int ('0'),
-    SDLK_1 : cast!int ('1'),
-    SDLK_2 : cast!int ('2'),
-    SDLK_3 : cast!int ('3'),
-    SDLK_4 : cast!int ('4'),
-    SDLK_5 : cast!int ('5'),
-    SDLK_6 : cast!int ('6'),
-    SDLK_7 : cast!int ('7'),
-    SDLK_8 : cast!int ('8'),
-    SDLK_9 : cast!int ('9'),
-    SDLK_COLON : cast!int (':'),
-    SDLK_SEMICOLON : cast!int (';'),
-    SDLK_LESS : cast!int ('<'),
-    SDLK_EQUALS : cast!int (':'),
-    SDLK_GREATER : cast!int ('>'),
-    SDLK_QUESTION : cast!int ('?'),
-    SDLK_AT : cast!int ('@'),
+    SDLK_LEFTPAREN : cast!i32 ('('),
+    SDLK_RIGHTPAREN : cast!i32 (')'),
+    SDLK_ASTERISK : cast!i32 ('*'),
+    SDLK_PLUS : cast!i32 ('+'),
+    SDLK_COMMA : cast!i32 (','),
+    SDLK_MINUS : cast!i32 ('-'),
+    SDLK_PERIOD : cast!i32 ('.'),
+    SDLK_SLASH : cast!i32 ('/'),
+    SDLK_0 : cast!i32 ('0'),
+    SDLK_1 : cast!i32 ('1'),
+    SDLK_2 : cast!i32 ('2'),
+    SDLK_3 : cast!i32 ('3'),
+    SDLK_4 : cast!i32 ('4'),
+    SDLK_5 : cast!i32 ('5'),
+    SDLK_6 : cast!i32 ('6'),
+    SDLK_7 : cast!i32 ('7'),
+    SDLK_8 : cast!i32 ('8'),
+    SDLK_9 : cast!i32 ('9'),
+    SDLK_COLON : cast!i32 (':'),
+    SDLK_SEMICOLON : cast!i32 (';'),
+    SDLK_LESS : cast!i32 ('<'),
+    SDLK_EQUALS : cast!i32 (':'),
+    SDLK_GREATER : cast!i32 ('>'),
+    SDLK_QUESTION : cast!i32 ('?'),
+    SDLK_AT : cast!i32 ('@'),
     /*
        Skip uppercase letters
      */
-    SDLK_LEFTBRACKET : cast!int ('['),
-    SDLK_BACKSLASH : cast!int (92),
-    SDLK_RIGHTBRACKET : cast!int (']'),
-    SDLK_CARET : cast!int ('^'),
-    SDLK_UNDERSCORE : cast!int ('_'),
-    SDLK_BACKQUOTE : cast!int ('`'),
-    SDLK_a : cast!int ('a'),
-    SDLK_b : cast!int ('b'),
-    SDLK_c : cast!int ('c'),
-    SDLK_d : cast!int ('d'),
-    SDLK_e : cast!int ('e'),
-    SDLK_f : cast!int ('f'),
-    SDLK_g : cast!int ('g'),
-    SDLK_h : cast!int ('h'),
-    SDLK_i : cast!int ('i'),
-    SDLK_j : cast!int ('j'),
-    SDLK_k : cast!int ('k'),
-    SDLK_l : cast!int ('l'),
-    SDLK_m : cast!int ('m'),
-    SDLK_n : cast!int ('n'),
-    SDLK_o : cast!int ('o'),
-    SDLK_p : cast!int ('p'),
-    SDLK_q : cast!int ('q'),
-    SDLK_r : cast!int ('r'),
-    SDLK_s : cast!int ('s'),
-    SDLK_t : cast!int ('t'),
-    SDLK_u : cast!int ('u'),
-    SDLK_v : cast!int ('v'),
-    SDLK_w : cast!int ('w'),
-    SDLK_x : cast!int ('x'),
-    SDLK_y : cast!int ('y'),
-    SDLK_z : cast!int ('z'),
+    SDLK_LEFTBRACKET : cast!i32 ('['),
+    SDLK_BACKSLASH : cast!i32 (92),
+    SDLK_RIGHTBRACKET : cast!i32 (']'),
+    SDLK_CARET : cast!i32 ('^'),
+    SDLK_UNDERSCORE : cast!i32 ('_'),
+    SDLK_BACKQUOTE : cast!i32 ('`'),
+    SDLK_a : cast!i32 ('a'),
+    SDLK_b : cast!i32 ('b'),
+    SDLK_c : cast!i32 ('c'),
+    SDLK_d : cast!i32 ('d'),
+    SDLK_e : cast!i32 ('e'),
+    SDLK_f : cast!i32 ('f'),
+    SDLK_g : cast!i32 ('g'),
+    SDLK_h : cast!i32 ('h'),
+    SDLK_i : cast!i32 ('i'),
+    SDLK_j : cast!i32 ('j'),
+    SDLK_k : cast!i32 ('k'),
+    SDLK_l : cast!i32 ('l'),
+    SDLK_m : cast!i32 ('m'),
+    SDLK_n : cast!i32 ('n'),
+    SDLK_o : cast!i32 ('o'),
+    SDLK_p : cast!i32 ('p'),
+    SDLK_q : cast!i32 ('q'),
+    SDLK_r : cast!i32 ('r'),
+    SDLK_s : cast!i32 ('s'),
+    SDLK_t : cast!i32 ('t'),
+    SDLK_u : cast!i32 ('u'),
+    SDLK_v : cast!i32 ('v'),
+    SDLK_w : cast!i32 ('w'),
+    SDLK_x : cast!i32 ('x'),
+    SDLK_y : cast!i32 ('y'),
+    SDLK_z : cast!i32 ('z'),
 
 
     SDLK_RIGHT : SdlScanCodeToKeyCode (SDL_Scancode::SDL_SCANCODE_RIGHT),

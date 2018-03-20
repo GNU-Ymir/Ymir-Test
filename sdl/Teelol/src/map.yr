@@ -1,0 +1,91 @@
+mod src.map;
+
+import core.io;
+import std.list;
+
+import src.drawable;
+import src.resource;
+
+import src.lib.file;
+
+struct
+| drawables : List!(Drawable)
+| width : u32
+| height : u32
+| file : File
+ -> Map;
+
+/*
+   Structure of a map file (with .mp extension) :
+
+   width height // both u32
+   x y type // int, int, int (the third one will be convert into ResourceType)
+*/
+
+private
+{
+    def _loadMapSize (ref map : Map)
+    {
+        map.width = map.file.read!u32 ();
+        map.height = map.file.read!u32 ();
+    }
+
+    def _loadMapContent (ref map : Map)
+    {
+        while (!map.file.isEof ())
+        {
+            // TODO : fix isEof problems
+            let x = map.file.read!i32 (); if (map.file.isEof ()) return;
+            let y = map.file.read!i32 (); if (map.file.isEof ()) return;
+            let type = map.file.read!i32 ();
+
+            let resManager = getResourcesManager ();
+            let res = resManager.getResource (toResourceType (type));
+            
+            map.drawables.push (Drawable { Position { x, y }, res });
+        }
+    }
+}
+
+def createMap (const filePath : string) -> Map
+{
+    let file = File::init;
+    if (!file.open (filePath, "r"))
+    {
+        println ("Map file open error !");
+        assert (false);
+    }
+
+    let map = Map::init;
+    map.file = file;
+
+    return map;
+}
+
+def close (ref map : Map)
+{
+    if (!map.file.close ())
+        println ("Map file close error !");
+}
+
+def loadInfo (ref map : Map)
+{
+    map._loadMapSize ();
+}
+
+def loadContent (ref map : Map)
+{
+    map._loadMapContent ();
+}
+
+def getDrawables (ref map : Map) -> List!(p!Drawable)
+{
+    let next_ = map.drawables.next ();
+    let res = list!(p!Drawable) ();
+    while (next_ !is null)
+    {
+        res.push (&(next_.value));
+        next_ = next (next_);
+    }
+    return res;
+}

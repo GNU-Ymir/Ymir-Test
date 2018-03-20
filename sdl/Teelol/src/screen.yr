@@ -25,7 +25,7 @@ private
 }
 
 // TODO : the createwindow flag should come from the main function in order to propose the fullscreen mode
-def createScreen (const title : string, const windowWidth : int, const windowHeight : int, const windowPosX : int, const windowPosY : int) -> Screen
+def createScreen (const title : string, const windowWidth : i32, const windowHeight : i32, const windowPosX : i32, const windowPosY : i32) -> Screen
 {
     if (SDL_Init (SDL_InitFlag::Video) != 0)
     {
@@ -99,12 +99,12 @@ def destroy (ref screen : Screen)
         SDL_DestroyWindow (screen.window);
 }
 
-def addDrawable (ref screen : Screen, ref drawable : p!Drawable)
+def addDrawable (ref screen : Screen, drawable : p!Drawable)
 {
     screen.drawables.push (drawable);
 }
 
-def addDrawables (ref screen : Screen, ref drawables : List!(p!Drawable))
+def addDrawables (ref screen : Screen, drawables : List!(p!Drawable))
 {
     let next_ = drawables.next ();
     while (next_ !is null)
