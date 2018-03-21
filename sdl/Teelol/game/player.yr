@@ -1,14 +1,15 @@
-mod src.player;
-
-import src.lib.sdl;
-import src.resource;
-import src.drawable;
-import src.collision;
-import src.movement;
+mod game.player;
 
 import core.io;
 import std.list;
 import std.math;
+
+import common.lib.sdl;
+import common.resource;
+import common.drawable;
+
+import game.collision;
+import game.movement;
 
 struct
 | name : string

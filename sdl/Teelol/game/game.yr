@@ -1,18 +1,19 @@
-mod src.game;
+mod game.game;
 
 import core.io;
 import core.string;
 
 import std.memory;
 
-import src.lib.signal;
-import src.lib.sdl;
-import src.screen;
-import src.eventHandler;
-import src.player;
-import src.resource;
-import src.collision;
-import src.map;
+import common.lib.signal;
+import common.lib.sdl;
+import common.screen;
+import common.eventHandler;
+import common.resource;
+
+import game.player;
+import game.collision;
+import game.map;
 
 struct
 | screen : Screen

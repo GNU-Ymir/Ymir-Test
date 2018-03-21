@@ -1,13 +1,14 @@
-mod src.collision;
+mod game.collision;
 
 import core.io;
 
 import std.memory;
 import std.list;
 
-import src.lib.sdl;
-import src.drawable;
-import src.player;
+import common.lib.sdl;
+import common.drawable;
+
+import game.player;
 
 struct
 | background : SDL_Rect

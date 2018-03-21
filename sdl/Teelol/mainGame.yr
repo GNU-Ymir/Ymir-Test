@@ -1,6 +1,6 @@
-mod main;
+mod mainGame;
 
-import src.game;
+import game.game;
 
 def main()
 {

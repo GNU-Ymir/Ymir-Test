@@ -1,4 +1,4 @@
-mod src.lib.signal;
+mod common.lib.signal;
 
 struct (T...)
 | func : [fn (T) -> void]

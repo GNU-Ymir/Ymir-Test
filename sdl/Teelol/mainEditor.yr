@@ -1,0 +1,10 @@
+mod mainEditor;
+
+import editor.editor;
+
+def main()
+{
+    let editor = Editor::init;
+    createEditor (editor);
+    editor.start ();
+}

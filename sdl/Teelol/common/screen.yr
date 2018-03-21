@@ -1,13 +1,14 @@
-mod src.screen;
+mod common.screen;
 
 extern (C) printf (const c : p!char, ...);
 
 import core.io;
 import std.abort;
 import std.list;
-import src.lib.sdl;
-import src.drawable;
-import src.resource;
+
+import common.lib.sdl;
+import common.drawable;
+import common.resource;
 
 struct
 | window : p!SDL_Window

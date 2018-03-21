@@ -1,4 +1,4 @@
-mod src.lib.sdl;
+mod common.lib.sdl;
 
 public {
     extern (C) SDL_Init (flags : u32) -> i32;

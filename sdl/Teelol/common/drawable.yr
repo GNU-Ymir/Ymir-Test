@@ -1,7 +1,7 @@
-mod src.drawable;
+mod common.drawable;
 
-import src.lib.sdl;
-import src.resource;
+import common.lib.sdl;
+import common.resource;
 
 // TODO : write free mem function
 

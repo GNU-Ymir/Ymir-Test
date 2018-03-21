@@ -1,4 +1,4 @@
-mod src.movement;
+mod game.movement;
 
 import std.math;
 
