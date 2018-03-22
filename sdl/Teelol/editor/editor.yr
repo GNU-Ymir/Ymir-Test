@@ -2,12 +2,12 @@ mod editor.editor;
 
 import core.io;
 
-// import common.screen;
-// import common.event;
+import common.screen;
+import common.eventHandler;
 
 struct
-// | screen : Screen
-// | eventHdl : EventHandler
+| screen : Screen
+| eventHdl : event!(Editor)::EventHandler
 | continue : bool
  -> Editor;
 

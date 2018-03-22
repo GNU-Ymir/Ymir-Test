@@ -17,7 +17,7 @@ import game.map;
 
 struct
 | screen : Screen
-| eventHdl : EventHandler
+| eventHdl : EventHandler!Game
 | continue : bool
 | mainPlayer : Player
 | testPlayer : Player
@@ -41,7 +41,7 @@ def createGame (ref game : Game)
     // we can't call loadMapContent() yet because it needs the ResourcesManager to be initialized and this one needs the screen to be created !
     
     game.screen = createScreen (gTitle, cast!i32 (map.width), cast!i32 (map.height), gWindowPosX, gWindowPosY);
-    game.eventHdl = createEventHandler (game);
+    game.eventHdl = createEventHandler!(Game) (game);
     game.continue = true;
 
     createResourcesManager (game.screen);
@@ -103,13 +103,13 @@ def initEvents (ref eventHdl : EventHandler)
     let keySpaceSignal = Signal!(ref Game)::init;
     keySpaceSignal.connect (onKeySpace);
     
-    eventHdl.onEvent (SDL_EventType::QUIT, quitSignal);
-    eventHdl.onEvent (SDL_EventType::KEYUP, SDL_Keycode::SDLK_ESCAPE, quitSignal);
+    eventHdl.onEvent!(Game) (SDL_EventType::QUIT, quitSignal);
+    eventHdl.onEvent!(Game) (SDL_EventType::KEYUP, SDL_Keycode::SDLK_ESCAPE, quitSignal);
 
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignal);
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignal);
+    eventHdl.onEvent!(Game) (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_RIGHT, keyRightSignal);
+    eventHdl.onEvent!(Game) (SDL_EventType::KEYDOWN, SDL_Scancode::SDL_SCANCODE_LEFT, keyLeftSignal);
 
-    eventHdl.onEvent (SDL_EventType::KEYDOWN, SDL_Keycode::SDLK_SPACE, keySpaceSignal);
+    eventHdl.onEvent!(Game) (SDL_EventType::KEYDOWN, SDL_Keycode::SDLK_SPACE, keySpaceSignal);
 }
 
 def onQuit (ref game : Game)
