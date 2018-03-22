@@ -1,11 +1,33 @@
 mod mainGame;
 
+import core.io;
 import game.game;
 
-def main()
+def main(args : [string])
 {
-    // on passera sans doute plus tard des params tel que la map, la dim de l'ecran...
     let game = Game::init;
-    createGame (game);
+    handleParams (game, args);
     game.start();
+}
+
+def handleParams (ref game : Game, params : [string])
+{
+    if (params.len > 2)
+    {
+        if (params.len < 2)
+            println ("Missing parameter(s) !");
+        
+        printUsage ();
+        assert (false);
+    }
+
+    if (params.len == 2)
+        createGame (game, params[1]);
+    else
+        createGame (game);
+}
+
+def printUsage ()
+{
+    println ("Usage : teelol [mapFilePath]");
 }

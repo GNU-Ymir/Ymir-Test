@@ -8,7 +8,7 @@ import std.memory;
 import common.lib.signal;
 import common.lib.sdl;
 import common.screen;
-import common.eventHandler;
+import game.eventHandler;
 import common.resource;
 
 import game.player;
@@ -34,9 +34,14 @@ imut gDefaultPosX = 200;
 imut gDefaultPosY = 400;
 imut gDefaultMapPath = "map/default.mp";
 
-def createGame (ref game : Game) 
+def createGame (ref game : Game)
 {
-    let map = createMap (gDefaultMapPath);
+    createGame (game, gDefaultMapPath);
+}
+
+def createGame (ref game : Game, mapFilePath : string) 
+{
+    let map = createMap (mapFilePath);
     map.loadInfo ();
     // we can't call loadMapContent() yet because it needs the ResourcesManager to be initialized and this one needs the screen to be created !
     

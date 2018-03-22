@@ -1,10 +1,45 @@
 mod mainEditor;
 
+import core.io;
+import std.conv;
+
 import editor.editor;
 
-def main()
+def main(args : [string])
 {
     let editor = Editor::init;
-    createEditor (editor);
+    handleParams (editor, args);
     editor.start ();
+}
+
+def handleParams (ref editor : Editor, params : [string])
+{
+    if (params.len < 2 || params.len > 4)
+    {
+        if (params.len < 2)
+            println ("Missing parameter(s) !");
+        else if (params.len > 4)
+            println ("Too many parameters !");
+        
+        printUsage ();
+        assert (false);
+    }
+
+    // Open map file
+    if (params.len == 2)
+    {
+        createEditor (editor, params[1]);
+    }
+    else
+    {
+        let width = to!u32 (params[1]);
+        let height = to!u32 (params[2]);
+        createEditor (editor, width, height, params[3]);
+    }
+}
+
+def printUsage ()
+{
+    println ("Usage : teeditor mapFilePath");
+    println ("        teeditor width height resultMapFilePath");
 }
