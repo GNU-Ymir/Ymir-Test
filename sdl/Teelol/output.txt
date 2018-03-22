@@ -1,0 +1,52 @@
+[  3%] Building C object CMakeFiles/../teelol.dir/mainGame.yr.o
+ymir1: erreur interne du compilateur : Erreur de segmentation
+0xc6993f crash_signal
+        ../../gcc-src/gcc/toplev.c:325
+0x6f7cf5 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::assign(char const*)
+        /usr/include/c++/7/bits/basic_string.h:1420
+0x6f7cf5 std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::operator=(char const*)
+        /usr/include/c++/7/bits/basic_string.h:694
+0x6f7cf5 Word::setLocus(unsigned int)
+        ../../gcc-src/gcc/ymir/Word.cc:50
+0x76b7fb syntax::IVar::templateExpReplace(std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, syntax::IExpression*, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, syntax::IExpression*> > > const&)
+        ../../gcc-src/gcc/ymir/astTemplate.cc:487
+0x76b9de syntax::IVar::templateExpReplace(std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, syntax::IExpression*, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, syntax::IExpression*> > > const&)
+        ../../gcc-src/gcc/ymir/astTemplate.cc:513
+0x76b9de syntax::IVar::templateExpReplace(std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, syntax::IExpression*, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, syntax::IExpression*> > > const&)
+        ../../gcc-src/gcc/ymir/astTemplate.cc:513
+0x76bf73 syntax::ITypedVar::templateExpReplace(std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, syntax::IExpression*, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, syntax::IExpression*> > > const&)
+        ../../gcc-src/gcc/ymir/astTemplate.cc:430
+0x776371 semantic::IStructCstInfo::getScore(std::vector<syntax::IExpression*, std::allocator<syntax::IExpression*> > const&)
+        ../../gcc-src/gcc/ymir/StructInfo.cc:332
+0x776aca semantic::IStructCstInfo::TempOp(std::vector<syntax::IExpression*, std::allocator<syntax::IExpression*> > const&)
+        ../../gcc-src/gcc/ymir/StructInfo.cc:254
+0x686f03 syntax::IVar::asType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:211
+0x68df94 syntax::ITypedVar::getType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:346
+0x7771f5 semantic::IStructCstInfo::TempOp(std::vector<syntax::IExpression*, std::allocator<syntax::IExpression*> > const&)
+        ../../gcc-src/gcc/ymir/StructInfo.cc:275
+0x686f4c syntax::IVar::asType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:213
+0x68df94 syntax::ITypedVar::getType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:346
+0x7771f5 semantic::IStructCstInfo::TempOp(std::vector<syntax::IExpression*, std::allocator<syntax::IExpression*> > const&)
+        ../../gcc-src/gcc/ymir/StructInfo.cc:275
+0x686f03 syntax::IVar::asType()
+        ../../gcc-src/gcc/ymir/astExpression.cc:211
+0x68c3c5 syntax::ITypedVar::expression()
+        ../../gcc-src/gcc/ymir/astExpression.cc:387
+0x6ef7f7 semantic::IFrame::computeParams(std::vector<syntax::IVar*, std::allocator<syntax::IVar*> > const&)
+        ../../gcc-src/gcc/ymir/Frame.cc:217
+0x6f46c0 semantic::IExternFrame::validate()
+        ../../gcc-src/gcc/ymir/ExternFrame.cc:65
+Veuillez soumettre un rapport d’anomalies complet,
+avec la sortie du préprocesseur si nécessaire.
+Please include the complete backtrace with any bug report.
+Voir <https://gcc.gnu.org/bugs/> pour les instructions.
+CMakeFiles/../teelol.dir/build.make:62 : la recette pour la cible « CMakeFiles/../teelol.dir/mainGame.yr.o » a échouée
+make[2]: *** [CMakeFiles/../teelol.dir/mainGame.yr.o] Erreur 1
+CMakeFiles/Makefile2:67 : la recette pour la cible « CMakeFiles/../teelol.dir/all » a échouée
+make[1]: *** [CMakeFiles/../teelol.dir/all] Erreur 2
+Makefile:83 : la recette pour la cible « all » a échouée
+make: *** [all] Erreur 2
