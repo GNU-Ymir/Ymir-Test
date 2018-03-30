@@ -1,4 +1,4 @@
-mod src.resource;
+mod common.resource;
 
 extern (C) printf (const c : p!char, ...);
 
@@ -8,9 +8,9 @@ import std.memory;
 import core.io;
 import core.string;
 
-import src.lib.sdl;
-import src.lib.sdlImage;
-import src.screen;
+import common.lib.sdl;
+import common.lib.sdlImage;
+import common.screen;
 
 enum
 | Tee : 0
@@ -21,8 +21,8 @@ enum
 struct
 | type : ResourceType
 | texture : p!SDL_Texture
-| width : int
-| height : int
+| width : i32
+| height : i32
  -> Resource;
 
 // may be replaced by a map instead of a linked list ?
@@ -155,4 +155,23 @@ def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> 
     res.texture = null;
     
     return res;
+}
+
+def toResourceType (value : i32) -> mut ResourceType
+{
+    match (value)
+    {
+        0 => return ResourceType::Tee;
+        1 => return ResourceType::OtherTee;
+        2 => return ResourceType::Eyes;
+        _ => {
+            println ("Invalid resource type");
+            assert (false);
+        }
+    }
+}
+
+def isInitialized (ref res : Resource) -> bool
+{
+    return res.texture !is null;
 }

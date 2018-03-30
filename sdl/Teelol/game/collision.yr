@@ -1,13 +1,14 @@
-mod src.collision;
+mod game.collision;
 
 import core.io;
 
 import std.memory;
 import std.list;
 
-import src.lib.sdl;
-import src.drawable;
-import src.player;
+import common.lib.sdl;
+import common.drawable;
+
+import game.player;
 
 struct
 | background : SDL_Rect
@@ -30,7 +31,7 @@ private
         gCollisionManagerInstance = null;
     }
 
-    def collidesWithSomething (colManager : p!CollisionManager, ref player : Player, speed : int, direction : Direction) -> bool
+    def collidesWithSomething (colManager : p!CollisionManager, ref player : Player, speed : i32, direction : Direction) -> bool
     {
         let next_ = colManager.objects.next ();
         while (next_ !is null)
@@ -43,11 +44,10 @@ private
             
             next_ = next (next_);
         }
-
         return false;
     }
 
-    def collides (objectA : p!Drawable, speed : int, const direction : Direction, objectB : p!Drawable) -> bool
+    def collides (objectA : p!Drawable, speed : i32, const direction : Direction, objectB : p!Drawable) -> bool
     {
         let rectA = SDL_Rect { objectA.pos.x, objectA.pos.y, objectA.res.width, objectA.res.height };
         let rectB = SDL_Rect { objectB.pos.x, objectB.pos.y, objectB.res.width, objectB.res.height };
@@ -69,7 +69,7 @@ private
     }
 }
 
-def createCollisionManager (screenWidth : int, screenHeight : int) -> mut p!CollisionManager
+def createCollisionManager (screenWidth : i32, screenHeight : i32) -> mut p!CollisionManager
 {
     if (gCollisionManagerInstance is null)
     {
@@ -100,7 +100,17 @@ def addObject (colManager : p!CollisionManager, drawable : p!Drawable)
     colManager.objects.push (drawable);
 }
 
-def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+def addObjects (colManager : p!CollisionManager, drawables : List!(p!Drawable))
+{
+    let next_ = drawables.next ();
+    while (next_ !is null)
+    {
+        colManager.objects.push (next_.value);
+        next_ = next (next_);
+    }
+}
+
+def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : i32) -> bool
 {
     let background = colManager.background;
     let drawable = player.body;
@@ -113,7 +123,7 @@ def canGoRight (colManager : p!CollisionManager, ref player : Player, speed : in
     return !colManager.collidesWithSomething (player, speed, Direction::Right);
 }
 
-def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : i32) -> bool
 {
     let background = colManager.background;
     let drawable = player.body;
@@ -126,7 +136,7 @@ def canGoLeft (colManager : p!CollisionManager, ref player : Player, speed : int
     return !colManager.collidesWithSomething (player, speed, Direction::Left);
 }
 
-def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : i32) -> bool
 {
     let background = colManager.background;
     let drawable = player.body;
@@ -139,7 +149,7 @@ def canGoDown (colManager : p!CollisionManager, ref player : Player, speed : int
     return !colManager.collidesWithSomething (player, speed, Direction::Down);
 }
 
-def canGoUp (colManager : p!CollisionManager, ref player : Player, speed : int) -> bool
+def canGoUp (colManager : p!CollisionManager, ref player : Player, speed : i32) -> bool
 {   
     return !colManager.collidesWithSomething (player, speed, Direction::Up);
 }

@@ -1,17 +1,19 @@
-mod src.game;
+mod game.game;
 
 import core.io;
 import core.string;
 
 import std.memory;
 
-import src.lib.signal;
-import src.lib.sdl;
-import src.screen;
-import src.eventHandler;
-import src.player;
-import src.resource;
-import src.collision;
+import common.lib.signal;
+import common.lib.sdl;
+import common.screen;
+import game.eventHandler;
+import common.resource;
+
+import game.player;
+import game.collision;
+import game.map;
 
 struct
 | screen : Screen
@@ -22,35 +24,50 @@ struct
  -> Game;
 
 // for now...
-imut gWindowWidth = 640;
-imut gWindowHeight = 480;
+// imut gWindowWidth = 640;
+// imut gWindowHeight = 480;
 imut gWindowPosX = 2024;
 imut gWindowPosY = 100;
 imut gTitle = "Teelol";
 imut gPlayerName = "Abitbol";
 imut gDefaultPosX = 200;
 imut gDefaultPosY = 400;
+imut gDefaultMapPath = "map/default.mp";
 
-def createGame (ref game : Game) 
+def createGame (ref game : Game)
 {
-    game.screen = createScreen (gTitle, gWindowWidth, gWindowHeight, gWindowPosX, gWindowPosY);
+    createGame (game, gDefaultMapPath);
+}
+
+def createGame (ref game : Game, mapFilePath : string) 
+{
+    let map = createMap (mapFilePath);
+    map.loadInfo ();
+    // we can't call loadMapContent() yet because it needs the ResourcesManager to be initialized and this one needs the screen to be created !
+    
+    game.screen = createScreen (gTitle, cast!i32 (map.width), cast!i32 (map.height), gWindowPosX, gWindowPosY);
     game.eventHdl = createEventHandler (game);
     game.continue = true;
 
     createResourcesManager (game.screen);
-    createCollisionManager (gWindowWidth, gWindowHeight);
+    createCollisionManager (cast!i32 (map.width), cast!i32 (map.height));
     
     game.mainPlayer = createPlayer (gPlayerName.dup(), gDefaultPosX, gDefaultPosY, ResourceType::Tee);
     game.testPlayer = createPlayer (gPlayerName.dup(), 50, 50, ResourceType::OtherTee);
-    
+
+    map.loadContent ();
+    game.screen.addDrawables (map.getDrawables ());
     game.screen.addDrawables (game.mainPlayer.getDrawables ());
     game.screen.addDrawables (game.testPlayer.getDrawables ());
 
     let colManager = getCollisionManager ();
     colManager.addObject (&(game.mainPlayer.body));
     colManager.addObject (&(game.testPlayer.body));
+    colManager.addObjects (map.getDrawables ());
     
     initEvents (game.eventHdl);
+
+    on exit => map.close ();
 }
 
 def start (ref game : Game)

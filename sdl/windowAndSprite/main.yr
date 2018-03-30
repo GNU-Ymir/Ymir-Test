@@ -10,7 +10,7 @@ imut WindowHeight = 480;
 imut WindowPosX = 100;
 imut WindowPosY = 100;
 
-def main() -> int
+def main() -> i32
 {
     if (SDL_Init (SDLInitFlag::Video) != 0)
     {
@@ -47,8 +47,8 @@ def main() -> int
     let spriteTexture = SDL_CreateTextureFromSurface (renderer, spriteSurface);
     SDL_FreeSurface (spriteSurface); // SDL_CreateTextureFromSurface copie les données, on peut libérer la surface
 
-    let format = uint::init;
-    let access = int::init, w = int::init, h = int::init;
+    let format = u32::init;
+    let access = i32::init, w = i32::init, h = i32::init;
 
     if (SDL_QueryTexture (spriteTexture, &format, &access, &w, &h) < 0)
     {

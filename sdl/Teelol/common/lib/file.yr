@@ -1,4 +1,4 @@
-mod main;
+mod common.lib.file;
 
 import core.io;
 import std.outbuffer;
@@ -64,6 +64,10 @@ def isEof (ref file : File) -> bool
     return feof (file.handle) == 1;
 }
 
+/*
+
+// Example :
+
 def main()
 {
     let file = File::init;
@@ -76,19 +80,14 @@ def main()
     // let str = file.readString ();
     // println (str);
 
-        if (file.isEof ())
-        println ("ok");
-    let a = file.read!i32 ();
+    let a = file.readInt ();
     println (a);
-    let b = file.read!i32 ();
-    println (b);
-    b = file.read!i32 ();
-    println (b);
-    if (file.isEof ())
-        println ("ok");
     
     on exit => {
         if (!file.close ())
             println ("File close error");
     }
 }
+
+
+*/
