@@ -1,0 +1,124 @@
+import core.io;
+import core.string;
+
+extern (C) scanf (c : p!(const char), ...);
+extern (C) rand () -> u32;
+extern (C) srand (i : u64);
+extern (C) time (i : u64) -> u64;
+
+struct
+| brd : [i32 ; 16U]
+| x : i32
+| y : i32
+ -> P15;
+
+
+
+def play (ref brd : P15) {
+    let a = char::init;
+    while true {
+        brd.create ();
+        while !brd.isDone () {
+            brd.draw ();
+            brd.getMove ();
+        }
+        brd.draw ();
+        println ("Congratulations !\nPlay again (Y/N) ?");
+        scanf ("%c".ptr, &a);
+        
+        if a != 'Y' && a != 'y' break;
+    }
+}
+
+def create (ref brd : P15) {
+    let v = [i32 ; 0U];
+
+    for i in 1 .. 16 {
+        brd.brd [i - 1] = i;
+    }
+    
+    for i in 0 .. 1000 {
+        brd.getCandidates (v);
+        brd.move ( v [rand () % v.len]);
+        v = [i32 ; 0U];
+    }
+}
+
+def move (ref brd : P15, d : i32) {
+    let i = brd.x + brd.y * 4;
+    match d {
+        1 => brd.y --;
+        2 => brd.x ++;
+        4 => brd.y ++;
+        8 => brd.x --;
+    }
+    
+    brd.brd [i] = brd.brd [brd.x + brd.y * 4];
+    brd.brd [brd.x + brd.y * 4] = 0;
+}
+
+def getCandidates (ref brd : P15, ref v : [i32]) {
+    if (brd.x < 3) v = v ~ [2];
+    if (brd.x > 0) v = v ~ [8];
+    if (brd.y < 3) v = v ~ [4];
+    if (brd.y > 0) v = v ~ [1];
+}
+
+def draw (ref brd : P15) {
+    let i = i32::init;
+    println ("\n\n");
+    for y in 0 .. 4 {
+        println ("+----+----+----+----+");
+        for x in 0 .. 4 {
+            i = brd.brd [x + y * 4];
+            print ("| ");
+            if (i < 10) print (" ");
+            if (i == 0) print ("  ");
+            else print (i, " ");
+        }
+        println ("");
+    }
+    println ("+----+----+----+----+");
+}
+
+def getMove (ref brd : P15) {
+    let v = [i32 ; 0U], c = [i32 ; 0U];
+    brd.getCandidates (v);
+    brd.getTiles (c, v);
+    while true {
+        print ("Possible moves: ");
+        for i in 0U .. c.len
+            print (c [i], " ");
+        let z = i32::init;
+        scanf ("%d".ptr, &z);
+        for i in 0U .. c.len
+            if z == c [i] {
+                brd.move (v [i]); return;
+            }
+    }
+}
+
+def getTiles (ref brd : P15, ref c : [i32], ref v : [i32]) {
+    for i in 0U .. v.len {
+        let xx = brd.x, yy = brd.y;
+        match v [i] {
+            1 => yy --;
+            2 => xx ++;
+            4 => yy ++;
+            8 => xx --;
+        }
+        c = c ~ [brd.brd [xx + yy * 4]];
+    }
+}
+
+def isDone (ref brd : P15) -> bool {
+    for i in 0 .. 15
+        if (brd.brd [i] != i + 1) return false;
+    return true;
+}
+
+def main () {
+    srand (time (0UL));
+    let brd = P15::init;
+    brd.play ();    
+}

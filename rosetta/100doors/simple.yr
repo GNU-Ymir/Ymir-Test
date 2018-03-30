@@ -1,0 +1,23 @@
+
+import core.io;
+import std.comprehension;
+
+def main () {
+    let open = comp: [false | i in 0 .. 100];
+    for pass in 0 .. 100 {
+        let door = pass;
+        while door < 100 {
+            open [door] = !open [door];            
+            door += pass + 1;
+        }
+    }
+
+    for door in 0 .. 100 {
+        println ("door #", door + 1,
+                 match open [door] {
+                     true => " is open.";
+                     _ => "is closed.";
+                 }
+            );
+    }
+}
