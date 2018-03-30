@@ -1,7 +1,6 @@
 import core.io;
 
 extern (C) system (c : p!(const char));
-extern (C) scanf (c : p!(const char), ...);
 extern (C) rand () -> u32;
 extern (C) time (i : u64) -> u64;
 extern (C) srand (i : u64);
@@ -72,9 +71,9 @@ def draw (ref g : Grid) {
 }
     
 def wait (ref g : Grid) {
-    g.moved = false; let c = char::init;
+    g.moved = false;
     print ("(W)Up (S)Down (A)Left (D)Right ");
-    scanf ("%c".ptr, &c);
+    let c = read!char ();
     match c {
         'W' => g.move (movDir::UP);
         'A' => g.move (movDir::LEFT);

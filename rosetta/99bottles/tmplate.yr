@@ -1,0 +1,18 @@
+import core.io;
+
+def bottles (max : i32, min : i32) () {
+    let cte middle = (max + min) / 2;
+    cte if (max == min) {
+        println (min, " bottles of beer on the wall\n",
+                 min, " bottles of beer\n",
+                 "Take one down, pass it around\n",
+                 min - 1, " bottles of beer on the wall\n\n");
+    } else {
+        bottles!(max, middle + 1);
+        bottles!(middle, min);
+    }
+}
+
+def main () {
+    bottles!(100, 1);
+}

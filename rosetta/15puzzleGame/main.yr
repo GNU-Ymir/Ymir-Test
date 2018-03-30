@@ -1,7 +1,6 @@
 import core.io;
 import core.string;
 
-extern (C) scanf (c : p!(const char), ...);
 extern (C) rand () -> u32;
 extern (C) srand (i : u64);
 extern (C) time (i : u64) -> u64;
@@ -15,7 +14,6 @@ struct
 
 
 def play (ref brd : P15) {
-    let a = char::init;
     while true {
         brd.create ();
         while !brd.isDone () {
@@ -24,7 +22,7 @@ def play (ref brd : P15) {
         }
         brd.draw ();
         println ("Congratulations !\nPlay again (Y/N) ?");
-        scanf ("%c".ptr, &a);
+        let a = read!char ();
         
         if a != 'Y' && a != 'y' break;
     }
@@ -76,7 +74,7 @@ def draw (ref brd : P15) {
             if (i == 0) print ("  ");
             else print (i, " ");
         }
-        println ("");
+        println ("|");
     }
     println ("+----+----+----+----+");
 }
@@ -89,8 +87,8 @@ def getMove (ref brd : P15) {
         print ("Possible moves: ");
         for i in 0U .. c.len
             print (c [i], " ");
-        let z = i32::init;
-        scanf ("%d".ptr, &z);
+        
+        let z = read!i32 ();        
         for i in 0U .. c.len
             if z == c [i] {
                 brd.move (v [i]); return;
