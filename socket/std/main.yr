@@ -1,0 +1,30 @@
+import std.socket;
+import std.outbuffer;
+import core.io;
+import std.conv;
+
+use tcp;
+
+def main (args) {
+    let serv = server (args [1].to!u16);
+    while (true) {
+        let cli = serv.accept ();
+        if (cli.socket == -1) break;
+        else {
+            cli.send ("login : ");
+            let buf = OutBuffer ();
+            while (true) {                
+                let msg = cli.recv!string (255U);
+                buf.write (msg.content);
+                if (msg.content.len != 255U) break;
+            }
+            
+            println ("New client named : ", buf.to!string);
+            cli.send ("Bye " ~ buf.to!string ~ " !!");
+            cli.send (12);
+            cli.close ();
+                
+        }
+    }
+    println ("Close ");
+}
