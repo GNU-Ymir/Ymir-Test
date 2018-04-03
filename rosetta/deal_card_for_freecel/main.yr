@@ -1,0 +1,58 @@
+import std.range;
+import core.io;
+import std.conv;
+
+struct
+| seed : u32
+ -> RandomGenerator;
+
+def rnGen () {
+    return RandomGenerator {1U};
+}
+
+def @safe next (ref rng : RandomGenerator) {
+    rng.seed = (rng.seed * 214_013U + 2_531_011U) & cast!u32 (i32::max);
+    return rng.seed >> 16U;
+}
+
+struct
+| cards : [i32 ; 52U]
+ -> Deck;
+
+def deal (ref deck : Deck, seed : u32) {
+    let nc = cast!i32 (deck.cards.len);
+    nc.iota ().retro ().copy (deck.cards);
+
+    let uc = deck.cards.len;
+    let rnd = RandomGenerator {seed};
+    for i in 0U .. uc {
+        let card = (uc - 1U) - rnd.next () % (uc - 1U);
+        let z = deck.cards [card];
+        deck.cards [card] = deck.cards [i];
+        deck.cards [i] = z;        
+    }    
+}
+
+def show (ref deck : const Deck) {
+    let suit = "TQCP", symb = "A23456789TJQK";
+    let z = 0;
+    println ("Game #", 0, "\n=======================");
+    for c in 52 .. 0 {
+        print (symb [deck.cards [c - 1] / 4], suit [deck.cards [c - 1] % 4], " ");
+        
+        z ++;
+        if z >= 8 {
+            println ("");
+            z = 0;
+        }
+    }
+    println ("");
+}
+
+def main (args) {
+    let seed = match (args.len == 2) { true => args [1].to!u16; _ => 11_982US; };
+    println ("Hand : ", seed);
+    let cards = Deck::init;
+    cards.deal (seed);
+    cards.show ();
+}
