@@ -1,0 +1,9 @@
+import core.io;
+import std.algorithm.iteration;
+
+
+def main () {
+    let array = [1, 2, 3, 4, 5, 6];
+    let m = array.map!((a) => a + 5);
+    println (m);
+}

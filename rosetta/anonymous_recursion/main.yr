@@ -1,0 +1,20 @@
+import core.io;
+
+// TODO
+def fibo (n : u32) {    
+    if (n < 0U) assert (false, "must be positive");
+    
+    let fib = dg (u32)-> u32;    
+    fib = (n : u32) {
+        if n <= 1
+            return n;
+        else 
+            return fib (n - 2U) + fib (n - 1U);
+    };
+    
+    return fib (n);
+}
+
+def main () {
+    println (fibo (10U));
+}

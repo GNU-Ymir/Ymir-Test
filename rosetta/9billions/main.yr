@@ -1,0 +1,56 @@
+import core.io, std.bigint, std.algorithm.comparaison;
+import core.array;
+
+static cache : [[BigInt]];
+
+self () {
+    cache = cache ~ [[bigint (1)].dup ()].dup ();
+}
+
+def cumu (n : u32) {
+    for l in cache.len .. n + 1U {
+        let r_ = [bigint (0)].dup ();
+        for x in 1U .. l + 1U {
+            r_ = r_ ~ [r_ [r_.len - 1U] + cache [l - x][min (x, l - x)]];
+        }
+        cache = cache ~ [r_];
+    }
+    return cache [n];
+}
+
+def row (n : u32) -> [BigInt] {
+    let r_ = cumu (n);
+    let rng = [BigInt ; n];
+    for i in 0U .. n {
+        rng [i] = r_ [i + 1U] - r_ [i];
+    }
+    return rng;
+}
+
+def printlnBig (n : const [BigInt]) {
+    print ("[");
+    for it in 0U .. n.len {
+        print (n [it].to!string);
+        if (it != n.len - 1U)
+            print (", ");
+    }
+    println ("]");
+}
+
+def back (T) (ref n : [T]) -> ref T {
+    return n [n.len - 1U];
+}
+
+def main () {
+    println ("Rows : ");
+    for x in 1U .. 11U {
+        print (x, ": ");
+        printlnBig (row (x));
+    }
+    
+    println ("Sums : ");
+
+    for x in [23U, 123U, 1234U] {
+        println (x, " ", cumu (x).back ().to!string);
+    }
+}
