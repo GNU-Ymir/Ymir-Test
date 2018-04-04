@@ -1,0 +1,22 @@
+import core.io, std.random, std.range;
+import std.algorithm.iteration;
+
+def isBalanced (const txt : string) {
+    let count = 0;
+    for c in txt {
+        if c == ']' {
+            count --;
+            if count < 0 return false;
+        } else if c == '['
+            count ++;
+    }
+    
+    return count == 0;
+}
+
+def main () {
+    for i in 1U .. 9U {
+        let s = iota (i * 2U).map!((x) => ("[]")[uniform (0, 2)]);
+        println (match (s.isBalanced ()) { true => "Ok : "; _ => "Bad : ";}, s);
+    }
+}

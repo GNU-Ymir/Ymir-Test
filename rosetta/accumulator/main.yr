@@ -1,0 +1,22 @@
+
+import core.io;
+
+struct
+| x : f64
+ -> Acc;
+
+def opCall (T) (ref this : Acc, i : T) {
+    this.x += cast!f64 (i);
+    return this.x;
+}
+
+def acc (T) (i : T) {
+    return Acc {cast!f64 (i)};
+}
+
+def main () {
+    let x = acc (1);
+    x (5);
+    acc (3);
+    println (x (2.3));
+}

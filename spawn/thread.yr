@@ -68,7 +68,6 @@ def spawn (F : FUN, FUN, T...) (n : uint, data : T) -> mut [Thread] {
 }
 
 
-
 def join (const th : Thread) {
     pthread_join (th.id, null);
 }

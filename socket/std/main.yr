@@ -1,0 +1,23 @@
+import std.range;
+import core.io, core.array;
+import std.conv;
+
+import std.socket.tcp;
+use Tcp;
+
+union (T)
+| data : [u8]
+| msg : T
+ -> Msg;
+
+def main () {
+    let listener = Tcp::bind (":3001");
+    while true {
+        let stream = listener.accept ();        
+        stream.write ((Msg!(const string) {"login : "}).data);
+        let ret = [u8 ; cte 255U];
+        stream.read (ret);
+        println ("New client : ", Msg!(const string) {ret}.msg);
+        stream.close ();
+    }
+}
