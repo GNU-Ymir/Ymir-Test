@@ -1,30 +1,23 @@
-import std.socket;
-import std.outbuffer;
-import core.io;
+import std.range;
+import core.io, core.array;
 import std.conv;
 
-use tcp;
+import std.socket.tcp;
+use Tcp;
 
-def main (args) {
-    let serv = server (args [1].to!u16);
-    while (true) {
-        let cli = serv.accept ();
-        if (cli.socket == -1) break;
-        else {
-            cli.send ("login : ");
-            let buf = OutBuffer ();
-            while (true) {                
-                let msg = cli.recv!string (255U);
-                buf.write (msg.content);
-                if (msg.content.len != 255U) break;
-            }
-            
-            println ("New client named : ", buf.to!string);
-            cli.send ("Bye " ~ buf.to!string ~ " !!");
-            cli.send (12);
-            cli.close ();
-                
-        }
+union (T)
+| data : [u8]
+| msg : T
+ -> Msg;
+
+def main () {
+    let listener = Tcp::bind (":3001");
+    while true {
+        let stream = listener.accept ();        
+        stream.write ((Msg!(const string) {"login : "}).data);
+        let ret = [u8 ; cte 255U];
+        stream.read (ret);
+        println ("New client : ", Msg!(const string) {ret}.msg);
+        stream.close ();
     }
-    println ("Close ");
 }
