@@ -29,7 +29,7 @@ def play (ref brd : P15) {
 }
 
 def create (ref brd : P15) {
-    let v = [i32 ; 0U];
+    let v = [i32 ; new 0U];
 
     for i in 1 .. 16 {
         brd.brd [i - 1] = i;
@@ -38,7 +38,7 @@ def create (ref brd : P15) {
     for i in 0 .. 1000 {
         brd.getCandidates (v);
         brd.move ( v [rand () % v.len]);
-        v = [i32 ; 0U];
+        v = [i32 ; new 0U];
     }
 }
 
@@ -80,7 +80,7 @@ def draw (ref brd : P15) {
 }
 
 def getMove (ref brd : P15) {
-    let v = [i32 ; 0U], c = [i32 ; 0U];
+    let v = [i32 ; new 0U], c = [i32 ; new 0U];
     brd.getCandidates (v);
     brd.getTiles (c, v);
     while true {
