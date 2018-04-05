@@ -31,7 +31,7 @@ def test2 () {
     let fn1 = fn (i32)-> i32 ((a) => a * 2);
     assert (fn1 (2) == 4);
 
-    let imut fn2 = (a) => a * 2;
+    let cte fn2 = (a) => a * 2;
     assert (fn2 (2) == 4);
 
     let fn3 = (a : i32) => a * 2;
@@ -62,7 +62,7 @@ def foo4 (call : fn (i32, i32) -> i32) {
 def nbar4fp (fp : fn (i32)-> void) { }
 def tbar4fp (T, R) (fp : fn (T) -> R) { }
 def nbaz4fp (a : fn ()-> void) { return 1; }
-def tbaz4fp (R) (a : fn ()-> R) { imut assert (is (R : void)); return 1; }
+def tbaz4fp (R) (a : fn ()-> R) { cte assert (is (R : void)); return 1; }
 
 def test4 () {
     assert (foo4 ((a) => a * 2) == 20);

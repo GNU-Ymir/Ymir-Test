@@ -5,7 +5,7 @@ extern (C) sscanf (const x : p!(char), const y : p!char, ...)-> i32;
 extern (C) time (x : p!u64)-> i32;
 
 
-imut LONG_TIME = 4000;
+cte LONG_TIME = 4000;
 static p_ : [i32];
 static t_ : [i32];
 static q : i32;
@@ -31,8 +31,8 @@ def main (args : [string]) {
     }
 
     q ++;
-    p_ = [i32 ; cast!u32 (q + 1)];
-    t_ = [i32 ; cast!u32 (q + 1)];
+    p_ = [i32 ; new cast!u32 (q + 1)];
+    t_ = [i32 ; new cast!u32 (q + 1)];
 
     time (&starttime);
     arctan (2);

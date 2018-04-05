@@ -1,43 +1,43 @@
 import core.io;
 
 def test1 () {
-    let imut a = 12;
-    let imut b = (a++) + 7;
-    imut assert (a == 13);
-    imut assert (b == 20);
+    let cte a = 12;
+    let cte b = (a++) + 7;
+    cte assert (a == 13);
+    cte assert (b == 20);
 }
 
 def fibo (n : u64) () -> u64 {
-    imut if n < 2U
+    cte if n < 2U
         return n;
     else return fibo!(n - 1U)() + fibo!(n - 2U)();
 }
 
 def test2 () {
-    let imut a = fibo!93UL ();
-    imut assert (a == 12200160415121876738UL);
+    let cte a = fibo!93UL ();
+    cte assert (a == 12200160415121876738UL);
 }
 
 def equals (left : string, right : string) () {
-    imut if left.len != right.len
+    cte if left.len != right.len
         return false;
     else return left [0] == right [0] && equals!(left, right, 1);
 }
 
 def equals (left : string, right : string, i : i32) () {
-    imut if i < left.len
+    cte if i < left.len
         return left [i] == right [i] && equals!(left, right, i + 1);
     else return true;
 }
 
 def test3 () {
-    imut assert (equals!("test", "test"));
-    imut assert (!equals!("test", "tect"));
-    imut assert (equals!(
+    cte assert (equals!("test", "test"));
+    cte assert (!equals!("test", "tect"));
+    cte assert (equals!(
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud",
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud"));
 
-    imut assert (equals!("test" ~ "truc", "testtruc"));
+    cte assert (equals!("test" ~ "truc", "testtruc"));
 }
 
 def main () {

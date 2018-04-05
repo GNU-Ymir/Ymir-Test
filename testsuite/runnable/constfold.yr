@@ -1,4 +1,4 @@
 
 def main () {
-    imut assert (1 == 1);    
+    cte assert (1 == 1);    
 }

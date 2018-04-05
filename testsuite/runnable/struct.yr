@@ -23,7 +23,7 @@ struct (T...)
 
 def test2 () {
     let sig = Signal!(ref Test!(i32), t!(i32, i32))::init;
-    let imut foo = (a, b) {
+    let cte foo = (a, b) {
         a.a = b.0 + b.1;        
     };
 
@@ -47,7 +47,7 @@ def test3 () {
     //assert (a.a == b.a);
 
     let c = foo2!10 ('r');
-    imut assert (is (typeof (c.a) : char));
+    cte assert (is (typeof (c.a) : char));
 }
 
 

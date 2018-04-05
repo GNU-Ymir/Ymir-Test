@@ -10,12 +10,12 @@ def foo1 (a : [i32]) {
 }
 
 def test () {
-    let a = [i32 ; imut 10U];
+    let a = [i32 ; 10U];
     assert (foo1 (a) == 1);
     assert (foo1 ([1, 2]) == 2);
 
     let b = [1, 2, 3];   
-    imut assert (is (b : [i32; 3U]));
+    cte assert (is (b : [i32; 3U]));
     assert (!is (b : [i32]));
 }
 

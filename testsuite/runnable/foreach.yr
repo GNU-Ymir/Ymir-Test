@@ -55,7 +55,7 @@ def test3 () {
 
 def test4 () {
     let i = 0U;
-    let a = [u32 ; imut 5U];
+    let a = [u32 ; 5U];
     a [0] = 16U;
     for u in a {
         i = i + u;
@@ -92,7 +92,7 @@ def test5 () {
 
 def test6 () {
     let a = [21L, 22L, 23L];
-    let b = [i64; imut 3U];
+    let b = [i64; 3U];
     let sum = 0L, i = 0UL;
     
     for v in a {
@@ -113,12 +113,12 @@ def test6 () {
 }
 
 def test7 () {
-    imut for i in 0 .. 10 {
-        imut assert (i < 10);
+    cte for i in 0 .. 10 {
+        cte assert (i < 10);
     }
-
-    imut for i in (1, [1, 2]) {
-        imut assert (is (typeof (i) : i32) || is (typeof (i) : [i32 ; 2U]));
+        
+    cte for i in (1, [1, 2]) {
+        cte assert (is (typeof (i) : i32) || is (typeof (i) : [i32 ; 2U]));
     }
 }
 
