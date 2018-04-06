@@ -19,11 +19,11 @@ def test () {
     assert (!is (b : [i32]));
 }
 
-def foo2 (a : const string) {
+def foo2 (a : const [char]) {
     return 1;
 }
 
-def foo2 (a : string) {
+def foo2 (a : [char]) {
     return 2;
 }
 

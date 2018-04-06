@@ -1,0 +1,21 @@
+import core.io;
+
+def @safe modInverse (T) (a : T, b : T) {
+    if b == 1 { return 1; }
+    let b0 = b, x0 = cast!T (0), x1 = cast!(T) (1);
+
+    while a > 1 {
+        let const q = a / b;
+        let z = b;
+        b = a % b;
+        a = z;
+        z = x0;
+        x0 = x1 - q * x0;
+        x1 = z;
+    }
+    return match x1 < 0 {true => x1 + b0; _ => x1; };    
+}
+
+def main () {
+    println (modInverse (42, 2017));
+}
