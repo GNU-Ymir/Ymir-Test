@@ -1,15 +1,15 @@
-mod game.player;
+mod src.player;
 
 import core.io;
 import std.list;
 import std.math;
 
-import common.lib.sdl;
-import common.resource;
-import common.drawable;
+import src.lib.sdl;
+import src.resource;
+import src.drawable;
 
-import game.collision;
-import game.movement;
+import src.collision;
+import src.movement;
 
 struct
 | name : string
@@ -25,9 +25,9 @@ struct
 
 private
 {
-    imut gHorizontalSpeed = 1;
-    imut gVerticalSpeed = 1;
-    imut gMaxJumpsCount = 2;
+    cte gHorizontalSpeed = 1;
+    cte gVerticalSpeed = 1;
+    cte gMaxJumpsCount = 2;
 }
 
 def createPlayer (name : string, const posX : i32, const posY : i32, resType : ResourceType) -> Player

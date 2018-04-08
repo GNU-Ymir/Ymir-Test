@@ -1,12 +1,12 @@
-mod game.eventHandler;
+mod src.eventHandler;
 
 import core.io;
 import std.list;
 
-import common.lib.sdl;
-import common.lib.signal;
+import src.lib.sdl;
+import src.lib.signal;
 
-import game.game;
+import src.game;
 
 struct
 | type : u32

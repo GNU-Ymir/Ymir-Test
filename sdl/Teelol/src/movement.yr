@@ -1,4 +1,4 @@
-mod game.movement;
+mod src.movement;
 
 import std.math;
 
@@ -28,7 +28,7 @@ struct
 | speedY : i32
  -> LinearMovement;
 
-imut gG = 9.81f;
+cte gG = 9.81f;
 
 def abs (T) (value : T) -> T
 {

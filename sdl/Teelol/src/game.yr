@@ -1,19 +1,19 @@
-mod game.game;
+mod src.game;
 
 import core.io;
 import core.string;
 
 import std.memory;
 
-import common.lib.signal;
-import common.lib.sdl;
-import common.screen;
-import game.eventHandler;
-import common.resource;
+import src.lib.signal;
+import src.lib.sdl;
+import src.screen;
+import src.eventHandler;
+import src.resource;
 
-import game.player;
-import game.collision;
-import game.map;
+import src.player;
+import src.collision;
+import src.map;
 
 struct
 | screen : Screen
@@ -24,15 +24,15 @@ struct
  -> Game;
 
 // for now...
-// imut gWindowWidth = 640;
-// imut gWindowHeight = 480;
-imut gWindowPosX = 2024;
-imut gWindowPosY = 100;
-imut gTitle = "Teelol";
-imut gPlayerName = "Abitbol";
-imut gDefaultPosX = 200;
-imut gDefaultPosY = 400;
-imut gDefaultMapPath = "map/default.mp";
+// cte gWindowWidth = 640;
+// cte gWindowHeight = 480;
+cte gWindowPosX = 2024;
+cte gWindowPosY = 100;
+cte gTitle = "Teelol";
+cte gPlayerName = "Abitbol";
+cte gDefaultPosX = 200;
+cte gDefaultPosY = 400;
+cte gDefaultMapPath = "map/default.mp";
 
 def createGame (ref game : Game)
 {

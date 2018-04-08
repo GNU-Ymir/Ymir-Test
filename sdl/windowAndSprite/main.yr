@@ -2,13 +2,23 @@ mod main;
 
 import core.io;
 import src.sdl;
+import std.list;
 
 extern (C) printf (const c : p!char, ...);
 
-imut WindowWidth = 640;
-imut WindowHeight = 480;
-imut WindowPosX = 100;
-imut WindowPosY = 100;
+cte WindowWidth = 640;
+cte WindowHeight = 480;
+cte WindowPosX = 2200;
+cte WindowPosY = 100;
+
+struct
+| posX : i32
+| posY : i32
+| offsetX : i32
+| offsetY : i32
+| width : i32
+| height : i32
+ -> Sprite;
 
 def main() -> i32
 {
@@ -36,7 +46,7 @@ def main() -> i32
 
     SDL_RenderSetLogicalSize (renderer, WindowWidth, WindowHeight);
 
-    let spriteSurface = IMG_Load ("tee.png".ptr);
+    let spriteSurface = IMG_Load ("sprites/goku.png".ptr);
 
     if (spriteSurface is null)
     {
@@ -55,19 +65,33 @@ def main() -> i32
         printf ("SDL_QueryTexture() error : %s\n".ptr, SDL_GetError());
         return -1;
     }
-    
-    let spriteRect = SDLRect { 10, 10, w, h }; // les deux premiers param sont utils pour positionner le sprite, osef des deux autres
-    if (SDL_RenderCopy (renderer, spriteTexture, cast!(p!SDLRect) (null), &spriteRect) < 0)
-    {
-        printf ("SDL_RenderCopy() error : %s\n".ptr, SDL_GetError());
-        return -1;
-    }
+
+    let sprites = [Sprite ; 4u];
+    sprites[0] = Sprite { 50, 50, 10, 450, 50, 100 };
+    sprites[1] = Sprite { 50, 50, 70, 450, 50, 100 };
+    sprites[2] = Sprite { 50, 50, 130, 450, 50, 100 };
+    sprites[3] = Sprite { 50, 50, 185, 450, 50, 100 };
+
+    SDL_SetRenderDrawBlendMode(renderer, SDLBlendMode::SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 0ub, 0ub, 255ub, 255ub);
     
     let stop = false;
     let event = SDLEvent::init;
-
+    let index = 0u;
+    
     while (!stop)
     {
+        let spriteRect = SDLRect { sprites[index].posX, sprites[index].posY, sprites[index].width, sprites[index].height };
+        let spriteLocation = SDLRect { sprites[index].offsetX, sprites[index].offsetY, sprites[index].width, sprites[index].height };
+        if (SDL_RenderCopy (renderer, spriteTexture, &spriteLocation, &spriteRect) < 0)
+        {
+            printf ("SDL_RenderCopy() error : %s\n".ptr, SDL_GetError());
+            return -1;
+        }
+
+        index = (index + 1u) % 4u;
+
+        
         while (SDL_PollEvent (&event) != 0)
         {
             match event.type {
@@ -81,6 +105,7 @@ def main() -> i32
         }
         
         SDL_RenderPresent (renderer);
+        SDL_Delay (50u);
     }
 
     SDL_DestroyTexture (spriteTexture);

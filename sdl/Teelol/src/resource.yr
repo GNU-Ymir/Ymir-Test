@@ -1,0 +1,177 @@
+mod src.resource;
+
+extern (C) printf (const c : p!char, ...);
+
+import std.list;
+import std.memory;
+
+import core.io;
+import core.string;
+
+import src.lib.sdl;
+import src.lib.sdlImage;
+import src.screen;
+
+enum
+| Tee : 0
+| OtherTee : 1
+| Eyes : 2
+ -> ResourceType;
+
+struct
+| type : ResourceType
+| texture : p!SDL_Texture
+| width : i32
+| height : i32
+ -> Resource;
+
+// may be replaced by a map instead of a linked list ?
+struct
+| surfacesList : List!SurfaceRes
+ -> ResourcesManager;
+
+private
+{
+    struct
+    | surface : p!SDL_Surface
+    | renderingContext : p!SDL_Renderer
+    | filePath : string
+    | resType : ResourceType
+     -> SurfaceRes;
+
+    // we be replaced by a map
+    struct
+    | type : ResourceType
+    | filePath : string
+     -> ImageRes;
+
+    def createSurfacesList (renderingContext : p!SDL_Renderer)
+    {
+        let mlist = list!SurfaceRes ();
+
+        let next_ = gImagesPathList.next ();
+        while (next_ !is null)
+        {
+            let imageRes = next_.value;
+            let surf = IMG_Load (imageRes.filePath.ptr);
+
+            if (surf is null)
+            {
+                // will be logged
+                println ("File not found !");
+            }
+            else
+            {
+                mlist.push (SurfaceRes { surf, renderingContext, imageRes.filePath.dup(), imageRes.type });
+                
+            }
+            next_ = next(next_);
+        }
+
+        return mlist;
+    }
+
+    def printSdlErr (const message : string)
+    {
+        print (message, " : ");
+        printf ("%s".ptr, SDL_GetError());
+    }
+
+    static gResourcesManagerInstance : p!ResourcesManager;
+    static gImagesPathList : List!ImageRes;
+
+    // global test surface
+    cte gTeeFilePath = "img/tee.png";
+    cte gOtherTeeFilePath = "img/otherTee.png";
+    cte gTeeEyesFilePath = "img/eyes.png";
+    
+    // static constructor
+    self ()
+    {
+        gResourcesManagerInstance = null;
+        gImagesPathList = list!ImageRes ();
+        gImagesPathList.push (ImageRes { ResourceType::Tee, gTeeFilePath.dup() });
+        gImagesPathList.push (ImageRes { ResourceType::OtherTee, gOtherTeeFilePath.dup() });
+        gImagesPathList.push (ImageRes { ResourceType::Eyes, gTeeEyesFilePath.dup () });
+    }
+}
+
+def createResourcesManager (ref screen : Screen) -> p!ResourcesManager
+{
+    if (gResourcesManagerInstance is null)
+    {
+        gResourcesManagerInstance = alloc (ResourcesManager { createSurfacesList (screen.renderer) });
+        return gResourcesManagerInstance;
+    }
+    else
+    {
+        println ("You cannot have two instances of a ResourcesManager !");
+        assert (false);
+    }  
+}
+
+def getResourcesManager () -> p!ResourcesManager
+{
+    if (gResourcesManagerInstance is null)
+    {
+        println ("The resources manager must be initialized by using the createResourcesManager function.");
+        assert (false);
+    }
+    return gResourcesManagerInstance;
+}
+
+def getResource (resManager : const p!ResourcesManager, type : ResourceType) -> mut Resource
+{
+    let resList = resManager.surfacesList;
+    let res = Resource::init;
+    
+    let next_ = resList.next ();
+    while (next_ !is null)
+    {
+        let surfRes = next_.value;
+        if (surfRes.resType == type)
+        {
+            res.type = type;
+            res.texture = SDL_CreateTextureFromSurface (surfRes.renderingContext, surfRes.surface);
+
+            if (res.texture is null)
+            {
+                printSdlErr ("SDL_CreateTextureFromSurface error");
+                assert (false);
+            }
+
+            if (SDL_QueryTexture (res.texture, null, null, &res.width, &res.height) < 0)
+            {
+                printSdlErr ("SDL_QueryTexture error");
+                assert (false);
+            }
+            
+            return res;
+        }
+        next_ = next(next_);
+    }
+
+    // the corresponding ressource was not found
+    res.texture = null;
+    
+    return res;
+}
+
+def toResourceType (value : i32) -> mut ResourceType
+{
+    match (value)
+    {
+        0 => return ResourceType::Tee;
+        1 => return ResourceType::OtherTee;
+        2 => return ResourceType::Eyes;
+        _ => {
+            println ("Invalid resource type");
+            assert (false);
+        }
+    }
+}
+
+def isInitialized (ref res : Resource) -> bool
+{
+    return res.texture !is null;
+}

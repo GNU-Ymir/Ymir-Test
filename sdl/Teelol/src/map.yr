@@ -1,11 +1,11 @@
-mod game.map;
+mod src.map;
 
 import core.io;
 import std.list;
 
-import common.drawable;
-import common.resource;
-import common.lib.file;
+import src.drawable;
+import src.resource;
+import src.lib.file;
 
 struct
 | drawables : List!(Drawable)
