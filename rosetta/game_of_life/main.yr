@@ -1,0 +1,73 @@
+import core.io, core.array;
+import std.comprehension, std.random;
+
+enum
+| alive : true
+| dead : false
+ -> Cell;
+
+extern (C) usleep (x : u32)-> void;
+extern (C) system (x : p!(const char))-> void;
+
+def show (array : [[Cell]]) {
+    
+    for x in 0U .. array.len {
+        print ("\033[07m  \033[m");        
+        for y in 0U .. array [x].len {
+            print (match array [x][y] {
+                Cell::alive => "\033[07m  \033[m";
+                _ => "  ";
+            });
+        }
+        print ("\033[07m  \033[m\n");
+    }
+    println ("");
+}
+
+def evolve (array : [[Cell]]) {
+    let next = comp: [[Cell ; new array [i].len] | i in 0U .. array.len];
+
+    for x in 0 .. cast!i64 (array.len) {
+        for y in 0 .. cast!i64 (array [x].len) {
+            let n = 0;
+            let h = cast!i64 (array [x].len), w = cast!i64 (array.len);                  
+            for y1 in y - 1 .. y + 2 {
+                for x1 in x - 1 .. x + 2 {
+                    if array [(x1 + w) % w][(y1 + h) % h]
+                        n ++;
+                }
+            }
+            
+            if array [x][y] == Cell::alive { n --; }
+            next [x][y] = (n == 3 || (n == 2 && array [x][y] == Cell::alive));            
+        }
+    }
+    return next;
+}
+
+def game (x, y) {
+    let univ = comp: [[Cell ; new y] | i in 0U .. x];
+    for x_ in 0U .. univ.len {
+        for y_ in 0U .. univ [x_].len {
+            univ [x_][y_] = (uniform (0, 2) == 0);
+        }
+    }
+
+    let i = 0;
+    while true {
+        println ("Generation : ", i);
+        univ.show ();
+        univ = univ.evolve ();
+        usleep (10_000U);
+        system ("clear".ptr);
+        i++;
+    }
+}
+
+def main () {
+    print ("Width : ");
+    let width = read!u32 ();
+    print ("Height : ");
+    let height = read!u32 ();
+    game (height, width);
+}
