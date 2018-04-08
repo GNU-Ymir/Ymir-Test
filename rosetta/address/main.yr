@@ -1,0 +1,13 @@
+
+
+def @inline foo (ref a : i32) {
+    import core.io;
+    println (a);
+}
+
+def main () {
+    let i = 10;
+    let ip = &i;
+    ip = cast!(p!i32) (0xdeadf00d_UL);
+    foo (*ip);
+}

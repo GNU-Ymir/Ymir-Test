@@ -20,7 +20,7 @@ def cumu (n : u32) {
 
 def row (n : u32) -> [BigInt] {
     let r_ = cumu (n);
-    let rng = [BigInt ; n];
+    let rng = [BigInt ; new n];
     for i in 0U .. n {
         rng [i] = r_ [i + 1U] - r_ [i];
     }

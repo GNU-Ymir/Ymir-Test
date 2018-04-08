@@ -4,5 +4,4 @@ import core.io, core.array;
 def main () {
     println ("ha".replicate (5U));
     let b = [char; 5U];
-    b [] = '*';
 }

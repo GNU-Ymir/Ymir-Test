@@ -13,7 +13,7 @@ def sum (a : [f64]) {
 }
 
 def map (n : u32) {
-    let array = [f64 ; n];
+    let array = [f64 ; new n];
     for i in 0U .. array.len {
         array [i] = (4.0 / n) / (1. + ((i - 0.5) * (1. / n)) * ((i - 0.5) * (1. / n)));
     }

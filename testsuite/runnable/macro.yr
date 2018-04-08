@@ -22,7 +22,7 @@ __macro json {
     ($z: expr ":" "[" *x: ($y: expr, ",") "]") {
         log (z);
         current += 4;
-        imut for it in x {
+        cte for it in x {
             log (it.y);
         }
         current -= 4;
@@ -40,7 +40,7 @@ __macro json {
     }
     
     (*x: (*elem: ($y: token), ",")) {
-        imut for it in x {
+        cte for it in x {
             json: { $(it.elem) };
         }
     }
@@ -60,8 +60,8 @@ def test () {
 
 __macro stringify {
     (*elem: ($i: token)) {
-        let res = [char ; 0U];
-        imut for it in elem
+        let res = [char ; new 0U];
+        cte for it in elem
             res = res ~ it.i;
         res;
     }
@@ -76,12 +76,12 @@ __macro comp {
     ($x: expr "|" $y: ident "in" $z: expr) {
         let res;
         {
-            imut if (!is (z : [i32])) {
+            cte if (!is (z : [i32])) {
                 let y = z.fst;
-                res = [ typeof (x); 0U ];
+                res = [ typeof (x); new 0U ];
             } else {
                 let y = z [0];
-                res = [ typeof (x) ; 0U ];
+                res = [ typeof (x) ; new 0U ];
             }
         }
         
@@ -94,12 +94,12 @@ __macro comp {
     ($x: expr "|" $y: ident "in" $z: expr "if" $test: expr) {
         let res;
         {
-            imut if (!is (z : [i32])) {
+            cte if (!is (z : [i32])) {
                 let y = z.fst;
-                res = [ typeof (x); 0U ];
+                res = [ typeof (x); new 0U ];
             } else {
                 let y = z [0];
-                res = [ typeof (x) ; 0U ];
+                res = [ typeof (x) ; new 0U ];
             }
         }
         

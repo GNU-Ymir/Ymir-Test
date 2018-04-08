@@ -3,7 +3,7 @@ extern (C) printf (const c : p!char, ...) -> i32;
 extern (C) atoi (const c : p!char) -> i32;
 
 def main (args) {
-    let s = [char ; 0U];
+    let s = [char ; new 0U];
     let count = 0U;
     count = cast!u32 (atoi ((args [1] ~ "\0").ptr));
     if (count == 0U) count = 1U;

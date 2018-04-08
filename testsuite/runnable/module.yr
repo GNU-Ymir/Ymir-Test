@@ -17,7 +17,7 @@ mod test (T) {
     }
 
     def foo () {
-        imut assert (is (T : i32));
+        cte assert (is (T : i32));
     }
     
 }
