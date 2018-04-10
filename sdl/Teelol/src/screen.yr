@@ -1,0 +1,116 @@
+mod src.screen;
+
+extern (C) printf (const c : p!char, ...);
+
+import core.io;
+import std.abort;
+import std.list;
+
+import src.lib.sdl;
+import src.drawable;
+import src.resource;
+
+struct
+| window : p!SDL_Window
+| renderer : p!SDL_Renderer
+| drawables : List!(p!Drawable)
+ -> Screen;
+
+private
+{
+    def printErr (const message : string)
+    {
+        print (message, " : ");
+        printf ("%s".ptr, SDL_GetError());
+    }
+}
+
+// TODO : the createwindow flag should come from the main function in order to propose the fullscreen mode
+def createScreen (const title : string, const windowWidth : i32, const windowHeight : i32, const windowPosX : i32, const windowPosY : i32) -> Screen
+{
+    if (SDL_Init (SDL_InitFlag::Video) != 0)
+    {
+        printErr ("SDL_Init() error");
+        abort ();
+    }
+
+    let screen = Screen::init;
+    screen.window = SDL_CreateWindow (title.ptr, windowPosX, windowPosY, windowWidth, windowHeight, SDL_WindowFlag::Shown);
+
+    if (screen.window is null)
+    {
+        printErr ("SDL_CreateWindow() error");
+        abort ();
+    }
+
+    // -1 : init the first rendering driver supporting the requested flag (index of rendering driver) 
+    screen.renderer = SDL_CreateRenderer (screen.window, -1, SDL_RendererFlag::Accelerated);
+
+    if (screen.renderer is null)
+    {
+        printErr ("SDL_CreateRenderer() error");
+        abort ();
+    }
+
+    SDL_RenderSetLogicalSize (screen.renderer, windowWidth, windowHeight);
+
+    screen.drawables = list!(p!Drawable) ();
+    
+    return screen;
+}
+
+def clear (ref screen : Screen)
+{
+    SDL_SetRenderDrawColor (screen.renderer, 0ub, 0ub, 0ub, 255ub);
+    SDL_RenderClear (screen.renderer);
+}
+
+def display (ref screen : Screen)
+{
+    let next_ = screen.drawables.next ();
+    while (next_ !is null)
+    {
+        let draw = *(next_.value);
+        let res = draw.res;
+
+        if (res.texture !is null)
+        {
+            let pos = draw.pos;
+
+            let spriteRect = SDL_Rect { pos.x, pos.y, res.width, res.height };
+            if (SDL_RenderCopy (screen.renderer, res.texture, null, &spriteRect) < 0)
+            {
+                printErr ("SDL_RenderCopy() error");
+                abort ();
+            }
+        }
+
+        next_ = next (next_);
+    }
+    
+    SDL_RenderPresent (screen.renderer);
+}
+
+def destroy (ref screen : Screen)
+{
+    println ("destroy !");
+    if (screen.renderer !is null)
+        SDL_DestroyRenderer (screen.renderer);
+    if (screen.window !is null)
+        SDL_DestroyWindow (screen.window);
+}
+
+def addDrawable (ref screen : Screen, drawable : p!Drawable)
+{
+    screen.drawables.push (drawable);
+}
+
+def addDrawables (ref screen : Screen, drawables : List!(p!Drawable))
+{
+    let next_ = drawables.next ();
+    while (next_ !is null)
+    {
+        screen.drawables.push (next_.value);
+        next_ = next(next_);
+    }
+}

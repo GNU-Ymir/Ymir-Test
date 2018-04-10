@@ -1,7 +1,7 @@
-mod mainGame;
+mod main;
 
 import core.io;
-import game.game;
+import src.game;
 
 def main(args : [string])
 {
