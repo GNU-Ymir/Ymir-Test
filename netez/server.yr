@@ -1,11 +1,9 @@
 import std.socket.tcp;
 import message;
+import protocol;
+
 use Message;
 use Tcp;
-
-struct
-| stream : TcpStream
- -> Protocol;
 
 def foo (a : i32, b : i32) {
     println ("Recv : ", a);

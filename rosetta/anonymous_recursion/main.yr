@@ -4,8 +4,8 @@ import core.io;
 def fibo (n : u32) {    
     if (n < 0U) assert (false, "must be positive");
     
-    let fib = dg (u32)-> u32;    
-    fib = (n : u32) {
+    let fib = (dg (u32)-> u32)::init;    
+    fib = move (n : u32) {
         if n <= 1
             return n;
         else 

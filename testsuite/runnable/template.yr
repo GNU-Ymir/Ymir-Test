@@ -54,7 +54,7 @@ mod i {
 def test3 () {
     assert (foo3 (10) == i::template::foo3 (10));
     let b = foo3!(i32);
-    let c = fn (i32)-> i32 (foo3);
+    let c = fn (i32)-> i32 {foo3};
     assert (b is c);
 }
 

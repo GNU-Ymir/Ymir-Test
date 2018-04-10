@@ -15,7 +15,7 @@ def main () {
     while true {
         let stream = listener.accept ();        
         stream.write ((Msg!(const string) {"login : "}).data);
-        let ret = [u8 ; cte 255U];
+        let ret = [u8 ; 255U];
         let len = stream.read (ret);
         let res = [u8]{len, ret.ptr};
         println ("New client : ", Msg!(const string) {res}.msg);

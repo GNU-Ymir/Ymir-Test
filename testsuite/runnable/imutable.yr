@@ -2,7 +2,7 @@ import core.io;
 
 def test1 () {
     let cte a = 12;
-    let cte b = (a++) + 7;
+    let cte b = (a = a + 1) + 7;
     cte assert (a == 13);
     cte assert (b == 20);
 }

@@ -1,9 +1,12 @@
-mod main;
-import thread;
+import std.concurrency;
 import core.io;
 
-
 def main () {
-    let ths = spawn!((a, b) => println (a, " ", b)) (4U, 10, "salut");
-    ths.join ();
+    let x = 0;
+    let ths = thread::spawn (10U, (z : i32) {
+        x++;
+    }, 1);
+    
+    thread::join (ths);
+    println (x);
 }

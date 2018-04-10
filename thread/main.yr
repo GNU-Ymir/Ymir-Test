@@ -2,11 +2,11 @@ mod main;
 
 import core.io;
 
-extern (C) pthread_create (thread : p!ulong, attr : p!void, func : fn(p!void) -> p!void, arg : p!void) -> int;
+extern (C) pthread_create (thread : p!u64, attr : p!void, func : fn(p!void) -> p!void, arg : p!void) -> i32;
 
-extern (C) pthread_join (th : ulong, a : p!(p!(void)));
-extern (C) pthread_exit (a : int);
-extern (C) sleep (a : int);
+extern (C) pthread_join (th : u64, a : p!(p!(void)));
+extern (C) pthread_exit (a : i32);
+extern (C) sleep (a : i32);
 
 def foo(a : p!void) -> p!(void) {
     println ("test");

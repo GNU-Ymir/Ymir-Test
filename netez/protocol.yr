@@ -3,5 +3,9 @@ mod protocol;
 import std.socket.tcp;
 use Tcp;
 
+struct
+| stream : TcpStream
+ -> Protocol;
+
 
 

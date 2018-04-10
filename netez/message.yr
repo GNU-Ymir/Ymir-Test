@@ -1,6 +1,5 @@
 mod message;
 
-import std.socket;
 import protocol;
 
 mod Message {
