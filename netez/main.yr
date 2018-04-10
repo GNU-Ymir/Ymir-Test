@@ -1,0 +1,24 @@
+import std.socket.tcp;
+import message;
+import protocol;
+
+use Message;
+use Tcp;
+
+struct
+| stream : TcpStream
+ -> Protocol;
+
+
+def foo (a : i32, b : i32) {
+    println ("Recv : ", a);
+}
+
+def main (args) {
+    let stream = Tcp::connect ("127.0.0.1:4000");
+    let proto = Protocol {stream};
+    let msg = Message::new!(i32, i32) (proto);
+    msg.connect (foo);
+    msg.send (10, 10);    
+    msg.recv ();
+}
