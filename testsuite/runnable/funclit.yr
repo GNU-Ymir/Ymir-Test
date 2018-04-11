@@ -28,7 +28,7 @@ def test () {
 }
 
 def test2 () {
-    let fn1 = fn (i32)-> i32 {(a) => a * 2};
+    let fn1 = (fn (i32)-> i32) {(a) => a * 2};
     assert (fn1 (2) == 4);
 
     let cte fn2 = (a) => a * 2;
