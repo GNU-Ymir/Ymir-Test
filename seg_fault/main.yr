@@ -1,7 +1,7 @@
 
 
 def debile () {
-    let a = cast!(p!int) (null);
+    let a = cast!(p!i32) (null);
     *a = 10;
 }
 

@@ -1,0 +1,32 @@
+import std.range, std.random;
+import std.algorithm.iteration;
+import std.algorithm.comparison;
+cte w = 14U;
+cte h = 10U;
+
+def main () {
+    let vis = [[bool ; w] ; h];
+    let hor = iota (h + 1U).map!((a) => ["+---"].replicate (w));
+    let ver = iota (h).map!((a) => ["|   "].replicate (w) ~ ["|"]);
+
+    let walk = (dg (u32, u32)-> void)::init;
+    walk = (x : u32, y : u32) {
+        vis [y][x] = true;
+        for const z in [[x - 1U, y], [x, y + 1U], [x + 1U, y], [x, y - 1U]].shuffle () {
+            if !(z [0] >= w || z [1] >= h || vis [z[1]][z[0]]) {
+                if z[0] == x { hor [max(y, z [1])][x] = "+   "; }
+                if z [1] == y { ver [y][max (x, z [0])] = "    "; }
+                walk (z [0], z [1]);
+            }
+        }
+    };
+
+    walk (uniform (0U, w), uniform (0U, h));
+    for const i in 0UL .. hor.len {
+        if i < ver.len
+            println ((hor [i] ~ ["+\n"] ~ ver [i]).join ());
+        else
+            println ((hor [i] ~ ["+\n"]).join ());
+    }
+    
+}

@@ -1,0 +1,65 @@
+import std.random, std.string;
+
+enum
+| ROCK : 1
+| PAPER : 2
+| SCISSORS : 3
+ -> Choice;
+   
+def beats (c1, c2) {
+    return match (c1, c2) {
+        (Choice::PAPER, Choice::ROCK) => true;
+        (Choice::SCISSORS, Choice::PAPER) => true;
+        (Choice::ROCK, Choice::SCISSORS) => true;
+        _ => false;
+    };   
+}
+
+def genMove (ro, pa, s) {
+    let x = uniform (1, ro + pa + s);
+    if x < s { return Choice::ROCK; }
+    if x <= s + ro { return Choice::PAPER; }
+    else return Choice::SCISSORS;
+}
+
+def name (a) {
+    return match a {
+        Choice::ROCK => "rock";
+        Choice::SCISSORS => "scissors";
+        Choice::PAPER => "paper";
+        _ => "";
+    };
+}
+
+def evaluate (const a) {
+    return match a {
+        "rock" => (Choice::ROCK, true);
+        "scissors"=> (Choice::SCISSORS, true);
+        "paper" => (Choice::PAPER, true);
+        _ => (Choice::ROCK, false);
+    };
+}
+
+def main () {
+    let ro = 1, pa = 1, s = 1;
+    while true {
+        println ("Rock, Paper or Scissors ?");
+        let input = read!(string).toLower ();
+        let (h, good) = evaluate (input);
+        if good {
+            let c = genMove (ro, pa, s);
+            println ("Player : ", h.name (), " Computer : ", c.name ());
+            
+            if (beats (h, c)) println ("Player won !");
+            else if (beats (c, h)) println ("Computer Won ^^");
+            else println ("Draw -_-'");
+
+            match (h) {
+                Choice::ROCK=> ro++;
+                Choice::PAPER=> pa ++;
+                Choice::SCISSORS=> s++;                
+            }
+            
+        } else println ("Wrong input ", input);
+    }
+}

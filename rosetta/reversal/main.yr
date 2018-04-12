@@ -1,0 +1,21 @@
+import std.comprehension, std.random, std.range;
+import std.algorithm.sorting;
+import std.algorithm.mutation;
+
+
+def main () {
+    let data = comp: [i | i in 1U .. 10U];
+    while data.isSorted ()
+        data.shuffle ();
+
+    let trial = 0;
+    while !data.isSorted () {
+        println (trial, ": ", data, " How many numbers to flip ?");
+        let nb = read!i32 ();
+        trial ++;
+
+        data [0 .. nb].reverse ();
+    }
+    println ("You took ", trial, " attempts");
+    
+}

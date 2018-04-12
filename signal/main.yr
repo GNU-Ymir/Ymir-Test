@@ -14,13 +14,13 @@ def call (T...) (ref sig : Signal!T, elems : T) {
     }
 }
 
-def test2 (a : int, b : int) {
+def test2 (a : i32, b : i32) {
     println (a * b);
 }
 
 def main () {
-    let a = Signal!(int, int)::init;
-    a.connect ((a : int, b : int) {
+    let a = Signal!(i32, i32)::init;
+    a.connect ((a : i32, b : i32) {
         println (a + b);
     });
 

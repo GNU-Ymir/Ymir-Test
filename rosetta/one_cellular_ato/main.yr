@@ -1,0 +1,30 @@
+import std.algorithm.mutation;
+
+//cte trans = "___#_##_";
+cte trans = "___#_##_";
+
+def v (cell, i) return match cell [i] != '_' { true => 1; _ => 0; };
+
+def evolve (ref cell : [char], ref backup : [char], len : u64) {
+    let diff = 0U;
+    for i in 0 .. cast!i32 (len) {
+        backup [i] = trans [cell.v (i - 1) * 4 + cell.v (i) * 2 + cell.v (i + 1)];
+        if backup [i] != cell [i]
+            diff ++;
+    }
+
+    for i in 0U .. len {
+        cell [i] = backup [i];
+    }
+    return diff != 0;
+}
+
+def main () {
+    let c = "_###_##_#_#_#_#__#__".dup (),
+        b = "____________________".dup ();
+    
+    println (c);
+    while evolve (c, b, c.len - 2U) {
+        println (c);
+    }
+}
