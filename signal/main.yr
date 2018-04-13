@@ -10,7 +10,7 @@ def connect (T...) (ref sig : Signal!T, foo : fn (T) -> void) {
 
 def call (T...) (ref sig : Signal!T, elems : T) {
     for it in 0U .. sig.func.len {
-        sig.func [it] (elems.expand);
+        sig.func [it] (elems::expand);
     }
 }
 
