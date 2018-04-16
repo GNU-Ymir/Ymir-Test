@@ -1,0 +1,98 @@
+import std.memory;
+
+struct
+| left : p!Node
+| right : p!Node
+| content : [const char]
+ -> Node;
+
+
+def print (ref n : Node, nb : i32) {
+    for i in 0 .. nb
+        print (' ');
+    println ('[', n.content, ']');
+    if (n.left !is null) {
+        print (*(n.left), nb + 4);
+        if (n.right !is null)
+            print (*(n.right), nb + 4);
+    }    
+}
+
+__macro instruction {
+    ("let" +z : (*fst: ($x : token) "=" *rest: ($x : token), ",") ";" *rest:($x : token)) {
+        let ret = instruction: {$(rest)};
+        cte for i in z {
+            let left = Node {null, null, q: {$(i.fst)}};
+            let right = high: {$(i.rest)};
+            ret = Node {alloc (Node {alloc (left), alloc (right), "let"}), alloc (ret), "compound"};
+        }
+        ret;
+    }
+    
+    () {
+        Node {null, null, "compound"};
+    }
+}
+
+__macro high {
+    (*fst : ($x : token) "*" *rest: ($x : token)) {
+        let left = low: {$(fst)};
+        Node {alloc (left), alloc (high: {$(rest)}), "*"};
+    }
+
+    (*x : ($z : token)) {
+        let node = low: {$(x)};
+        node;
+    }
+    
+}
+
+__macro low {
+    (*fst: ($x: token) "+" *rest: ($x : token)) {
+        let left = pth:{$(fst)};
+        Node {alloc (left), alloc (low: {$(rest)}), "+"};
+    }
+        
+    (*x : ($x : token)) {
+        let node = pth: {$(x)};
+        node;
+    }
+}
+
+__macro pth {
+    ("(" *fst: ($x : token) ")") {
+        let node = high: {$(fst)};
+        node;
+    }
+    
+    (*fst: ($x : token)) {
+        Node {null, null, constante:{$(fst)}};
+    }
+}
+
+__macro constante {
+    (*elem : ($x : token)) {
+        let totale = "";
+        let cte any = false, cte nb = 0;
+        cte for i in elem {
+            cte for j in 0U .. i.x.len {                
+                cte if ((i.x [j] < '0' || i.x [j] > '9') && i.x [j] != ' ')
+                    cte assert (false, i.x ~ " is not an int");
+                
+                cte if (i.x [j] != ' ') {
+                    totale = totale ~ [i.x [j]];
+                }
+            }
+        }
+        totale;
+    }   
+}
+
+def main () {
+    print (high: { 32 + (3 + 81) * 7}, 0);
+    
+    print (instruction: {
+        let x = 1 + 3 * 3, y = 2;
+        let z = 3, y2 = 45;
+    }, 0);
+}
