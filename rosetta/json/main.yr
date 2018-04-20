@@ -1,0 +1,18 @@
+import std.json;
+
+def main ()  {
+    let a = json: {
+        {
+            "foo" : [1, 2, 3, (1)],
+            "test" : {
+                "hehe" : []
+            }
+        }
+    };
+    
+    println (a ["foo"][1]);
+    println (a.len (), " ", a ["foo"].len ());
+    a ["truc"] = json: {{ "evidement" : [1, 2, 3] }};
+    println (a);
+}
+
