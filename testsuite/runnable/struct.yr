@@ -22,7 +22,7 @@ struct (T...)
  -> Signal;
 
 def test2 () {
-    let sig = Signal!(ref Test!(i32), t!(i32, i32))::init;
+    let sig = Signal!(ref Test!(i32), (i32, i32))::init;
     let cte foo = (a, b) {
         a.a = b.0 + b.1;        
     };

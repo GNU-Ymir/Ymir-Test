@@ -1,7 +1,7 @@
 import core.io;
 
-struct True {}
-struct False {}
+struct -> True;
+struct -> False;
 
 def boolOr (T of True) () return true;
 def boolOr (T of False) () return false;
@@ -15,7 +15,7 @@ def str (V, E) (lam : Lam!(V, E)) {
     return "λ (" ~ lam.v.str () ~ "." ~ lam.e.str () ~ ")";
 }
 
-def str (T of t!(E1, E2), E1, E2) (a : T) {
+def str (T of (E1, E2), E1, E2) (a : T) {
     return "(" ~ a.0.str () ~ ")(" ~ a.1.str () ~ ")";
 }
 
@@ -32,10 +32,10 @@ def isVar (V) ()
 def canReduce (V) () return isVar!V != true;
 
 def canReduce (V, E) () return canReduce!E ();
-def canReduce (T of t!(E1, E2), E1, E2) () return (canReduce!E1 () || canReduce!E2 ());
+def canReduce (T of (E1, E2), E1, E2) () return (canReduce!E1 () || canReduce!E2 ());
 
-def AppCanReduce (true, T of t!(E1, E2), E1, E2) () return true;
-def AppCanReduce (false, T of t!(E1, E2), E1, E2) () return false;
+def AppCanReduce (true, T of (E1, E2), E1, E2) () return true;
+def AppCanReduce (false, T of (E1, E2), E1, E2) () return false;
 
 
 def reduceTo (V, E) (lam : Lam!(V, E)) {
@@ -43,7 +43,7 @@ def reduceTo (V, E) (lam : Lam!(V, E)) {
     return Lam!(V, typeof (e)) {lam.v, lam.e};
 }
 
-def reduceTo (T of t!(E1, E2), E1, E2) (a : T) {
+def reduceTo (T of (E1, E2), E1, E2) (a : T) {
     return reduceTo!(canReduce!E1 (), canReduce!E2 ()) (a);
 }
 
@@ -63,21 +63,21 @@ def reduceTo (true, true, T) (a : T) {
 }
 
 def CPlus () {
-    return Lam!(M, Lam!(N, Lam!(F,  t!(M, t!(N, F)))))::init;
+    return Lam!(M, Lam!(N, Lam!(F,  (M, (N, F)))))::init;
 }
 
-struct X {}
-struct Y {}
-struct F {}
-struct G {}
-struct M {}
-struct N {}
+struct -> X;
+struct -> Y;
+struct -> F;
+struct -> G;
+struct -> M;
+struct -> N;
 
 def main () {
     let C0 = Lam!(F, Lam!(X, X))::init;
-    let C1 = Lam!(F, Lam!(X, t!(F, X)))::init;
-    let C2 = Lam!(F, Lam!(X, t!(F, t!(F,X))))::init;    
-    let C3 = Lam!(F, Lam!(X, t!(F, t!(F, t!(F,X)))))::init;
+    let C1 = Lam!(F, Lam!(X, (F, X)))::init;
+    let C2 = Lam!(F, Lam!(X, (F, (F,X))))::init;    
+    let C3 = Lam!(F, Lam!(X, (F, (F, (F,X)))))::init;
 
     
     //let L0 = ((CPlus (), C2), C3);

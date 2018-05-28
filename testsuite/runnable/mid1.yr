@@ -61,11 +61,10 @@ def testAccess () {
     cte assert (!__pragma (compiles, (starray [4] = 1)));
 }
 
-struct Test {
-}
+struct -> Test;
 
 mod Foo {
-    struct Inner {}
+    struct -> Inner;
 }
 
 def testArrayAlloc () {
@@ -142,7 +141,7 @@ def testLiteral () {
     cte assert (!__pragma (compiles, (a [0] = 't')));
 
     let t1 = (a, b, c);
-    cte assert (is (t1 : tuple) && is (t1 : t!(u8, i8, u16)));    
+    cte assert (is (t1 : tuple) && is (t1 : (u8, i8, u16)));    
 
     let a1 = [1, 2, 3], a2 = [.4f, .3, .2];
     cte assert (is (a1 : [i32 ; 3U]) && is (a2 : [f64 ; 3U]));
@@ -150,7 +149,7 @@ def testLiteral () {
 
 mod DC1 {
     mod DC2 {
-        struct Test {}
+        struct -> Test;
         private def foo () {}
         def foo2() { foo (); }
     }
