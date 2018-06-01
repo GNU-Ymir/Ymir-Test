@@ -1,7 +1,7 @@
 import std.algorithm.mutation;
 
 //cte trans = "___#_##_";
-cte trans = "___#_##_";
+cte trans = "__##_##_";
 
 def v (cell, i) return match cell [i] != '_' { true => 1; _ => 0; };
 

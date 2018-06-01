@@ -80,9 +80,9 @@ def main () {
     let C3 = Lam!(F, Lam!(X, (F, (F, (F,X)))))::init;
 
     
-    //let L0 = ((CPlus (), C2), C3);
-    //    let L1 = L0.reduceTo ();
+    let L0 = ((CPlus (), C2), C3);
+    let L1 = reduceTo!(false, false) (L0);
     
-    println (C0.str ());
+    println (L1);
     
 }

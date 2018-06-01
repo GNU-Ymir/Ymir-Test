@@ -14,7 +14,9 @@ def main () {
         let nb = read!i32 ();
         trial ++;
 
-        data [0 .. nb].reverse ();
+        if (nb >= data.len) println ("Nooooooo !! How dare you !");
+        else 
+            data [0 .. nb].reverse ();
     }
     println ("You took ", trial, " attempts");
     
