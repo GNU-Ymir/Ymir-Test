@@ -1,33 +1,33 @@
 mod sdl;
 
-public {
-    extern (C) SDL_Init (flags : u32) -> i32;
-    extern (C) SDL_CreateWindow (const title : p!char, x : i32, y : i32, w : i32, h : i32, flags : u32) -> p!SDLWindow;
-    extern (C) SDL_CreateRenderer (const window : p!SDLWindow, const index : i32, const flags : u32) -> p!SDLRenderer;
-    extern (C) SDL_RenderSetLogicalSize(const renderer : p!SDLRenderer, const w : i32, const h : i32) -> i32;
-    extern (C) SDL_PollEvent (event : p!SDLEvent) -> i32;
-    extern (C) SDL_SetRenderDrawColor (const renderer : p!SDLRenderer, const r : u8, const g : u8, const b : u8, const a : u8) -> i32;
-    extern (C) SDL_RenderFillRect (const renderer : p!SDLRenderer, rect : p!SDLRect) -> i32;
-    extern (C) SDL_RenderPresent (const renderer : p!SDLRenderer);
-    extern (C) SDL_DestroyRenderer (const renderer : p!SDLRenderer);
-    extern (C) SDL_DestroyWindow (const window : p!SDLWindow);
+pub {
+    extern (C) def SDL_Init (flags : u32) -> i32;
+    extern (C) def SDL_CreateWindow (title : &c8, x : i32, y : i32, w : i32, h : i32, flags : u32) -> &SDLWindow;
+    extern (C) def SDL_CreateRenderer (window : &SDLWindow, index : i32, flags : u32) -> &SDLRenderer;
+    extern (C) def SDL_RenderSetLogicalSize(renderer : &SDLRenderer, w : i32, h : i32) -> i32;
+    extern (C) def SDL_PollEvent (event : &SDLEvent) -> i32;
+    extern (C) def SDL_SetRenderDrawColor (renderer : &SDLRenderer, r : u8, g : u8, b : u8, a : u8) -> i32;
+    extern (C) def SDL_RenderFillRect (renderer : &SDLRenderer, rect : &SDLRect) -> i32;
+    extern (C) def SDL_RenderPresent (renderer : &SDLRenderer);
+    extern (C) def SDL_DestroyRenderer (renderer : &SDLRenderer);
+    extern (C) def SDL_DestroyWindow (window : &SDLWindow);
 }
 
-struct
-| data : p!void
+pub struct
+| data : &void
  -> SDLWindow;
 
-struct
-| data : p!void
+pub struct
+| data : &void
  -> SDLRenderer;
 
-struct
-| type : u32
-| data : [u8 ; 52U] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
+pub struct
+| t : u32
+| data : [u8 ; 52u32] // because sizeof (SDL_Event) = 2 bytes (type) + 52 bytes
  -> SDLEvent;
 
-struct
-| type : u32
+pub struct
+| t : u32
 | timestamp : u32
 | windowId : u32
 | which : u32
@@ -39,8 +39,8 @@ struct
 | y : i32
 -> SDLMouseButtonEvent;
 
-struct
-| type : i32
+pub struct
+| t : i32
 | timestamp : u32
 | windowId : u32
 | state : u8
@@ -48,12 +48,12 @@ struct
 | padding2 : u8
 | padding3 : u8
 | scancode : u32 //SDL_Scancode
-| sym : i32
+| sym : u32
 | mode : u16
 | unicode : u32    
 -> SDLKeyboardEvent;
 
-struct
+pub struct
 | x : i32
 | y : i32
 | w : i32
@@ -61,112 +61,111 @@ struct
  -> SDLRect;
 
 // TODO : complete by using SDL.h
-enum : u32
-| Audio : 16u
-| Video : 32u
+pub enum : u32
+| Audio = 16u32
+| Video = 32u32
  -> SDLInitFlag;
 
 // TODO : complete by using SDL_video.h
-enum : u32
-| FullScreen : 1u
-| OpenGL : 2u
-| Shown : 4u
-| Hidden : 8u
-| Borderless : 16u
+pub enum : u32
+| FullScreen = 1u32
+| OpenGL = 2u32
+| Shown = 4u32
+| Hidden = 8u32
+| Borderless = 16u32
  -> SDLWindowFlag;
 
-enum : u32
-| Software : 1u
-| Accelerated : 2u
-| PresentVSync : 4u
-| TargetTexture : 8u
+pub enum : u32
+| Software = 1u32
+| Accelerated = 2u32
+| PresentVSync = 4u32
+| TargetTexture = 8u32
  -> SDLRendererFlag;
 
 // TODO : complete by using SDL_events.h
-enum : u32
-| Quit : 256U
-| KeyDown : 768U
-| KeyUp : 769U
-| MouseMotion : 1024U
-| MouseButtonDown : 1025U
-| MouseButtonUp : 1026U
-| MouseWheel : 1027U
-| Unknown : 0U // not used by the SDL
+pub enum : u32
+| Quit = 256u32
+| KeyDown = 768u32
+| KeyUp = 769u32
+| MouseMotion = 1024u32
+| MouseButtonDown = 1025u32
+| MouseButtonUp = 1026u32
+| MouseWheel = 1027u32
+| Unknown = 0u32 // not used by the SDL
  -> SDLEventType;
 
-enum SDL_Keycode {
-    SDLK_UNKNOWN : 0,
-    
-    SDLK_RETURN : cast!i32 ('\r'),
-    SDLK_ESCAPE : cast!i32 ('\033'),
-    SDLK_BACKSPACE : cast!i32 ('\b'),
-    SDLK_TAB : cast!i32 ('\t'),
-    SDLK_SPACE : cast!i32 (' '),
-    SDLK_EXCLAIM : cast!i32 ('!'),
-    SDLK_QUOTEDBL : cast!i32 ('"'),
-    SDLK_HASH : cast!i32 ('#'),
-    SDLK_PERCENT : cast!i32 ('%'),
-    SDLK_DOLLAR : cast!i32 ('$'),
-    SDLK_AMPERSAND : cast!i32 ('&'),
-    SDLK_QUOTE : 39,
-    SDLK_LEFTPAREN : cast!i32 ('('),
-    SDLK_RIGHTPAREN : cast!i32 (')'),
-    SDLK_ASTERISK : cast!i32 ('*'),
-    SDLK_PLUS : cast!i32 ('+'),
-    SDLK_COMMA : cast!i32 (','),
-    SDLK_MINUS : cast!i32 ('-'),
-    SDLK_PERIOD : cast!i32 ('.'),
-    SDLK_SLASH : cast!i32 ('/'),
-    SDLK_0 : cast!i32 ('0'),
-    SDLK_1 : cast!i32 ('1'),
-    SDLK_2 : cast!i32 ('2'),
-    SDLK_3 : cast!i32 ('3'),
-    SDLK_4 : cast!i32 ('4'),
-    SDLK_5 : cast!i32 ('5'),
-    SDLK_6 : cast!i32 ('6'),
-    SDLK_7 : cast!i32 ('7'),
-    SDLK_8 : cast!i32 ('8'),
-    SDLK_9 : cast!i32 ('9'),
-    SDLK_COLON : cast!i32 (':'),
-    SDLK_SEMICOLON : cast!i32 (';'),
-    SDLK_LESS : cast!i32 ('<'),
-    SDLK_EQUALS : cast!i32 (':'),
-    SDLK_GREATER : cast!i32 ('>'),
-    SDLK_QUESTION : cast!i32 ('?'),
-    SDLK_AT : cast!i32 ('@'),
-    /*
-       Skip uppercase letters
-     */
-    SDLK_LEFTBRACKET : cast!i32 ('['),
-    SDLK_BACKSLASH : cast!i32 (92),
-    SDLK_RIGHTBRACKET : cast!i32 (']'),
-    SDLK_CARET : cast!i32 ('^'),
-    SDLK_UNDERSCORE : cast!i32 ('_'),
-    SDLK_BACKQUOTE : cast!i32 ('`'),
-    SDLK_a : cast!i32 ('a'),
-    SDLK_b : cast!i32 ('b'),
-    SDLK_c : cast!i32 ('c'),
-    SDLK_d : cast!i32 ('d'),
-    SDLK_e : cast!i32 ('e'),
-    SDLK_f : cast!i32 ('f'),
-    SDLK_g : cast!i32 ('g'),
-    SDLK_h : cast!i32 ('h'),
-    SDLK_i : cast!i32 ('i'),
-    SDLK_j : cast!i32 ('j'),
-    SDLK_k : cast!i32 ('k'),
-    SDLK_l : cast!i32 ('l'),
-    SDLK_m : cast!i32 ('m'),
-    SDLK_n : cast!i32 ('n'),
-    SDLK_o : cast!i32 ('o'),
-    SDLK_p : cast!i32 ('p'),
-    SDLK_q : cast!i32 ('q'),
-    SDLK_r : cast!i32 ('r'),
-    SDLK_s : cast!i32 ('s'),
-    SDLK_t : cast!i32 ('t'),
-    SDLK_u : cast!i32 ('u'),
-    SDLK_v : cast!i32 ('v'),
-    SDLK_w : cast!i32 ('w'),
-    SDLK_x : cast!i32 ('x'),
-    SDLK_y : cast!i32 ('y'),
-    SDLK_z : cast!i32 ('z')
-}
+pub enum : u32    
+| SDLK_UNKNOWN = 0u32
+| SDLK_RETURN = cast!u32 ('\r')
+| SDLK_ESCAPE = 27u32
+| SDLK_BACKSPACE = cast!u32 ('\b')
+| SDLK_TAB = cast!u32 ('\t')
+| SDLK_SPACE = cast!u32 (' ')
+| SDLK_EXCLAIM = cast!u32 ('!')
+| SDLK_QUOTEDBL = cast!u32 ('"')
+| SDLK_HASH = cast!u32 ('#')
+| SDLK_PERCENT = cast!u32 ('%')
+| SDLK_DOLLAR = cast!u32 ('$')
+| SDLK_AMPERSAND = cast!u32 ('&')
+| SDLK_QUOTE = 39u32
+| SDLK_LEFTPAREN = cast!u32 ('(')
+| SDLK_RIGHTPAREN = cast!u32 (')')
+| SDLK_ASTERISK = cast!u32 ('*')
+| SDLK_PLUS = cast!u32 ('+')
+| SDLK_COMMA = cast!u32 (',')
+| SDLK_MINUS = cast!u32 ('-')
+| SDLK_PERIOD = cast!u32 ('.')
+| SDLK_SLASH = cast!u32 ('/')
+| SDLK_0 = cast!u32 ('0')
+| SDLK_1 = cast!u32 ('1')
+| SDLK_2 = cast!u32 ('2')
+| SDLK_3 = cast!u32 ('3')
+| SDLK_4 = cast!u32 ('4')
+| SDLK_5 = cast!u32 ('5')
+| SDLK_6 = cast!u32 ('6')
+| SDLK_7 = cast!u32 ('7')
+| SDLK_8 = cast!u32 ('8')
+| SDLK_9 = cast!u32 ('9')
+| SDLK_COLON = cast!u32 ('=')
+| SDLK_SEMICOLON = cast!u32 (';')
+| SDLK_LESS = cast!u32 ('<')
+| SDLK_EQUALS = cast!u32 ('=')
+| SDLK_GREATER = cast!u32 ('>')
+| SDLK_QUESTION = cast!u32 ('?')
+| SDLK_AT = cast!u32 ('@')
+/*
+Skip uppercase letters
+ */
+| SDLK_LEFTBRACKET = cast!u32 ('[')
+| SDLK_BACKSLASH = cast!u32 (92)
+| SDLK_RIGHTBRACKET = cast!u32 (']')
+| SDLK_CARET = cast!u32 ('^')
+| SDLK_UNDERSCORE = cast!u32 ('_')
+| SDLK_BACKQUOTE = cast!u32 ('`')
+| SDLK_a = cast!u32 ('a')
+| SDLK_b = cast!u32 ('b')
+| SDLK_c = cast!u32 ('c')
+| SDLK_d = cast!u32 ('d')
+| SDLK_e = cast!u32 ('e')
+| SDLK_f = cast!u32 ('f')
+| SDLK_g = cast!u32 ('g')
+| SDLK_h = cast!u32 ('h')
+| SDLK_i = cast!u32 ('i')
+| SDLK_j = cast!u32 ('j')
+| SDLK_k = cast!u32 ('k')
+| SDLK_l = cast!u32 ('l')
+| SDLK_m = cast!u32 ('m')
+| SDLK_n = cast!u32 ('n')
+| SDLK_o = cast!u32 ('o')
+| SDLK_p = cast!u32 ('p')
+| SDLK_q = cast!u32 ('q')
+| SDLK_r = cast!u32 ('r')
+| SDLK_s = cast!u32 ('s')
+| SDLK_t = cast!u32 ('t')
+| SDLK_u = cast!u32 ('u')
+| SDLK_v = cast!u32 ('v')
+| SDLK_w = cast!u32 ('w')
+| SDLK_x = cast!u32 ('x')
+| SDLK_y = cast!u32 ('y')
+| SDLK_z = cast!u32 ('z')
+ -> SDL_Keycode;

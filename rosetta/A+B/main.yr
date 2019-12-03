@@ -1,4 +1,4 @@
-import core.io;
+import std::io;
 
 def main () {
     println (read!i32 + read!i32);

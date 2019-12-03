@@ -1,122 +1,110 @@
-import core.io;
-import core.string;
-
-extern (C) rand () -> u32;
-extern (C) srand (i : u64);
-extern (C) time (i : u64) -> u64;
+import std::io;
+import std::random;
+import std::algorithm::_;
 
 struct
-| brd : [i32 ; 16U]
-| x : i32
-| y : i32
+| mut brd : [mut i32 ; 16_u64]
+| mut x : i32
+| mut y : i32
  -> P15;
 
+enum
+| LEFT = 0
+| RIGHT = 1
+| UP = 2
+| DOWN = 3
+| NONE = 4
+ -> Move;
 
-
-def play (ref brd : P15) {
+def play () {
+    let mut brd = create ();
     while true {
-        brd.create ();
         while !brd.isDone () {
             brd.draw ();
-            brd.getMove ();
+            println ("Move ? (u) up, (d) down, (l) left, (r) right : ");
+            brd = brd.move ((read!c8).toMove ());
         }
+        
         brd.draw ();
         println ("Congratulations !\nPlay again (Y/N) ?");
-        let a = read!char ();
+        let a = read!c32 ();
         
-        if a != 'Y' && a != 'y' break;
+        if a != 'Y' && a != 'y' break {}
     }
 }
 
-def create (ref brd : P15) {
-    let v = [i32 ; new 0U];
-
-    for i in 1 .. 16 {
-        brd.brd [i - 1] = i;
+def create () -> P15 {
+    let mut brd  : [mut i32 ; 16]= generate!(16_u64, |i, n| { 
+        if (i < n - 1u64)
+            cast!(i32) (i) + 1
+        else 0
+    });
+    
+    let mut p15 = P15 (brd, 3, 3);
+    
+    for _ in 0 .. 1000 {
+        p15 = p15.move (uniform (0, 4).toMove (), ?add=true);
     }
     
-    for i in 0 .. 1000 {
-        brd.getCandidates (v);
-        brd.move ( v [rand () % v.len]);
-        v = [i32 ; new 0U];
-    }
+    p15
 }
 
-def move (ref brd : P15, d : i32) {
-    let i = brd.x + brd.y * 4;
-    match d {
-        1 => brd.y --;
-        2 => brd.x ++;
-        4 => brd.y ++;
-        8 => brd.x --;
-    }
-    
-    brd.brd [i] = brd.brd [brd.x + brd.y * 4];
-    brd.brd [brd.x + brd.y * 4] = 0;
+def toMove (u : i32) -> Move {
+    if (u == Move::LEFT) Move::LEFT
+    else if (u == Move::RIGHT) Move::RIGHT
+    else if (u == Move::UP) Move::UP
+    else if (u == Move::DOWN) Move::DOWN
+    else Move::NONE
 }
 
-def getCandidates (ref brd : P15, ref v : [i32]) {
-    if (brd.x < 3) v = v ~ [2];
-    if (brd.x > 0) v = v ~ [8];
-    if (brd.y < 3) v = v ~ [4];
-    if (brd.y > 0) v = v ~ [1];
+def toMove (c : c8) -> Move {
+    if (c == 'u'c8) Move::UP
+    else if (c == 'd'c8) Move::DOWN
+    else if (c == 'l'c8) Move::LEFT
+    else if (c == 'r'c8) Move::RIGHT
+    else Move::NONE
 }
 
-def draw (ref brd : P15) {
-    let i = i32::init;
+def move (brd : P15, d : Move, add : bool = false) -> P15 {   
+    let x = if (d == Move::LEFT && brd.x < 3) { brd.x + 1 }
+    else if (d == Move::RIGHT && brd.x > 0) { brd.x - 1 }
+    else brd.x;
+
+    let y =  if (d == Move::UP && brd.y < 3) { brd.y + 1 }
+    else if (d == Move::DOWN && brd.y > 0) { brd.y - 1 }
+    else brd.y;
+        
+    if (x != brd.x || y != brd.y) { // MOVE right        
+        let mut res : [mut i32 ; 16] = brd.brd;
+        res [brd.y * 4 + brd.x] = brd.brd [y * 4 + x];
+        res [y * 4 + x] = 0;
+        P15 (res, x, y)
+    } else if (add) move (brd, uniform (0, 4).toMove ())
+    else brd
+}
+
+def draw (brd : P15) {
     println ("\n\n");
     for y in 0 .. 4 {
         println ("+----+----+----+----+");
         for x in 0 .. 4 {
-            i = brd.brd [x + y * 4];
+            let i = brd.brd [x + y * 4];
             print ("| ");
-            if (i < 10) print (" ");
-            if (i == 0) print ("  ");
-            else print (i, " ");
+            if (i < 10) print (" ")
+            if (i == 0) print ("  ")
+            else print (i, " ")
         }
         println ("|");
     }
     println ("+----+----+----+----+");
 }
 
-def getMove (ref brd : P15) {
-    let v = [i32 ; new 0U], c = [i32 ; new 0U];
-    brd.getCandidates (v);
-    brd.getTiles (c, v);
-    while true {
-        print ("Possible moves: ");
-        for i in 0U .. c.len
-            print (c [i], " ");
-        
-        let z = read!i32 ();        
-        for i in 0U .. c.len
-            if z == c [i] {
-                brd.move (v [i]); return;
-            }
-    }
-}
-
-def getTiles (ref brd : P15, ref c : [i32], ref v : [i32]) {
-    for i in 0U .. v.len {
-        let xx = brd.x, yy = brd.y;
-        match v [i] {
-            1 => yy --;
-            2 => xx ++;
-            4 => yy ++;
-            8 => xx --;
-        }
-        c = c ~ [brd.brd [xx + yy * 4]];
-    }
-}
-
-def isDone (ref brd : P15) -> bool {
+def isDone (brd : P15) -> bool {
     for i in 0 .. 15
         if (brd.brd [i] != i + 1) return false;
-    return true;
+    true
 }
 
 def main () {
-    srand (time (0UL));
-    let brd = P15::init;
-    brd.play ();    
+    play ();    
 }

@@ -1,0 +1,19 @@
+import std::socket::tcp;
+import std::io;
+import message;
+import protocol;
+
+def foo (a : [c8], b : i32) {
+    println ("Recv : ", a, ' ', b);
+}
+
+
+def main () {
+    let stream = Tcp::connect ("0.0.0.0:7000");
+    let proto = Protocol (stream);
+    let msg = Message::new!([c8], i32) (proto);
+    
+    (ref msg).(Message::connect) (&foo);
+    msg.(Message::recv) ();
+    msg.(Message::send) ("Thanks!!"s8, 1);
+}

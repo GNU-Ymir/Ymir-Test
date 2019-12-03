@@ -1,23 +1,20 @@
-import std.algorithm._;
-import std.comprehension;
+import std::algorithm::_;
+import std::io;
 
-def reduce (FN : T, T, X) (a : [X]) {
-    let fst = a [0];
-    for i in 1U .. a.len
+def reduce (FN : fn (X, X)-> X, X) (a : [X]) -> X {
+    let mut fst = a [0];
+    for i in 1_u64 .. a.len
         fst = FN (fst, a [i]);
-    return fst;
+    fst
 }
 
-def add (a, b) return a + b;
-def mul (a, b) return a * b;
+def add (T) (a : T, b : T)-> T a + b
+def mul (T) (a : T, b : T)-> T a * b
 
 def main ()  {
-    let list = comp: [i | i in 1 .. 11];
+    let list = generate!(|i, _| => i + 1_u64) (10_u64);
 
-    println ("add : ", list.reduce!add);
-    println ("mult : ", list.reduce!mul);
-    println ("min : ", list.reduce!min);
-    println ("max : ", list.reduce!max);
-    
+    println ("add : ", list.reduce!|x, y| x + y);
+    println ("add : ", list.reduce!|x, y| x * y);    
 }
 

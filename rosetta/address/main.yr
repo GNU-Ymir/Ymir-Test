@@ -1,13 +1,12 @@
+import std::io;
 
-
-def @inline foo (ref a : i32) {
-    import core.io;
+def foo (ref a : i32) {
     println (a);
 }
 
 def main () {
     let i = 10;
     let ip = &i;
-    ip = cast!(p!i32) (0xdeadf00d_UL);
-    foo (*ip);
+    ip = cast!(&i32) (0xdeadf00d_u64);
+    foo (ref (*ip));
 }

@@ -1,41 +1,84 @@
 mod message;
+import std::socket::tcp;
 
 import protocol;
 
-mod Message {
-    struct (T...)
-    | id : u64
-    | slots : [dg (T)-> void]
-    | proto : p!Protocol
-     -> Msg;
+pub mod Message {
+    static mut last = 0u64;
     
-    def send (T...) (msg : Msg!T, datas : T) {
-        let sock = msg.proto.stream;
-        //let id = RawMsg!u64 {msg.id};
-        //sock.write (id.data);
-        cte for i in datas {
-            sock.write (cast!(p!void) (&i), i::sizeof);
+    pub struct
+    | id : u64
+    | mut slots : [fn (T)-> void] = []
+    | proto : Protocol
+     -> Msg  (T...);
+
+    def connect (T...) (ref mut msg : Msg!T, foo : fn (T)-> void) {
+        msg.slots = alias (msg.slots ~ [foo]);
+    }
+    
+    pub def send (T...) (msg : Msg!T, datas : T) {
+        let sock = msg.proto.stream;        
+        for i in datas {
+            cte if (is!(typeof i)(T of [U], U)) {
+                sock.(Tcp::write) (cast!(&void) (&i.len), cast!u64 (sizeof u64));
+                sock.(Tcp::write) (cast!(&void) (i.ptr), i.len * sizeof (typeof i)::inner);
+            } else 
+                sock.(Tcp::write) (cast!(&void) (&i), cast!u64 (sizeof (typeof i)));
         }
     }
 
-    def recv (T...) (msg : Msg!T) {
-        let res = t!(T)::init;
+    pub def send (T) (msg : Msg!T, i : T) {
+        let sock = msg.proto.stream;        
+        cte if (is!(T)(C of [U], U)) {
+            sock.(Tcp::write) (cast!(&void) (&i.len), cast!u64 (sizeof u64));
+            sock.(Tcp::write) (cast!(&void) (i.ptr), i.len * cast!u64 (sizeof (typeof i)::inner));
+        } else 
+            sock.(Tcp::write) (cast!(&void) (&i), cast!u64 (sizeof (typeof i)));        
+    }
+
+    
+    pub def recv (T...) (msg : Msg!T) {
+        import std::memory;
+        let mut res : (mut T) = T::init;
         let sock = msg.proto.stream;
-        cte for i in res {
-            sock.read (cast!(p!void) (&i), i::sizeof);
+        for ref mut i in res {
+            cte if (is!(typeof i)(T of [U], U)) {
+                let mut len : u64 = 0u64;
+                sock.(Tcp::read) (cast!(&void) (&len), cast!u64 (sizeof u64));
+                i = alias allocArray!((typeof i)::inner) (len);
+                sock.(Tcp::read) (cast!(&void) (i.ptr), i.len * sizeof (typeof i)::inner);
+            } else 
+                sock.(Tcp::read) (cast!(&void) (&i), cast!u64 (sizeof (typeof i)))
         }
 
-        for it in 0U .. msg.slots.len
-            msg.slots [it] (res.expand);
+        for it in 0u64 .. msg.slots.len
+            msg.slots [it] (expand res);
     }
 
-    def connect (T...) (ref msg : Msg!T, foo : dg (T) -> void) {
-        msg.slots = msg.slots ~ [foo];
+    pub def recv (T) (msg : Msg!T) {
+        import std::memory;
+        let mut res : (mut T,) = (T,)::init;
+        let sock = msg.proto.stream;
+        for ref mut i in res {
+            cte if (is!(typeof i)(T of [U], U)) {
+                let mut len : u64 = 0u64;
+                sock.(Tcp::read) (cast!(&void) (&len), cast!u64 (sizeof u64));
+                i = alias allocArray!((typeof i)::inner) (len);
+                sock.(Tcp::read) (cast!(&void) (i.ptr), i.len * sizeof (typeof i)::inner);
+            } else 
+                sock.(Tcp::read) (cast!(&void) (&i), cast!u64 (sizeof (typeof i)))
+        }
+
+        for it in 0u64 .. msg.slots.len
+            msg.slots [it] (expand res);
+    }
+    
+    pub def foo (T...) (ref mut msg : Msg!T, foo : fn (T) -> void) {
+        msg.slots = alias (msg.slots ~ [foo]);
     }
 
-    def new (T...) (ref proto : Protocol) {
-        let static last = 0UL;
-        last ++;
-        return Msg!T {last, [], &proto};
+    pub def new (T...) (proto : Protocol) -> Msg!T {
+        last += 1u64;
+        Msg!T (last, proto)
     }
 }

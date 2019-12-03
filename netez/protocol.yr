@@ -1,10 +1,9 @@
 mod protocol;
 
-import std.socket.tcp;
-use Tcp;
+import std::socket::tcp;
 
-struct
-| stream : TcpStream
+pub struct
+| stream : Tcp::TcpStream
  -> Protocol;
 
 

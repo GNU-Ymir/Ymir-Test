@@ -1,19 +1,23 @@
-import core.io;
+import std::io;
 
-def @safe modInverse (T) (a : T, b : T) {
-    if b == 1 { return 1; }
-    let b0 = b, x0 = cast!T (0), x1 = cast!(T) (1);
+def modInverse (T) (a_ : T, b_ : T) -> i32 {
+    if b_ == 1 { return 1; }
+    let mut b0 = b_, mut x0 = cast!T (0), mut x1 = cast!(T) (1);
 
+    let mut a = a_, mut b = b_;
     while a > 1 {
-        let const q = a / b;
-        let z = b;
+        let q = a / b;
+        let mut z = b;
         b = a % b;
         a = z;
         z = x0;
         x0 = x1 - q * x0;
         x1 = z;
     }
-    return match x1 < 0 {true => x1 + b0; _ => x1; };    
+    return
+        if x1 < 0
+           x1 + b0
+        else x1
 }
 
 def main () {

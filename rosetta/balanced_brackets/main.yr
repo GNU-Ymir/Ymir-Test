@@ -1,22 +1,22 @@
-import core.io, std.random, std.range;
-import std.algorithm.iteration;
+import std::io, std::random;
+import std::algorithm::_;
 
-def isBalanced (const txt : string) {
-    let count = 0;
+def isBalanced (txt : [c32]) -> bool {
+    let mut count = 0;
     for c in txt {
         if c == ']' {
-            count --;
+            count -= 1;
             if count < 0 return false;
         } else if c == '['
-            count ++;
+            count += 1;
     }
     
-    return count == 0;
+    count == 0
 }
 
 def main () {
-    for i in 1U .. 9U {
-        let s = iota (i * 2U).map!((x) => ("[]")[uniform (0, 2)]);
-        println (match (s.isBalanced ()) { true => "Ok : "; _ => "Bad : ";}, s);
+    for i in 1 .. 9 {
+        let s = generate!(|i, _| (i))(cast!u64 (i * 2)).map!(|_| => ("[]")[uniform (0, 2)]);
+        println (if (s.isBalanced ()) "Ok : " else "Bad : ", s);
     }
 }

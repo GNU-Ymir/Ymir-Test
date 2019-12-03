@@ -1,0 +1,141 @@
+import std.map;
+import std.conv;
+import core.array;
+import std.algorithm.comparison;
+
+cte nb_col = 7U;
+cte nb_lig = 6U;
+static joueurs : [char];
+
+static grille : [[char ; nb_lig] ; nb_col];
+
+self () {
+	joueurs = ['O','X'].dup ();
+	for col in grille {
+		for case in col {
+			case = '.';
+		}
+	}
+}
+
+def get_col (joueur) {
+	println("Colonne " ~ [joueur] ~ " ?");
+	let colj = read!u32();
+	while ((colj < 1U || colj > nb_col) || is_col_pleine(colj-1U)) {
+		println("Colonne " ~ [joueur] ~ " ?");	
+		colj = read!u32();
+	}
+	return colj-1U;
+}
+
+def is_col_pleine (col) {
+	return grille[col][nb_lig-1U] != '.';
+}
+
+def jouer_col (joueur, col) {
+	let lig = 0U;
+	for case in grille[col] {
+		if (case == '.') {
+			case = joueur;
+			return lig;
+		}
+		lig++;
+	}
+	return lig;
+}
+
+def jouer (joueur) {
+	let col = get_col(joueur);
+	let lig = jouer_col(joueur, col);
+	return verif_gagne(col,lig);
+}
+
+def verif_gagne (col,lig) {
+	// Verticale
+	let cnt = 1;
+	let min_col = cast!u32(max(cast!i32(col)-2,1));
+	let max_col = min(col+4U,nb_col);
+	for c_col in min_col .. max_col {
+		cnt = match grille[c_col][lig] == grille[c_col-1U][lig] && grille[c_col][lig] != '.' {
+			true => cnt+1;
+			false => 1; 
+		};
+		if (cnt == 4) return grille[col][lig];
+	}
+
+	// Horizontale
+	cnt = 1;
+	let min_lig = cast!u32(max(cast!i32(lig)-2,1));
+	let max_lig = min(lig+4U,nb_lig);
+	for c_lig in min_lig .. max_lig {
+		cnt = match grille[col][c_lig] == grille[col][c_lig-1U] && grille[col][c_lig] != '.' {
+			true => cnt+1;
+			false => 1; 
+		};
+		if (cnt == 4) return grille[col][lig];
+	}
+
+	// Diagonale haut droite
+	for diff in -2 .. 3 {
+		let c_col = cast!i32(col)+diff;
+		let c_lig = cast!i32(lig)+diff;
+		let dedans = c_col > 0 && c_lig > 0 && c_col < nb_col && c_lig < nb_lig;
+		cnt = match dedans && grille[c_col][c_lig] == grille[c_col-1][c_lig-1] && grille[c_col][c_lig] != '.' {
+			true => cnt+1;
+			false => 1; 
+		};
+		if (cnt == 4) return grille[col][lig];
+	}
+
+	// Diagonale haut gauche
+	for diff in -2 .. 3 {
+		let c_col = cast!i32(col)+diff;
+		let c_lig = cast!i32(lig)-diff;
+		let dedans = c_col > 0 && c_lig >= 0 && c_col < nb_col && c_lig+1 < nb_lig;
+		cnt = match dedans && grille[c_col][c_lig] == grille[c_col-1][c_lig+1] && grille[c_col][c_lig] != '.' {
+			true => cnt+1;
+			false => 1; 
+		};
+		if (cnt == 4) return grille[col][lig];
+	}
+	return '.';
+}
+
+def afficher_grille() {
+	print("|");
+	for col in 0U .. nb_col {
+		print(col+1U);
+	}
+	println("|");
+	for lig in nb_lig .. 0U {
+		print("|");
+		for col in 0U .. nb_col {
+			print(grille[col][lig - 1U]);
+		}
+		println("|");
+	}
+	print("|");
+	for col in 0U .. nb_col {
+		print(col+1U);
+	}
+	println("|");
+	println("");
+
+}
+
+def main()  {
+	let gagne = '.';
+	let nb_jetons = 0U;
+	let cte max = nb_col*nb_lig;
+	while nb_jetons != max && gagne =='.' {
+		afficher_grille();
+		gagne = jouer(joueurs[nb_jetons%(joueurs.len)]);
+		nb_jetons++;
+	}
+	afficher_grille();
+	if gagne != '.' {
+		println("Bravo au joueur " ~ [gagne] ~ " !"); 
+	} else {
+		println("Match nul !");
+	}
+}

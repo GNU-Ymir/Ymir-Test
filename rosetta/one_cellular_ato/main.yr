@@ -1,30 +1,33 @@
-import std.algorithm.mutation;
+import std::io;
+import std::algorithm::mutation;
 
-//cte trans = "___#_##_";
-cte trans = "__##_##_";
+//cte trans = "";
+alias trans = "___#_##_";
 
-def v (cell, i) return match cell [i] != '_' { true => 1; _ => 0; };
+def v (T) (cell : T, i : i32) -> i32
+    if cell [i] != '_' { 1 } else 0
 
-def evolve (ref cell : [char], ref backup : [char], len : u64) {
-    let diff = 0U;
+def evolve (ref mut cell : [mut c32], ref mut backup : [mut c32], len : u64) -> bool {
+    let mut diff = 0u64;
     for i in 0 .. cast!i32 (len) {
-        backup [i] = trans [cell.v (i - 1) * 4 + cell.v (i) * 2 + cell.v (i + 1)];
+        let x = cell.v ((i - 1)%:i32 len) * 4 + cell.v (i) * 2 + cell.v ((i + 1)%:i32 len);
+        backup [i] = trans [x];
         if backup [i] != cell [i]
-            diff ++;
+            diff += 1u64;
     }
 
-    for i in 0U .. len {
+    for i in 0u64 .. len {
         cell [i] = backup [i];
     }
-    return diff != 0;
+    return diff != 0u64;
 }
 
 def main () {
-    let c = "_###_##_#_#_#_#__#__".dup (),
-        b = "____________________".dup ();
+    let mut c : [mut c32] = copy "#_#_#_#_#_#_#_#_#_#_",
+        mut b : [mut c32] = copy "____________________";
     
     println (c);
-    while evolve (c, b, c.len - 2U) {
+    while evolve (ref c, ref b, c.len - 2u64) {
         println (c);
     }
 }
