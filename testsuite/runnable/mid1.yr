@@ -173,8 +173,6 @@ def testDColon () {
     let c = [DC1::DC2::Test ; 10U];
     cte assert (__pragma (compiles, DC1::DC2::foo2 ()));
     cte assert (!__pragma (compiles, DC1::DC2::foo ()));
-    
-    assert (equals!(DC1::DC2::Test::typeid, "mid1.DC1.DC2.Test"));
 }
 
 def add10 (a : i32) -> i32 {
@@ -205,7 +203,7 @@ def testExpand () {
     assert (expandFoo2 ((1, 3.)::expand) == 4.);
 }
 
-def main () {
+def main () {    
     testmatch ();
     testbreak ();
     teststringmatch ();

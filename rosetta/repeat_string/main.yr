@@ -1,7 +1,13 @@
+import std::io;
 
-import core.io, core.array;
+def replicate (T of [U], U) (a : T, N : u64) -> mut [mut U] {
+    let mut res : [mut U] = copy (a);
+    for _ in 1u64 .. N {
+        res = alias (res ~ a);
+    }
+    alias res
+}
 
 def main () {
-    println ("ha".replicate (5U));
-    let b = [char; 5U];
+    println ("ha".replicate (5u64));
 }

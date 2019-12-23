@@ -27,18 +27,18 @@ def test3 () {
             x = x ~ [j];
         }
         x;
-    } {}
+    } {};
     assert (x.len == 10UL);
 }
 
 def test4 () {
-    let x = 0;
-    while {
-        x = 1;
-        false;
-    } {}
+    // let x = 0;
+    // while {
+    //     x = 1;
+    //     false;
+    // } {}
     
-    assert (x == 1);
+//    assert (x == 1);
 }
 
 def main () {

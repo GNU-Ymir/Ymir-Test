@@ -1,6 +1,6 @@
 import std::algorithm::_;
 import std::io;
-
+    
 def reduce (FN : fn (X, X)-> X, X) (a : [X]) -> X {
     let mut fst = a [0];
     for i in 1_u64 .. a.len
@@ -9,12 +9,17 @@ def reduce (FN : fn (X, X)-> X, X) (a : [X]) -> X {
 }
 
 def add (T) (a : T, b : T)-> T a + b
+def add (T) (a : T)-> T a + a
+
 def mul (T) (a : T, b : T)-> T a * b
 
 def main ()  {
-    let list = generate!(|i, _| => i + 1_u64) (10_u64);
-
+    let list = generate!(|x, _| x + 1u64) (6_u64);
+    println ("LIST : ", list);
+    
     println ("add : ", list.reduce!|x, y| x + y);
-    println ("add : ", list.reduce!|x, y| x * y);    
+    println ("add : ", reduce!(add) (list));    
+    println ("mul : ", list.reduce!|x, y| x * y);
+    println ("mul : ", reduce!(mul) (list));
+    println ("max : ", reduce!(max) (list));    
 }
-

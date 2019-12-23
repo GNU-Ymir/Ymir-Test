@@ -9,15 +9,16 @@ enum
 extern (C) def usleep (x : u32)-> void;
 extern (C) def system (x : &(c8))-> void;
 
-def show (array : [Cell], w : u64) {
+def show (array : [Cell], w : u64) {   
     for x in 0u64 .. (array.len / w) {
-        print ("\u{0x1b}[07m  \u{0x1B}[0m\n");
+        print ("[");
         for y in 0_u64 .. w {
             print (if array [x * w + y] == Cell::alive 
-                   "\u{0x1b}[07m  \u{0x1b}[0m"
+                   "XX"
                    else "  "
             );
         }
+        println ("]");
     }
     println ("");
     
@@ -58,7 +59,7 @@ def game (h : u64, w : u64) {
         println ("Generation : ", i);
         univ.show (w);
         univ = alias univ.evolve (w);
-        usleep (10_000_u32);
+        usleep (100_000_u32);
         system ("clear"s8.ptr);
         i += 1;
     }

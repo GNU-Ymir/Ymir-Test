@@ -1,58 +1,53 @@
-import std.range;
-import core.io;
-import std.conv;
+import std::io;
+import std::range;
+import std::conv;
+import std::algorithm::_
 
 struct
-| seed : u32
+| seed : u32 = 1u32
  -> RandomGenerator;
 
-def rnGen () {
-    return RandomGenerator {1U};
-}
-
-def @safe next (ref rng : RandomGenerator) {
-    rng.seed = (rng.seed * 214_013U + 2_531_011U) & cast!u32 (i32::max);
-    return rng.seed >> 16U;
+def next (ref mut rnd : RandomGenerator) -> u32 {
+    let seed = (rnd.seed * 214_013u32 + 2_531_011u32) & cast!u32 (i32::max);
+    rnd = RandomGenerator (?seed=seed);
+    seed >> 16u32
 }
 
 struct
-| cards : [i32 ; 52U]
+| cards : [i32]
  -> Deck;
 
-def deal (ref deck : Deck, seed : u32) {
-    let nc = cast!i32 (deck.cards.len);
-    nc.iota ().retro ().copy (deck.cards);
+def deal (seed : u32 = 1u32, nc : i32 = 52) -> Deck {
+    let mut cards : [mut i32] = alias nc.iota ().reverse ();
+    let mut rnd = RandomGenerator (?seed = seed);
 
-    let uc = deck.cards.len;
-    let rnd = RandomGenerator {seed};
-    for i in 0U .. uc {
-        let card = (uc - 1U) - rnd.next () % (uc - 1U);
-        let z = deck.cards [card];
-        deck.cards [card] = deck.cards [i];
-        deck.cards [i] = z;        
-    }    
+    for i in 0 .. 52 {
+        let card = cast!u32 (nc - 1) - (ref rnd).next () % cast!u32 (nc - 1);
+        swap (ref cards [i], ref cards [card]);
+    }
+    
+    Deck (cards)
 }
 
-def show (ref deck : const Deck) {
-    let suit = "TQCP", symb = "A23456789TJQK";
-    let z = 0;
+def show (deck : Deck) {
+    let cards = [
+        "\u{0x1F0D1}\u{0x1F0D2}\u{0x1F0D3}\u{0x1F0D4}\u{0x1F0D5}\u{0x1F0D6}\u{0x1F0D7}\u{0x1F0D8}\u{0x1F0D9}\u{0x1F0DA}\u{0x1F0DB}\u{0x1F0DC}\u{0x1F0DD}\u{0x1F0DE}",
+        "\u{0x1F0C1}\u{0x1F0C2}\u{0x1F0C3}\u{0x1F0C4}\u{0x1F0C5}\u{0x1F0C6}\u{0x1F0C7}\u{0x1F0C8}\u{0x1F0C9}\u{0x1F0CA}\u{0x1F0CB}\u{0x1F0CC}\u{0x1F0CD}\u{0x1F0CE}",
+        "\u{0x1F0B1}\u{0x1F0B2}\u{0x1F0B3}\u{0x1F0B4}\u{0x1F0B5}\u{0x1F0B6}\u{0x1F0B7}\u{0x1F0B8}\u{0x1F0B9}\u{0x1F0BA}\u{0x1F0BB}\u{0x1F0BC}\u{0x1F0BD}\u{0x1F0BE}",
+        "\u{0x1F0A1}\u{0x1F0A2}\u{0x1F0A3}\u{0x1F0A4}\u{0x1F0A5}\u{0x1F0A6}\u{0x1F0A7}\u{0x1F0A8}\u{0x1F0A9}\u{0x1F0AA}\u{0x1F0AB}\u{0x1F0AC}\u{0x1F0AD}\u{0x1F0AE}"
+        ];
     println ("Game #", 0, "\n=======================");
-    for c in 52 .. 0 {
-        print (symb [deck.cards [c - 1] / 4], suit [deck.cards [c - 1] % 4], " ");
-        
-        z ++;
-        if z >= 8 {
+    for c in deck.cards.len .. 0u64 {
+        print (cards [deck.cards [c - 1u64]%4][deck.cards [c - 1u64]/4], " ");
+        if ((deck.cards.len - c + 1u64) % 8u64 == 0u64)
             println ("");
-            z = 0;
-        }
     }
     println ("");
 }
 
-def main (args) {
-    let seed = match (args.len == 2) { true => args [1].to!u16; _ => 11_982US; };
-    println ("Hand : ", seed);
-    let cards = Deck::init;
-    cards.deal (seed);
-    cards.show ();
+def main () {
+    for i in 0 .. 100 {
+        let deck = deal (?seed = i +:u32 11_988u32);
+        deck.show ();
+    }
 }

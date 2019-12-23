@@ -1,0 +1,49 @@
+import std.conv;
+
+type Integer impl (i32, (i8 | i16 | i32 | i64)) {
+
+    self (a : i8) { self.0 = 1; self.1.0 = a; }
+
+    self (a : i16) { self.0 = 2; self.1.1 = a; }
+
+    self (a : i32) { self.0 = 3; self.1.2 = a; }
+
+    self (a : i64) { self.0 = 4; self.1.3 = a; }
+
+    def x (self) -> ref i8 {
+        return self.1.0;
+    }
+
+    def y (self) -> ref i16 {
+        return self.1.1;
+    }
+
+    def z (self) -> ref i32 {
+        return self.1.2;
+    }
+
+    def w (self) -> ref i64 {
+        return self.1.3;
+    }    
+
+    def toString (self) {
+        match self.0 {
+            1 =>  return "i8 (" ~ self.1.0.to!string ~ ")";
+            2 =>  return "i16 (" ~ self.1.0.to!string ~ ")";
+            3 =>  return "i32 (" ~ self.1.0.to!string ~ ")";
+            4 =>  return "i64 (" ~ self.1.0.to!string ~ ")";
+            _ => { assert (false); }
+        };
+    }
+
+    ~self () {
+        println ("Exit ", self.toString ());
+    }
+    
+}
+
+def main () {
+    let a = Integer::init (10L);
+    a.w () = 98;
+    println (a.toString ());
+}

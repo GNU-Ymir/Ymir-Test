@@ -1,32 +1,31 @@
-import core.io;
+import std::io
+    
+struct
+| func : [fn (T) -> void] = []
+ -> Signal (T...);
 
-struct (T...)
-| func : [fn (T) -> void]
- -> Signal;
 
-def connect (T...) (ref sig : Signal!T, foo : fn (T) -> void) {
-    sig.func = sig.func ~ [foo];
+def connect (T...) (a : Signal!(T), b : fn (T)-> void) -> Signal!T {
+    let z = (a.func ~ [b]);
+    Signal!(T) (?func = z)    
 }
 
-def call (T...) (ref sig : Signal!T, elems : T) {
-    for it in 0U .. sig.func.len {
-        sig.func [it] (elems::expand);
+def call (T...) (sig : Signal!T, elems : T) {
+    for i in 0 .. cast!i32 (sig.func.len) {
+        sig.func [i] (expand elems)
     }
 }
 
-def test2 (a : i32, b : i32) {
-    println (a * b);
+def test (a : i32, b : [c32]) {
+    println ("Test {");
+    println ('\t', b);
+    println ('\t', a);
+    println ("}");
 }
 
 def main () {
-    let a = Signal!(i32, i32)::init;
-    a.connect ((a : i32, b : i32) {
-        println (a + b);
-    });
-
-    a.connect (test2);    
-    a.call (1, 2);
-    
+    let mut a = Signal!(i32, [c32]);
+    a = a.connect (&test);
+    a = a.connect (|x : i32, y : [c32]| => println (x, ' ', y));
+    a.call (1, "salut");
 }
-
-

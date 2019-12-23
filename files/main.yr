@@ -1,94 +1,49 @@
-mod main;
+import std::io;
 
-import core.io;
-import std.outbuffer;
-import std.conv;
-import std.traits;
-
-extern (C) fopen (const path : p!char, const mode : p!char) -> p!i32;
-extern (C) fclose (file : p!i32) -> i32;
-extern (C) fgetc (file : p!i32) -> i32;
-extern (C) fgets (buf : p!char, n : i32, file : p!i32) -> p!char;
-extern (C) feof (file : p!i32) -> i32;
+extern (C) {
+    def fopen  (path : &c8, mode : &c8) -> &i32;
+    def fclose (file : &i32) -> i32;
+    def fgetc  (file : &i32) -> c8;
+    def fgets  (buf : &c8, n : i32, file : &i32) -> i32;
+    def feof   (file : &i32)-> i32;
+}
 
 struct
-| handle : p!i32
+| handle : &i32
  -> File;
 
-imut Eof = -1;
+alias EOF = -1;
 
-def open (ref file : File, filePath : const string, mode : const string) -> bool
-{
-    file.handle = fopen (filePath.ptr, mode.ptr);
-    
-    if (file.handle is null)
-        return false;
-    return true;
+def open (filePath : [c8], mode : [c8]) -> File {    
+    File (fopen (filePath.ptr, mode.ptr))
 }
 
-def close (ref file : File) -> bool
-{
-    if (file.handle is null)
-        return false;
-    return fclose (file.handle) == 0;
+def close (ref mut file : File) {
+    fclose (file.handle);
+    file = File (null);
 }
 
-def readChar (ref file : File) -> mut char
-{
-    return cast!char (fgetc (file.handle));
+def isOpen (file : File) -> bool {
+    file.handle !is null
 }
 
-def read if (isIntegral!T) (T) (ref file : File) -> mut T
-{
-    let strValue = file.readString ();
-    return to!T (strValue);
+def readc (T of c8) (file : File) -> c8 {
+    fgetc (file.handle)
 }
 
-def readString (ref file : File) -> mut string
-{
-    let outbuf = OutBuffer ();
-    let c = file.readChar ();
-    while (c != ' ' && c != '\0' && c != cast!char (Eof) && c != '\n')
-    {
-        if (c != ' ' && c != '\0' && c != cast!char (Eof) && c != '\n')
-        {
-            outbuf.write (c);
-            c = file.readChar ();
-        }
+def isEof (file : File) -> bool
+    feof (file.handle) == 1
+
+def main () {
+    let file = open ("main.yr"s8, "r"s8);
+
+    while !file.isEof () {
+        let c = file.readc!(c8);
+        print (c);
     }
-    return to!string (outbuf);
-}
-
-def isEof (ref file : File) -> bool
-{
-    return feof (file.handle) == 1;
-}
-
-def main()
-{
-    let file = File::init;
-    if (!file.open ("test.txt", "r"))
-    {
-        println ("File open error");
-        assert (false);
-    }
-
-    // let str = file.readString ();
-    // println (str);
-
-        if (file.isEof ())
-        println ("ok");
-    let a = file.read!i32 ();
-    println (a);
-    let b = file.read!i32 ();
-    println (b);
-    b = file.read!i32 ();
-    println (b);
-    if (file.isEof ())
-        println ("ok");
     
-    on exit => {
-        if (!file.close ())
-            println ("File close error");
+    if file.isOpen () {
+        println ("Closing file");
+        (ref file).close ()
     }
 }
