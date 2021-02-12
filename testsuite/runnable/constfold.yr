@@ -1,4 +1,0 @@
-
-def main () {
-    cte assert (1 == 1);    
-}

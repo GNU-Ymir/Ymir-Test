@@ -1,8 +1,0 @@
-mod common.lib.sdlImage;
-
-import common.lib.sdl;
-
-public {
-    extern (C) IMG_Load (const file : p!char) -> mut p!SDL_Surface;
-    // extern (C) IMG_GetError () -> p!char; // doesn't work...
-}

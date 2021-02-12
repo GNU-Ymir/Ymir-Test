@@ -1,0 +1,7 @@
+compile:
+  - gyc main.yr -o file
+run:
+  - ./file
+  - cat test.txt
+stdout: "Hello World!!\n"
+clean: rm file test.txt

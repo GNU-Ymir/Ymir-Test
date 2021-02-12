@@ -1,0 +1,12 @@
+import std::io;
+import std::fs::file;
+
+def main ()
+    throws &FileError, &AssertError
+{
+    let str = with dmut file = File::open ("test.txt") {
+        file:.readAll ()
+    }    
+    assert (str == "Hello World!!\n"s8);
+    println ("Success!!");
+}

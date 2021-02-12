@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr -o file
+run:
+  - ./file
+stdout: "Success!!\n"
+clean: rm ./file

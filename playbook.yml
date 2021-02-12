@@ -1,0 +1,3 @@
+tests:
+  - files/read/test.yml
+  - files/write/test.yml

@@ -1,9 +1,0 @@
-import core.io;
-import std.algorithm.comparaison;
-
-
-def main () {
-    println (min (10, 12));
-    println (max (3, 4));
-    println (clamp (1, 2, 3));
-}
