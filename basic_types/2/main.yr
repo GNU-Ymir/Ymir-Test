@@ -1,0 +1,19 @@
+import std::io;
+def main () {
+    println (typeof(1.0)::typeid);
+    println (typeof(1.0f)::typeid);    
+    println (typeof(1u8)::typeid);
+    println (typeof(1u16)::typeid);
+    println (typeof(1u32)::typeid);
+    println (typeof(1u64)::typeid);
+    println (typeof(1i8)::typeid);
+    println (typeof(1i16)::typeid);
+    println (typeof(1)::typeid);
+    println (typeof(1i64)::typeid);
+    println (typeof([1i8])::typeid);
+    println (typeof([1i16])::typeid);
+    println (typeof([1])::typeid);
+    println (typeof([1i64])::typeid);
+    println (typeof(true)::typeid);
+    println (typeof('☺')::typeid);
+}

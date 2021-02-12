@@ -1,0 +1,10 @@
+import std::io
+    
+def main () {
+    let t = (1, 'r', 3.14);
+    let (x, y, z) = t;
+    println ("(", x, ") (", y, ") (", z, ")");
+    
+    let (f, e...) = t;
+    println ("(", f, ") (", e.0, ") (", e._1, ")");
+}

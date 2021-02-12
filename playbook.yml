@@ -1,3 +1,19 @@
 tests:
+  - hello_world/1/test.yml
+  - hello_world/2/test.yml
+  - variable/1/test.yml
+  - variable/2/test.yml
+  - variable/3/test.yml
+  - variable/4/test.yml
+  - variable/5/test.yml
+  - basic_types/1/test.yml
+  - basic_types/2/test.yml
+  - basic_types/3/test.yml
+  - basic_types/4/test.yml
+  - basic_types/5/test.yml
+  - basic_types/6/test.yml
+  - basic_types/7/test.yml
+  - basic_types/8/test.yml
   - files/read/test.yml
   - files/write/test.yml
+  

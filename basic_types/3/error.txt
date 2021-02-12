@@ -1,0 +1,9 @@
+Error : malformed literal, number of c8 is 3
+ --> main.yr:(2,13)
+    ┃ 
+ 2  ┃     let x = '☺'c8; 
+    ┃             ^
+
+
+ymir1: fatal error: 
+compilation terminated.

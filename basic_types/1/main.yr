@@ -1,0 +1,3 @@
+def main () {
+    let x : i8 = 934i8;
+}

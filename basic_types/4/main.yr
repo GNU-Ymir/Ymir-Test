@@ -1,0 +1,6 @@
+import std::io;
+
+def main () {
+    let t : (i32, c32, f64) = (1, 'r', 3.14);
+    println ((t,));
+}

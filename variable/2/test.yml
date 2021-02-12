@@ -1,0 +1,7 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "X is equal to : 2\nX is equal to : 3\n"
+stderr: ""
+clean: rm a.out

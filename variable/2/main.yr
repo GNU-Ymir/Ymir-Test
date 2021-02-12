@@ -1,0 +1,9 @@
+import std::io
+
+def main () {
+    let mut x = 2;    
+    println ("X is equal to : ", x); 
+
+    x = 3; 
+    println ("X is equal to : ", x);
+}

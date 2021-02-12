@@ -1,0 +1,9 @@
+Error : left operand of type i32 is immutable
+ --> main.yr:(7,5)
+    ┃ 
+ 7  ┃     x = 3; 
+    ┃     ^
+
+
+ymir1: fatal error: 
+compilation terminated.

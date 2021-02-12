@@ -6,7 +6,7 @@ import ntpath
 from typing import Any
 import subprocess 
 import logging, sys
-
+import re
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
@@ -67,14 +67,15 @@ class ColoredLogger(logging.Logger):
         
     
 
-def checkStdout (yml: dict, text : str, cwd : str):
+def checkStdout (yml: dict, text : str, cwd : str):    
     if (type (yml) is dict) :
         with open (cwd + "/" + yml["file"]) as stream:
-            return stream.read () == text
+            txt = stream.read ()
+            return (txt == text, txt)
     else :
-        return yml == text
+        return (yml == text, yml)
 
-def parseTest (path : str):
+def parseTest (path : str):    
     with open (path) as stream :
         try :
             logging.Logger.info ("Running test : " + path)
@@ -85,41 +86,53 @@ def parseTest (path : str):
             code = 0
             compile_out = ""
             compile_err = ""
+            ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
             failed = False
             if ("compile" in yamlContent) :
                 for i in yamlContent ["compile"]: 
                     compile = i.split ()
                     r = subprocess.run (compile, capture_output=True, cwd=cwd)                
-                    compile_out = compile_out + (r.stdout.decode("utf-8"))
-                    compile_err = compile_err + (r.stderr.decode ("utf-8"))
+                    compile_out = compile_out + ansi_escape.sub('', (r.stdout.decode("utf-8")))
+                    compile_err = compile_err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
                 
             if ("compile_out" in yamlContent):
-                if not checkStdout (yamlContent["compile_out"], compile_out):
+                (ok, txt) = checkStdout (yamlContent["compile_out"], compile_out, cwd)
+                if not ok:
                     logging.Logger.error ("Test failed " + path);
+                    logging.Logger.error ("Expected compile out : [" + txt + "]")
+                    logging.Logger.error ("Got : [" + compile_out + "]")
                     failed = True                    
                 
             if ("compile_err" in yamlContent):
-                if not checkStdout (yamlContent["compile_err"], compile_err):
+                (ok, txt) = checkStdout (yamlContent["compile_err"], compile_err, cwd)
+                if not ok:
                     logging.Logger.error ("Test failed " + path);
+                    logging.Logger.error ("Expected compile err : [" + txt + "]")
+                    logging.Logger.error ("Got : [" + compile_err + "]")
                     failed = True
                 
             if ("run" in yamlContent):
-                for i in yamlContent ["run"]: 
+                for i in yamlContent ["run"]:
                     run = i.split ()
                     r = subprocess.run (run, cwd=cwd, capture_output=True)
-                    output = output + (r.stdout.decode("utf-8"))
-                    err = output + (r.stderr.decode ("utf-8"))
+                    output = output + ansi_escape.sub('', (r.stdout.decode("utf-8")))
+                    err = err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
                 
             if ("stdout" in yamlContent):
-                if not checkStdout (yamlContent["stdout"], output, cwd):
+                (ok, txt) = checkStdout (yamlContent["stdout"], output, cwd)
+                if not ok:
                     logging.Logger.error ("Test failed " + path);
-                    logging.Logger.error ("Expected out : " + yamlContent["stdout"])
-                    logging.Logger.error ("Got : " + output)
+                    logging.Logger.error ("Expected stdout : [" + txt + "]")
+                    logging.Logger.error ("Got : [" + output + "]")
+
                     failed = True
                 
             if ("stderr" in yamlContent):
-                if not checkStdout (yamlContent["stderr"], err, cwd):
+                (ok, txt) = checkStdout (yamlContent["stderr"], err, cwd)
+                if not ok:
                     logging.Logger.error ("Test failed " + path);
+                    logging.Logger.error ("Expected stderr : [" + txt + "]")
+                    logging.Logger.error ("Got : [" + err + "]")
                     failed = True
 
             if ("clean" in yamlContent):
@@ -130,9 +143,8 @@ def parseTest (path : str):
                 logging.Logger.success ("Test succeed " + path);
                 
         except yaml.YAMLError as exc :
-            print (exc)
-            raise IllegalStateError (obj[key] + " : Yaml no valid")
-
+            logging.Logger.error ("Test failed " + i);
+    
 
     
 def parsePlaybook (path : str):
@@ -140,7 +152,10 @@ def parsePlaybook (path : str):
         try :
             yamlContent = yaml.load (stream, Loader=yaml.FullLoader)
             for i in yamlContent["tests"] :
-                parseTest (i)
+                try: 
+                    parseTest (i)
+                except :
+                    logging.Logger.error ("Test failed " + i);
         except yaml.YAMLError as exc :
             print (exc)
             raise IllegalStateError (obj[key] + " : Yaml no valid")
@@ -163,13 +178,20 @@ def setupLogging (args: Any) :
 
         
 def main (args: Any):
-    parsePlaybook (args.playbook)
+    if (args.test != None):
+        try : 
+            parseTest (args.test)
+        except :
+            logging.Logger.error ("Test failed " + args.test);
+    else :
+        parsePlaybook (args.playbook)
 
 if __name__ == "__main__" :
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("playbook", help="playbook of tests")
-
+    parser.add_argument("--playbook", help="playbook of tests")
+    parser.add_argument("--test", help="playbook of tests", default=None)
+    
     args = parser.parse_args()
     
     setupLogging (args)

@@ -1,0 +1,10 @@
+import std::io
+
+// This is a comment 
+
+// This is a function declaration 
+// The main function, is the first one to be called
+def main () {
+    // Print 'Hello World !!' to the console
+    println ("Hello World !!");
+}

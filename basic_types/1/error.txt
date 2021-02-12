@@ -1,0 +1,9 @@
+Error : overflow capacity for type i8 = 934
+ --> main.yr:(2,18)
+    ┃ 
+ 2  ┃     let x : i8 = 934i8;
+    ┃                  ^^^
+
+
+ymir1: fatal error: 
+compilation terminated.

@@ -1,0 +1,7 @@
+import std::io
+
+static pi = 3.14159265359
+
+def main () {
+    println ("Pi value is : ", pi);
+}

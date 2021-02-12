@@ -1,0 +1,19 @@
+def main () 
+    throws &AssertError
+{
+    // This is an example of comment
+
+    /* 
+     * This is another example of comment
+     * Where, the stars are optionnal
+     */
+
+    /*
+    And this is the proof
+    */
+
+    // None of the line will influence the compilation
+
+    let x = 1 + /* 2 + */  3;
+    assert (x == 4); 
+}
