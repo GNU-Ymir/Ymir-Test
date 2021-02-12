@@ -3,14 +3,14 @@
 In this repository the test of the ymir compiler are registered
 They can be used to verify that the compiler does what is intended
 
-A test is register in a playbook whose format is yaml:
+A test is registered in a playbook whose yaml format is the following :
 ```yaml
 tests:
   - path/to/test.yml
   - path/to/second/test.yml
 ```
 
-The test format is the following :
+The format of a test is the following :
 ```yaml
 compile: # the list of command to execute to compile the test
   - gyc main.yr -c main.o
