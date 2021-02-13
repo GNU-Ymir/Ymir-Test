@@ -1,0 +1,9 @@
+compile:
+  - gyc main.yr
+compile_out: ""
+compile_err: ""
+run:
+  - ./a.out
+stdout: "0\nnan\n"
+stderr: ""
+clean: rm a.out

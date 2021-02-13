@@ -16,4 +16,5 @@ tests:
   - basic_types/8/test.yml
   - files/read/test.yml
   - files/write/test.yml
-  
+  - templates/1/test.yml
+  - templates/2/test.yml

@@ -1,0 +1,10 @@
+import std::io;
+
+def foo (T) (a : T = T::init) {
+    println (a);
+}
+
+def main () {
+    foo!(i32) ();
+    foo!(f32) ();
+}

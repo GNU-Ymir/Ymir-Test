@@ -3,4 +3,4 @@ compile:
 run:
   - ./file
 stdout: "Success!!\n"
-clean: rm ./file
+clean: rm ./file 

@@ -1,0 +1,10 @@
+import std::io;
+
+def foo (T) (_ : (T)?) {
+    println (T::typeid);
+}
+
+def main () {
+    foo (12?);
+    foo (12.0f?);
+}
