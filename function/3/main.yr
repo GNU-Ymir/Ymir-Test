@@ -1,0 +1,20 @@
+import std::io;
+
+mod test {
+
+    def foo (x : i32) -> i32
+        x + 1
+
+    def bar (x : i32) -> i32
+        x + 2
+
+    pub def baz (x : i32 = {foo (1) + bar (2)}) {
+        println (x);
+    }    
+    
+}
+
+
+def main () {
+    test::baz ();
+}

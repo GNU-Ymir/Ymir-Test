@@ -1,0 +1,10 @@
+import std::io
+
+def add_one (x : i32)-> i32 {
+    x + 1; // the value of the block is void, due to the ';'
+}
+
+def main () {
+    let x = add_one (5); 
+    println ("The value of x : ", x);
+}

@@ -1,0 +1,12 @@
+import std::io;
+
+def isDivisable (x : i32, z : i32) -> bool {
+    if (z == 0) return false; 
+	
+    (x % z) == 0
+}
+
+def main () {
+    println (isDivisable (1, 2));
+    println (isDivisable (4, 2));
+}

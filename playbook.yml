@@ -21,3 +21,7 @@ tests:
   - option/1/test.yml
   - function/1/test.yml
   - function/2/test.yml
+  - function/3/test.yml
+  - function/4/test.yml
+  - function/5/test.yml
+  - function/6/test.yml
