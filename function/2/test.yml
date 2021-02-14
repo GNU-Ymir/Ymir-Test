@@ -2,5 +2,5 @@ compile:
   - gyc main.yr
 run:
   - ./a.out
-stdout: "2 1 8\n"
+stdout: "2 1 8\n1 9 2\n"
 clean: rm a.out

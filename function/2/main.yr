@@ -6,4 +6,5 @@ def foo (x : i32, y : i32 = 9, z : i32) {
 
 def main () {
     foo (8, y-> 1, x-> 2);
+    foo (1, 2);
 }
