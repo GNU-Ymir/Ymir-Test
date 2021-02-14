@@ -25,3 +25,7 @@ tests:
   - function/4/test.yml
   - function/5/test.yml
   - function/6/test.yml
+  - function/7/test.yml
+  - function/8/test.yml
+  - loops/1/test.yml
+  - loops/2/test.yml

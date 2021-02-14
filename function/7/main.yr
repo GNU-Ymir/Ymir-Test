@@ -1,0 +1,24 @@
+
+def foo () {
+    import std::io;	
+    let x = 12;
+
+    struct
+    | x: i32
+     -> X;  
+        
+    def bar (x : X) -> i32 {
+	println (x);
+	12
+    }
+    
+    println (x + bar (X (x-> x)));
+}
+
+def main () {
+    foo ();
+    
+    // Try to add the following lines : 
+    // bar ();
+    // println ("In the main function !");
+}

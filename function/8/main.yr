@@ -1,0 +1,14 @@
+import std::io
+
+def plusOne (i : i32) -> i32 
+	i + 1
+
+def plusTwo (i : i32) -> i32
+	i + 2
+	
+def main () {
+	let x = 12;
+	x.plusOne ()
+	 .plusTwo ()
+	 .println ();
+}	

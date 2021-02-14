@@ -1,0 +1,13 @@
+import std::io
+
+def main () {
+    let mut counter = 0;
+    
+    let result = loop { 
+	counter += 1;
+	if counter == 10 {
+	    break counter + 1; // stop the loop and set its value to 'counter + 1'
+	}
+    };
+    println ("Result : ", result);
+}
