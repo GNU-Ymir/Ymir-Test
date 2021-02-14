@@ -1,0 +1,9 @@
+import std::io
+
+def foo (x : i32, y : i32 = 9, z : i32) {
+    println (x, " ", y, " ", z);
+}
+
+def main () {
+    foo (8, y-> 1, x-> 2);
+}
