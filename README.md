@@ -27,8 +27,8 @@ clean: rm test *.o # command to run to remove generated files, can be unset
 
 The test are runnable with the python file run-test.py
 ```bash
-python3 run-test.py --test path/to/test.yml ; single test
-python3 run-test.py --playbook playbook.yml ; list of tests
+python3 run-test.py --test path/to/test.yml # single test
+python3 run-test.py --playbook playbook.yml # list of tests
 ```
 
 
