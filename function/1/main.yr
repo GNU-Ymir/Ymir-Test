@@ -1,0 +1,17 @@
+import std::io;
+
+def foo (x : i32 = 9) {
+    println (x);
+}
+
+def bar (x : i32 = 8, y : i32) {
+    println (x, " ", y);
+}
+
+def main () {
+    foo ();
+    foo (x-> 12);
+    bar (8);
+    bar (0, x-> 1);
+    bar (x-> 1, 0);
+}

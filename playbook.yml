@@ -19,3 +19,4 @@ tests:
   - templates/1/test.yml
   - templates/2/test.yml
   - option/1/test.yml
+  - function/1/test.yml
