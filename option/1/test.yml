@@ -1,0 +1,7 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "Err(core::exception::AssertError (err))\nOk(13)\n"
+stderr: ""
+clean: rm a.out

@@ -2,5 +2,5 @@ compile:
   - gyc main.yr
 run:
   - ./a.out
-output: "Hello World!!\n"
+stdout: "Hello World !!\n"
 clean: rm a.out

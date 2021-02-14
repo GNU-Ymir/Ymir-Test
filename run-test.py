@@ -94,22 +94,32 @@ def parseTest (path : str):
                     r = subprocess.run (compile, capture_output=True, cwd=cwd)                
                     compile_out = compile_out + ansi_escape.sub('', (r.stdout.decode("utf-8")))
                     compile_err = compile_err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
-                
+            else :
+                logging.Logger.error ("No 'compile' directive " + path)
+                failed = True
+
+            test_compile_out = ""
             if ("compile_out" in yamlContent):
-                (ok, txt) = checkStdout (yamlContent["compile_out"], compile_out, cwd)
-                if not ok:
-                    logging.Logger.error ("Test failed " + path);
-                    logging.Logger.error ("Expected compile out : [" + txt + "]")
-                    logging.Logger.error ("Got : [" + compile_out + "]")
-                    failed = True                    
-                
+                test_compile_out = yamlContent["compile_out"]
+            
+            (ok, txt) = checkStdout (test_compile_out, compile_out, cwd)
+            if not ok:
+                logging.Logger.error ("Test failed " + path);
+                logging.Logger.error ("Expected compile out : [" + txt + "]")
+                logging.Logger.error ("Got : [" + compile_out + "]")
+                failed = True                    
+
+            test_compile_err = ""
             if ("compile_err" in yamlContent):
-                (ok, txt) = checkStdout (yamlContent["compile_err"], compile_err, cwd)
-                if not ok:
-                    logging.Logger.error ("Test failed " + path);
-                    logging.Logger.error ("Expected compile err : [" + txt + "]")
-                    logging.Logger.error ("Got : [" + compile_err + "]")
-                    failed = True
+                test_compile_err = yamlContent["compile_err"]
+                
+            
+            (ok, txt) = checkStdout (test_compile_err, compile_err, cwd)
+            if not ok:
+                logging.Logger.error ("Test failed " + path);
+                logging.Logger.error ("Expected compile err : [" + txt + "]")
+                logging.Logger.error ("Got : [" + compile_err + "]")
+                failed = True                
                 
             if ("run" in yamlContent):
                 for i in yamlContent ["run"]:
@@ -117,18 +127,24 @@ def parseTest (path : str):
                     r = subprocess.run (run, cwd=cwd, capture_output=True)
                     output = output + ansi_escape.sub('', (r.stdout.decode("utf-8")))
                     err = err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
+
+                test_stdout = ""
+                if ("stdout" in yamlContent):
+                    test_stdout = yamlContent["stdout"]
                 
-            if ("stdout" in yamlContent):
-                (ok, txt) = checkStdout (yamlContent["stdout"], output, cwd)
+                (ok, txt) = checkStdout (test_stdout, output, cwd)
                 if not ok:
                     logging.Logger.error ("Test failed " + path);
                     logging.Logger.error ("Expected stdout : [" + txt + "]")
                     logging.Logger.error ("Got : [" + output + "]")
 
                     failed = True
-                
-            if ("stderr" in yamlContent):
-                (ok, txt) = checkStdout (yamlContent["stderr"], err, cwd)
+
+                test_stderr = ""    
+                if ("stderr" in yamlContent):
+                    test_stderr = yamlContent["stderr"]
+                    
+                (ok, txt) = checkStdout (test_stderr, err, cwd)
                 if not ok:
                     logging.Logger.error ("Test failed " + path);
                     logging.Logger.error ("Expected stderr : [" + txt + "]")

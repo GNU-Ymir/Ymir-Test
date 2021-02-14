@@ -1,0 +1,16 @@
+import std::io;
+
+def test (i : i32) -> i32?
+{
+    {
+        if i < 12 {
+            throw AssertError::new ("err");
+        }
+        i
+    }?
+}
+
+def main () {
+    println (test (11));    
+    println (test (13));
+}
