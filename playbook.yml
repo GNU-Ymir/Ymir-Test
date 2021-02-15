@@ -35,3 +35,5 @@ tests:
   - mutability/4/test.yml
   - mutability/5/test.yml
   - mutability/6/test.yml
+  - mutability/7/test.yml
+  - mutability/8/test.yml

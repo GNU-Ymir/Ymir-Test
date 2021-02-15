@@ -1,0 +1,13 @@
+import std::io
+    
+def main ()
+    throws &AssertError, &OutOfArray
+{
+    let x = [1, 2, 3];
+    let dmut y = copy x;
+    assert (x == y);
+
+    y [0] = 9;
+    assert (x == [1, 2, 3]);
+    assert (y == [9, 2, 3]);
+}
