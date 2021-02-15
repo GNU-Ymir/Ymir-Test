@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "2147483647\n12\n"

@@ -1,0 +1,29 @@
+import std::io
+
+enum : [c32]
+| MONDAY = "Mon"
+| TUESDAY = "Tue"
+| WEDNESDAY = "Wed"
+| THURSDAY = "Thu"
+| FRIDAY = "Fri"
+| SATURDAY = "Sat"
+| SUNDAY = "Sun"
+ -> Day;
+
+def foo (day : [c32]) {
+    println (day);
+}
+
+def bar (day : Day) {
+    println (day);
+}
+
+def main () {
+    // the internal type Day is of type [c32], so it can be implicitely casted into [c32]
+    foo (Day::MONDAY);
+    
+    bar (Day::MONDAY);
+
+    // // However, it is impossible to transform a [c32] into a Day implicitely
+    bar ("Mon")
+}

@@ -1,0 +1,18 @@
+Error : the call operator is not defined for type main::bar and {mut [c32]}
+ --> main.yr:(28,9)
+    ┃ 
+28  ┃     bar ("Mon")
+    ┃         ^     ^
+    ┃ Note : candidate bar --> main.yr:(17,5) : main::bar (day : main::Day([c32]))-> void
+    ┃ Error : incompatible types main::Day and mut [c32]
+    ┃  --> main.yr:(28,10)
+    ┃     ┃ 
+    ┃ 28  ┃     bar ("Mon")
+    ┃     ┃          ^
+    ┃ 
+    ┃ Note : parameter day --> main.yr:(17,10) : main::bar (day : main::Day([c32]))-> void
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+
+
+ymir1: fatal error: 
+compilation terminated.

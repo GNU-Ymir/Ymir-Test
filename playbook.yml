@@ -9,3 +9,4 @@ sub-playbooks:
   - loops/playbook.yml
   - mutability/playbook.yml
   - struct/playbook.yml
+  - enum/playbook.yml

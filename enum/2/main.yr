@@ -1,0 +1,21 @@
+import std::io;
+
+enum
+| a = 12
+ -> X;
+
+def test (x : X) {
+    println (x);
+}
+
+struct
+| z : i32
+ -> Z;
+
+def main ()
+    throws &OutOfArray
+{
+    let i = i32::__max__;
+    println (i);
+    println (X::members [0]);
+}
