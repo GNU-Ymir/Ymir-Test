@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+compile_err:
+  file: error.txt
+

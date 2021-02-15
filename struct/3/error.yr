@@ -1,0 +1,21 @@
+struct
+| x : i32
+| mut y : i32
+ -> Point;
+
+def main ()
+    throws &AssertError, &SegFault
+{
+    let mut point = Point (2, x-> 1);
+    let (x, y) = point::tupleof;
+
+    assert (x == 1 && y == 2);
+
+    let mut addrs : (&i32, dmut &i32) = point::fields_address;
+    *(addrs._1) = 9;
+
+    assert (point.y == 9);
+
+    let imut_addrs = point::fields_address;
+    assert (*(imut_addrs._1) == 9);
+}

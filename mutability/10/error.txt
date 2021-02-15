@@ -1,0 +1,39 @@
+Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+ --> main.yr:(5,17)
+    ┃ 
+ 5  ┃     let ref mut y : [mut i32] = ref x;
+    ┃                 ^
+    ┃ Note : 
+    ┃  --> main.yr:(5,37)
+    ┃     ┃ 
+    ┃  5  ┃     let ref mut y : [mut i32] = ref x;
+    ┃     ┃                                     ^
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+
+Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+ --> main.yr:(6,13)
+    ┃ 
+ 6  ┃     let mut y : [mut i32] = alias x;
+    ┃             ^
+    ┃ Note : 
+    ┃  --> main.yr:(6,29)
+    ┃     ┃ 
+    ┃  6  ┃     let mut y : [mut i32] = alias x;
+    ┃     ┃                             ^^^^^
+    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
+
+Error : undefined symbol y
+ --> main.yr:(8,5)
+    ┃ 
+ 8  ┃     y = [7, 8, 9]; // modify the value pointed by the reference (in the stack)
+    ┃     ^
+
+Error : undefined symbol y
+ --> main.yr:(9,5)
+    ┃ 
+ 9  ┃     y [0] = 89; // modify the value on the heap
+    ┃     ^
+
+
+ymir1: fatal error: 
+compilation terminated.

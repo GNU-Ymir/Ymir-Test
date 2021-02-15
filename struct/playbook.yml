@@ -1,2 +1,4 @@
 tests:
   - 1/test.yml
+  - 2/test.yml
+  - 3/test.yml

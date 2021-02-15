@@ -1,0 +1,11 @@
+def main ()
+    throws &OutOfArray, &AssertError
+{
+    let mut x : [i32] = [1, 2, 3];
+    let ref mut y : [mut i32] = ref x;
+    let mut y : [mut i32] = alias x;
+    
+    y = [7, 8, 9]; // modify the value pointed by the reference (in the stack)
+    y [0] = 89; // modify the value on the heap
+    assert (x == [89, 8, 9]); 
+}

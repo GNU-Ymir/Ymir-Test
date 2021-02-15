@@ -1,0 +1,18 @@
+mod main;
+
+import std::io;
+
+struct
+| x : i32
+| y : i32 = 9
+ -> Point; 
+ 
+def main ()
+    throws &AssertError
+{
+    let x = Point::init;
+    
+    // the structure is declared in the main module, thus its name is main::Point	
+    assert (Point::typeid == "main::Point");    
+    assert (x.x == 0 && x.y == 9);
+}
