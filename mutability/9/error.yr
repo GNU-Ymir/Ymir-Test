@@ -1,0 +1,7 @@
+def main () 
+    throws &OutOfArray, &AssertError
+{
+    let dmut x = alias "hello !";
+    x [0] = 'H'; // Well done
+    assert (x == "Hello !");
+}
