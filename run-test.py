@@ -164,14 +164,22 @@ def parseTest (path : str):
 
     
 def parsePlaybook (path : str):
+    cwd = os.path.dirname (path)
+    if cwd == "" :
+        cwd = "." 
     with open (path) as stream :
         try :
             yamlContent = yaml.load (stream, Loader=yaml.FullLoader)
-            for i in yamlContent["tests"] :
-                try: 
-                    parseTest (i)
-                except :
-                    logging.Logger.error ("Test failed " + i);
+            if "tests" in yamlContent : 
+                for i in yamlContent["tests"] :
+                    try: 
+                        parseTest (cwd + "/" + i)
+                    except :
+                        logging.Logger.error ("Test failed " + str (cwd + "/" + i));
+            if "sub-playbooks" in yamlContent :
+                for i in yamlContent ["sub-playbooks"] :
+                    logging.Logger.info ("Running sub playbook : " + str (i))
+                    parsePlaybook (cwd + "/" + i)
         except yaml.YAMLError as exc :
             print (exc)
             raise IllegalStateError (obj[key] + " : Yaml no valid")

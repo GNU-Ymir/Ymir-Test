@@ -1,0 +1,21 @@
+import std::io;
+
+
+mod Test {
+    def foo ()-> i32 {
+        12
+    }
+    
+    pub struct
+    | a : i32 = foo ()
+    | mut b : i32
+     -> A;
+}
+
+def main ()
+    throws &AssertError
+{
+    let mut a = Test::A::init;
+    a.b = 9;
+    assert (a.a == 12 && a.b == 9);
+}
