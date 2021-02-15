@@ -1,0 +1,4 @@
+def main () {
+    let x = 12;
+    let y = (10, ref x);
+}
