@@ -1,0 +1,11 @@
+import std::io
+
+def main ()
+    throws &OutOfArray
+{
+    let dmut x = [1, 2, 3];
+    x = [2, 3, 4];
+    // Try to add the following line : 
+    x [0] = 8;
+    println (x);
+}

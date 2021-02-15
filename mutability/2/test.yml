@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "[8, 3, 4]\n"
+clean: rm a.out

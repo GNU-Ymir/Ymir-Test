@@ -1,0 +1,8 @@
+def main ()
+    throws &AssertError
+{
+    let mut x = 12; // place a value of type i32 and value 12 on the stack
+    let ref mut y = ref x; // create a reference of x
+    y = 42; // modify the value pointed by the reference
+    assert (x == 42);
+}

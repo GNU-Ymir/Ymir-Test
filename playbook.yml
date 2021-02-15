@@ -29,3 +29,8 @@ tests:
   - function/8/test.yml
   - loops/1/test.yml
   - loops/2/test.yml
+  - mutability/1/test.yml
+  - mutability/2/test.yml
+  - mutability/3/test.yml
+  - mutability/4/test.yml
+  - mutability/5/test.yml
