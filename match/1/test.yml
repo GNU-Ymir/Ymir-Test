@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "12 1\nmain::Rectangle(main::Point(12, 1), main::Point(1, 3))\n"
+clean: rm a.out

@@ -1,0 +1,24 @@
+import std::io;
+
+struct
+| mut x : Point
+| y : Point
+ -> Rectangle;
+
+struct
+| mut x : i32
+| y : i32
+ -> Point;
+
+def main () {
+    let point = Point (10, 1);
+    let mut rect = Rectangle (point, Point (1, 3));
+    match ref rect {
+        Rectangle (Point (ref mut x:_, _), Point (y:_, 3)) => {
+            x = 12;
+            println (x, " ", y);
+        }
+        _ => println (rect);
+    }
+    println (rect);
+}

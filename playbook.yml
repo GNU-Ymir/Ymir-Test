@@ -10,3 +10,4 @@ sub-playbooks:
   - mutability/playbook.yml
   - struct/playbook.yml
   - enum/playbook.yml
+  - match/playbook.yml

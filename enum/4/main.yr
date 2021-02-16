@@ -1,0 +1,17 @@
+mod main;
+
+enum
+| typeid       = 1
+| typeinfo     = 2
+| members      = 3
+| member_names = 4
+| inner        = 5
+ -> AnnoyingEnum;
+
+def main ()
+    throws &AssertError
+{
+    assert (AnnoyingEnum::typeid == 1);
+    assert (AnnoyingEnum::__typeid == AnnoyingEnum::__typeid__);
+    assert (AnnoyingEnum::__typeid == "main::AnnoyingEnum");	
+}

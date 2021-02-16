@@ -1,0 +1,32 @@
+import std::io;
+
+struct
+| a : i32
+| b : i32
+| c : i32
+| d : i32
+ -> Ipv4Addr;
+
+enum
+| LOCALHOST = localhost ()
+| BROADCAST = broadcast ()
+ -> KnownAddr;
+
+def localhost ()-> Ipv4Addr {
+    println ("localhost");
+    Ipv4Addr (127, 0, 0, 1)
+}
+
+def broadcast ()-> Ipv4Addr {
+    println ("broadcast");
+    Ipv4Addr (255, 255, 255, 255)
+}
+
+def main ()
+    throws &AssertError
+{
+    let _ = KnownAddr::LOCALHOST; // will call localhost here
+
+    assert (KnownAddr::LOCALHOST.a == 127); // a second time here
+    assert (KnownAddr::BROADCAST.d == 255); // call broadcast here
+}
