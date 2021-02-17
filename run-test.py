@@ -89,11 +89,17 @@ def parseTest (path : str):
             ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
             failed = False
             if ("compile" in yamlContent) :
-                for i in yamlContent ["compile"]: 
-                    compile = i.split ()
+                if (type (yamlContent["compile"]) is list):
+                    for i in yamlContent ["compile"]: 
+                        compile = i.split ()
+                        r = subprocess.run (compile, capture_output=True, cwd=cwd)                
+                        compile_out = compile_out + ansi_escape.sub('', (r.stdout.decode("utf-8")))
+                        compile_err = compile_err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
+                else:
+                    compile = yamlContent["compile"].split ()
                     r = subprocess.run (compile, capture_output=True, cwd=cwd)                
                     compile_out = compile_out + ansi_escape.sub('', (r.stdout.decode("utf-8")))
-                    compile_err = compile_err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
+                    compile_err = compile_err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))                   
             else :
                 logging.Logger.error ("No 'compile' directive " + path)
                 failed = True
@@ -122,12 +128,18 @@ def parseTest (path : str):
                 failed = True                
                 
             if ("run" in yamlContent):
-                for i in yamlContent ["run"]:
-                    run = i.split ()
+                if type (yamlContent["run"]) is list : 
+                    for i in yamlContent ["run"]:
+                        run = i.split ()
+                        r = subprocess.run (run, cwd=cwd, capture_output=True)
+                        output = output + ansi_escape.sub('', (r.stdout.decode("utf-8")))
+                        err = err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
+                else :
+                    run = yamlContent ["run"]
                     r = subprocess.run (run, cwd=cwd, capture_output=True)
                     output = output + ansi_escape.sub('', (r.stdout.decode("utf-8")))
                     err = err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
-
+                    
                 test_stdout = ""
                 if ("stdout" in yamlContent):
                     test_stdout = yamlContent["stdout"]
@@ -205,7 +217,8 @@ def main (args: Any):
     if (args.test != None):
         try : 
             parseTest (args.test)
-        except :
+        except x :
+            print (x)
             logging.Logger.error ("Test failed " + args.test);
     else :
         parsePlaybook (args.playbook)

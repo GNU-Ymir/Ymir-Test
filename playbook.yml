@@ -11,3 +11,4 @@ sub-playbooks:
   - struct/playbook.yml
   - enum/playbook.yml
   - match/playbook.yml
+  - tokenizer/playbook.yml

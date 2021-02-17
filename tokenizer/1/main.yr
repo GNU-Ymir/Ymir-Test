@@ -1,0 +1,24 @@
+import std::io;
+import std::tokenizer;
+
+
+enum
+| RPAR = "("
+| LPAR = ")"
+| LCRO = "["
+| RCRO = "]"
+| SPACE = " "
+| DARROW = "=>"
+| EQUAL = "="
+ -> Tokens;
+
+
+
+def main ()
+    throws &AssertError
+{    
+    let dmut tzer = Tokenizer::new (tokens-> Tokens::members);
+
+    let res = tzer.tokenize ("[x + y] => x = y");
+    assert (res == ["[", "x", " ", "+", " ", "y", "]", " ", "=>", " ", "x", " ", "=", " ", "y"]);
+}
