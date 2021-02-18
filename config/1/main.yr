@@ -1,0 +1,27 @@
+import std::io;
+import std::config::toml;
+import std::fs::file;
+
+def main ()
+{
+    with dmut f = File::open ("in.toml") {
+        let str = f:.readAll ();
+        let cfg : &Dict = parse (str);
+
+        // Amélioration, Config surcharge par défault les operateur d'accés,
+        // Il throw OutOfArray, si jamais ça n'a pas de sens sur le sous type (par exemple Int)
+        
+        let nb = cfg["foo"]["array"][2] ?; // c'est pour ça qu'on met '?' pour catch si ça marche pas         
+        match nb {
+            Ok (x: _) => println (x);
+            Err () => println ("cfg :: foo :: array :: 2 n'existe pas");
+        }
+
+        println (cfg);        
+    } catch {
+        x : _ => { // on catch tout
+            println (x); 
+        }  
+    }
+    
+}

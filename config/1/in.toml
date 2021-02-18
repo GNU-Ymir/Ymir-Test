@@ -1,0 +1,13 @@
+[foo]
+bar = 1 # ignored comment
+baz = 'salut'
+array = [1, 2, 3]
+dict = { 
+     test = 'inner',
+     test2 = false
+}
+dict2 = { # another comment
+      dict2 = { # and another one
+      	    dict2 = 't'
+      }     
+}

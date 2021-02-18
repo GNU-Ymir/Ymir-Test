@@ -1,0 +1,2 @@
+Int (3)
+Dict (foo=> Dict (baz=> Str (salut), bar=> Int (1), dict=> Dict (test=> Str (inner), test2=> Bool (false)), dict2=> Dict (dict2=> Dict (dict2=> Str (t))), array=> Array (Int (1), Int (2), Int (3))))
