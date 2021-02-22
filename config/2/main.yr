@@ -1,0 +1,15 @@
+import std::config::toml;
+import std::fs::file;
+import std::io;
+import std::conv;
+
+def main () {    
+    with dmut file = File::open ("in.toml") {
+        let config = file:.readAll ().parse ();
+        println (config);
+    } catch {
+        x: _ => {
+            println (x);
+        }
+    }
+}    

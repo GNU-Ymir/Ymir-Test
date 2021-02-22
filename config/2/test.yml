@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "Dict (config=> Dict (a=> Str (🎵), b=> Int (127925)))\n"
+clean: rm a.out

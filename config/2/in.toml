@@ -1,0 +1,4 @@
+[config]
+
+a = "\u{0x1F3B5}"
+b = 0x1F3B5

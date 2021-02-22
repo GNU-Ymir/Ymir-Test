@@ -13,3 +13,4 @@ sub-playbooks:
   - match/playbook.yml
   - tokenizer/playbook.yml
   - config/playbook.yml
+  - conv/playbook.yml
