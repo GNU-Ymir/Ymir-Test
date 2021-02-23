@@ -1,13 +1,13 @@
 Error : discard the constant qualifier is prohibited, left operand mutability level is 3 but must be at most 1
  --> error.yr:(14,13)
     ┃ 
-14  ┃     let mut addrs : (&i32, dmut &i32) = point::fields_address;
+14  ┃     let mut addrs : (&i32, dmut &i32) = __pragma!field_addrs (point);
     ┃             ^^^^^
     ┃ Note : implicit alias of type mut (&(i32), mut &(mut i32)) is not allowed, it will implicitly discard constant qualifier
-    ┃  --> error.yr:(14,46)
+    ┃  --> error.yr:(14,50)
     ┃     ┃ 
-    ┃ 14  ┃     let mut addrs : (&i32, dmut &i32) = point::fields_address;
-    ┃     ┃                                              ^^
+    ┃ 14  ┃     let mut addrs : (&i32, dmut &i32) = __pragma!field_addrs (point);
+    ┃     ┃                                                  ^^^^^^^^^^^
     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
 
 Error : undefined symbol addrs
@@ -22,23 +22,23 @@ compilation terminated.
 Error : discard the constant qualifier is prohibited
  --> error2.yr:(14,13)
     ┃ 
-14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias point::fields_address;
+14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias __pragma!field_addrs (point);
     ┃             ^^^^^
     ┃ Note : 
     ┃  --> error2.yr:(14,46)
     ┃     ┃ 
-    ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias point::fields_address;
+    ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias __pragma!field_addrs (point);
     ┃     ┃                                              ^^^^^
     ┃     ┃ Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
     ┃     ┃  --> error2.yr:(14,27)
     ┃     ┃     ┃ 
-    ┃     ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias point::fields_address;
+    ┃     ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias __pragma!field_addrs (point);
     ┃     ┃     ┃                           ^
     ┃     ┃     ┃ Note : 
-    ┃     ┃     ┃  --> error2.yr:(14,57)
+    ┃     ┃     ┃  --> error2.yr:(14,61)
     ┃     ┃     ┃     ┃ 
-    ┃     ┃     ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias point::fields_address;
-    ┃     ┃     ┃     ┃                                                         ^^
+    ┃     ┃     ┃ 14  ┃     let mut addrs : (dmut &i32, dmut &i32) = alias __pragma!field_addrs (point);
+    ┃     ┃     ┃     ┃                                                             ^^^^^^^^^^^
     ┃     ┃     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
     ┃     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
     ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
