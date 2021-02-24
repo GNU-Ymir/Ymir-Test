@@ -1,0 +1,12 @@
+import std::io;
+
+def main () {
+    let z = cte for i in 0 .. 10 {
+        if (i == 7)
+            break i;
+        println (i);
+        0
+    }
+
+    println ("Z : ", z);
+}

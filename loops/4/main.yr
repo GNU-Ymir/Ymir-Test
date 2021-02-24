@@ -1,0 +1,14 @@
+import std::io;
+
+struct
+| foo : i32
+| bar : c32
+| baz : f64
+ -> Z;
+
+def main () {
+    let z = Z (1, 'r', 3.14);
+    cte for i : u32 in 0u32 .. typeof (__pragma!tupleof (z))::arity {
+        println ((__pragma!field_names(Z))[i], " => ", (__pragma!tupleof (z)).i);
+    }
+}

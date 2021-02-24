@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "foo => 1\nbar => r\nbaz => 3.140000\n"
+clean: rm a.out
