@@ -1,4 +1,5 @@
 import std::config::args;
+import std::config::_;
 import std::fs::file;
 import std::io;
 import std::conv;
