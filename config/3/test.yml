@@ -2,5 +2,5 @@ compile:
   - gyc main.yr
 run:
   - ./a.out
-stdout: "Dict (z=> Array (Int (1), Int (2), Int (3)), f=> Float (89.900000), u=> Str (test))\nF -> 89.900000\nZ -> [1, 2, 3]\nU -> test\n"  
+stdout: "F -> 89.900000\nZ -> [1, 2, 3]\nU -> test\n"  
 clean: rm a.out

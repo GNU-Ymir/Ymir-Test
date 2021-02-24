@@ -12,9 +12,7 @@ struct
 
 def main ()
 {
-    let cfg = parse ("./a.out -z 1 2 3 -f 89.9 -u test");
-    println (cfg);
-    let z = cfg.to!(X) ();
+    let z = parse!X ("./a.out -z 1 2 3 -f 89.9 -u test");
     println ("F -> ", z.f);
     println ("Z -> ", z.z);
     println ("U -> ", z.u);
