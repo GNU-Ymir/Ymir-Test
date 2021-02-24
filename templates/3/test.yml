@@ -2,4 +2,3 @@ compile:
   - gyc main.yr
 compile_err:
   file: error.txt
-clean: rm a.out
