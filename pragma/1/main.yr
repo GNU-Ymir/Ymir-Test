@@ -1,0 +1,81 @@
+import std::config::_;
+import std::config::toml;
+import std::io;
+
+trait Fooable {
+    pub def foo (mut self)-> void;
+}
+
+struct
+| a : c8
+| c : i32
+| b : f64 = 3.14
+| d : f64
+| z : &Z
+ -> X;
+
+class Z {
+    let mut i = 0;
+    
+    pub self () {}
+
+    impl Fooable {
+        pub over foo (mut self) -> void {
+            self.i = 89;
+        }
+    }
+
+    impl std::io::Printable;
+}
+
+def foo (T of [c32]) ()-> [c32] {
+    "salut"
+}
+
+def foo (T of i32) ()-> i32 {
+    12
+}
+
+def foo (T of i64) ()-> i64 {
+    89i64
+}
+
+def foo (T of c8) ()-> c8 {
+    'r'c8
+}
+
+def foo (T of f64) ()-> f64 {
+    89.5
+}
+
+def foo (T impl Fooable) () -> dmut T {
+    let dmut x = T::new ();
+    x:.foo ();
+    alias x
+}
+
+def foo (struct T) ()-> T
+    throws &SegFault, &OutOfArray
+{
+    let dmut r = [0u8 ; new sizeof (T)];
+    cte for i in 0us .. (__pragma!field_offsets (T)).len {
+        let offset = (__pragma!field_offsets (T)) [i];
+        let size = sizeof (__pragma!field_type (T, (__pragma!field_names (T))[i]));
+        let dmut z : &(mut void) = alias (cast!(&void) ((r [offset .. (offset + size)]).ptr));
+        cte if (__pragma!field_has_value (T))[i] {
+            *(cast! (&(__pragma!field_type (T, (__pragma!field_names (T))[i]))) (z)) = __pragma!field_value (T, (__pragma!field_names (T))[i]);
+        } else 
+            *(cast! (&(__pragma!field_type (T, (__pragma!field_names (T))[i]))) (z)) = foo!(__pragma!field_type (T, (__pragma!field_names (T))[i])) ();
+    }
+    {*(cast!(&T) (cast!(&void) (r.ptr)))}
+}
+
+extern (C) def printf (s : &c8, ...);
+
+
+def main ()
+    throws &SegFault, &OutOfArray
+{
+    println ((__pragma!field_offsets (X)), " ", sizeof (X));
+    println (foo!X ());
+}

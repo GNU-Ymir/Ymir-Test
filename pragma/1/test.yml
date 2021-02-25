@@ -1,0 +1,8 @@
+compile :
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "[0, 4, 8, 16, 24] 32\nmain::X(r, 12, 3.140000, 89.500000, main::Z(89))\n"
+clean: rm a.out
+
+  
