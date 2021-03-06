@@ -1,0 +1,30 @@
+import std::io;
+
+def divM (x : (f64?), y : f64) -> f64? {
+    match x {
+        Ok (z : _)=> {
+            if (y != 0.0)  {
+                (z / y)?
+            } else {
+                (f64?)::__err__
+            }
+        }
+        _ => {
+            (f64?)::__err__
+        }
+    }
+}
+
+def main () {
+    
+    let div0M = |x| => divM (x, 0.0);
+    let div3M = |x| => divM (x, 3.0);
+    let div5M = |x| => divM (x, 5.0);
+    let div7M = |x| => divM (x, 7.0);
+    
+    let x = (35.0?).div3M ().div7M ().div5M ();
+    println (x);
+
+    let z = (35.0?).div0M ().div7M ().div5M ();
+    println (z);
+}

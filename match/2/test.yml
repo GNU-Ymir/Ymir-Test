@@ -2,5 +2,5 @@ compile:
   - gyc main.yr
 run:
   - ./a.out
-stdout: "F -> 89.900000\nZ -> [1, 2, 3]\nU -> test\n"  
+stdout: "The answer is either 41, 42 or 43\n"
 clean: rm a.out

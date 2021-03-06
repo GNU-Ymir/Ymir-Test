@@ -1,0 +1,15 @@
+import std::io
+
+def main () {
+    match 42 {
+        1 .. 10 => {
+            println ("The answer is between 1 and 10 not included");
+        }
+        10 ... 40 => {
+            println ("The answer is between 10 and 40 included");
+        }
+        41 | 42 | 43 => {
+            println ("The answer is either 41, 42 or 43");
+        }
+    }
+}

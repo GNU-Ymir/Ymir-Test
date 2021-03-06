@@ -14,3 +14,4 @@ sub-playbooks:
   - tokenizer/playbook.yml
   - config/playbook.yml
   - conv/playbook.yml
+  - monade/playbook.yml

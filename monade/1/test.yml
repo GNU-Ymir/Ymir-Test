@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr -lbfd
+run:
+  - ./a.out
+stdout: "Ok(0.333333)\nErr()\n"
+clean: rm a.out
