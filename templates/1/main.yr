@@ -1,6 +1,6 @@
 import std::io;
 
-def foo (T) (_ : (T)?) {
+def foo {T} (_ : (T)?) {
     println (T::typeid);
 }
 

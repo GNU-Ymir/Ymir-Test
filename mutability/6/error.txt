@@ -1,8 +1,7 @@
 Warning : the creation of ref has no effect on the left operand
  --> main.yr:(3,22)
-    ┃ 
  3  ┃     let y = (10, ref x);
-    ┃                      ^
+    ╋                      ^
 
 
 ymir1: fatal error: 

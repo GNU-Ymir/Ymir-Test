@@ -1,0 +1,33 @@
+import std::io;
+
+class A {
+    pub self () {}
+}
+
+class B over A {
+    pub self () {}
+}
+
+class C over A {
+    pub self () {}
+}
+
+
+def main ()
+    throws &AssertError
+{
+    let a = if (true) {
+        C::new ()
+    } else {
+        alias B::new ()
+    };
+
+    let b = [C::new (), B::new (), A::new ()];
+    let c = [(C::new (), 23), (B::new (), 45)];
+    let dmut d = [(alias ((C::new (),))), (alias (((B::new (), ))))];
+
+    assert (typeof (a)::typeid == "main::A");
+    assert (typeof (b)::typeid == "[&(main::A)]");
+    assert (typeof (c)::typeid == "[(&(main::A), i32)]");
+    assert (typeof (d)::typeid == "mut [mut (mut &(mut main::A),)]");
+}

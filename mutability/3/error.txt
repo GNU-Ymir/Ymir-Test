@@ -1,15 +1,12 @@
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
  --> main.yr:(4,14)
-    ┃ 
  4  ┃     let dmut x = "Try to make me mutable !?";
-    ┃              ^
+    ╋              ^
     ┃ Note : 
     ┃  --> main.yr:(4,18)
-    ┃     ┃ 
     ┃  4  ┃     let dmut x = "Try to make me mutable !?";
-    ┃     ┃                  ^
-    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
-
+    ┃     ╋                  ^
+    ┗━━━━━┻━ 
 
 ymir1: fatal error: 
 compilation terminated.

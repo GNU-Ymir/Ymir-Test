@@ -1,8 +1,7 @@
 Warning : the symbol x declared but never used
  --> main.yr:(2,9)
-    ┃ 
  2  ┃     let x = 12;
-    ┃         ^
+    ╋         ^
 
 
 ymir1: fatal error: 

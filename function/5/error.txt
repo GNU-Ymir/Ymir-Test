@@ -1,15 +1,12 @@
 Error : incompatible types i32 and void
  --> main.yr:(3,29)
-    ┃ 
  3  ┃ def add_one (x : i32)-> i32 {
-    ┃                             ^
+    ╋                             ^
     ┃ Note : 
     ┃  --> main.yr:(5,1)
-    ┃     ┃ 
     ┃  5  ┃ }
-    ┃     ┃ ^
-    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
-
+    ┃     ╋ ^
+    ┗━━━━━┻━ 
 
 ymir1: fatal error: 
 compilation terminated.

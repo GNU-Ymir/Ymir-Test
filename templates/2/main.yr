@@ -1,10 +1,10 @@
 import std::io;
 
-def foo (T) (a : T = T::init) {
+def foo {T} (a : T = T::init) {
     println (a);
 }
 
 def main () {
-    foo!(i32) ();
-    foo!(f32) ();
+    foo!i32 ();
+    foo!f32 ();
 }

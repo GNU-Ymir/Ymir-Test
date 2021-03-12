@@ -12,6 +12,6 @@ def main ()
     assert (("123").to!(i64) () == 123i64);
     assert (("123").to!(u64) () == 123u64);
 
-    assert (("0xff").to!(u32, "x") () == 255u32);
-    assert (("0x1F3B5").to!(u32, "x") () == 127925u32);
+    assert (("0xff").to!{u32, "x"} () == 255u32);
+    assert (("0x1F3B5").to!{u32, "x"} () == 127925u32);
 }

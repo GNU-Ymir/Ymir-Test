@@ -1,26 +1,21 @@
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
  --> error.yr:(4,14)
-    ┃ 
  4  ┃     let dmut x = alias "hello !";
-    ┃              ^
+    ╋              ^
     ┃ Note : 
     ┃  --> error.yr:(4,18)
-    ┃     ┃ 
     ┃  4  ┃     let dmut x = alias "hello !";
-    ┃     ┃                  ^^^^^
-    ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 
-
+    ┃     ╋                  ^^^^^
+    ┗━━━━━┻━ 
 Error : undefined symbol x
  --> error.yr:(5,5)
-    ┃ 
  5  ┃     x [0] = 'H'; // Well done
-    ┃     ^
+    ╋     ^
 
 Error : undefined symbol x
  --> error.yr:(6,13)
-    ┃ 
  6  ┃     assert (x == "Hello !");
-    ┃             ^
+    ╋             ^
 
 
 ymir1: fatal error: 

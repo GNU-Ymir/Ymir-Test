@@ -1,8 +1,7 @@
 Error : left operand of type i32 is immutable
  --> main.yr:(7,7)
-    ┃ 
  7  ┃     x [0] = 8;
-    ┃       ^
+    ╋       ^
 
 
 ymir1: fatal error: 
