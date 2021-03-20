@@ -15,3 +15,5 @@ sub-playbooks:
   - config/playbook.yml
   - conv/playbook.yml
   - monade/playbook.yml
+  - class/playbook.yml
+  - args/playbook.yml

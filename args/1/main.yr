@@ -1,0 +1,51 @@
+import std::args;
+import std::io;
+
+struct
+| help : YesNo
+| sum : YesNo    
+| N : [i32]
+| verbose : YesNo
+| output : [c32] = ""
+| useless : i32
+ -> Foo;
+
+def main (args : [[c8]]) {
+    let x = ArgumentParser!(Foo)::new ()
+        :.info!"help" (short-> "h", comments-> "print this help and exit", isHelp-> true)
+        :.info!"sum" (comments-> "sum the integers (default find the max)")
+        :.info!"output" (short-> "o", comments-> "does nothing")
+        :.info!"verbose" (short-> "v", comments-> "prints the intermediate operations")
+        :.positional!"N" (comments-> "list of integers to process");    
+    
+    {
+        let f = x.parse (args);
+        if (f.sum) {
+            let mut res = f.N [0];
+            for i in f.N[1u64..$] {
+                if (f.verbose) println (res, " + ", i, " = ", res + i);
+                res += i
+            }
+            println (res);
+        } else {
+            let mut res = f.N [0];
+            for i in f.N [1u64..$] {
+                if (f.verbose) println (res, " < ", i, " = ", if (res < i) i else res);
+                if (i > res) res = i;
+            }
+            println (res);
+        }
+    } catch {
+        err : &ArgumentError => {
+            println (x.simpleUsage ());
+            println (x.diagnosis (err));
+        }
+        _ : &HelpRequired => {
+            println (x.usage ());
+        }
+        err: _ => {
+            println (err);
+        }
+    }
+
+}

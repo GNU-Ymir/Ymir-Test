@@ -1,0 +1,13 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+  - ./a.out -h
+  - ./a.out 1 2
+  - ./a.out 1 2 --useless 9
+  - ./a.out 1 2 3 --useless 89 --sum
+  - ./a.out 1 2 3 --useless 89 --sum -v
+  - ./a.out 1 2 3 --useless 89 --sum --verbose
+stdout:
+  file: out.txt
+clean: rm a.out

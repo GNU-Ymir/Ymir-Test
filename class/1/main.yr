@@ -1,0 +1,20 @@
+import std::io;
+
+class Z {
+    let _y : &X = X::new ();
+
+    pub self () {}
+    
+}
+
+class X {
+
+    let _y : &Z;
+    
+    pub self () with _y = Z::new () {
+    }
+    
+}
+
+def main () {
+}
