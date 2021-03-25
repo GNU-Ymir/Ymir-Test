@@ -1,0 +1,18 @@
+import std::io;
+
+def foo (a : i32, b : [c32]) {
+    println (a, " ", b);
+}
+
+def main () {
+    let x = &foo;
+    let y : (fn (i32, [c32])-> void) = &foo;
+    let z = |x : i32, c : [c32]| => {
+        println (x, " ", c);
+    }
+
+    let u = (1, "bar");
+    x (1, "foo");
+    y (expand u);
+    z (2, "baz");
+}

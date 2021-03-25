@@ -4,6 +4,7 @@ usage: [--h] [--sum] [--v] [--o str] --useless int [ int... ](N)
 
 positional arguments : 
 	      N	list of integers to process
+
 required arguments : 
 	    --useless	
 
