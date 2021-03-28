@@ -7,6 +7,7 @@ Error : discard the constant qualifier is prohibited, left operand mutability le
     ┃  5  ┃     let ref mut y : [mut i32] = ref x;
     ┃     ╋                                     ^
     ┗━━━━━┻━ 
+
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
  --> main.yr:(6,13)
  6  ┃     let mut y : [mut i32] = alias x;
@@ -16,6 +17,7 @@ Error : discard the constant qualifier is prohibited, left operand mutability le
     ┃  6  ┃     let mut y : [mut i32] = alias x;
     ┃     ╋                             ^^^^^
     ┗━━━━━┻━ 
+
 Error : undefined symbol y
  --> main.yr:(8,5)
  8  ┃     y = [7, 8, 9]; // modify the value pointed by the reference (in the stack)

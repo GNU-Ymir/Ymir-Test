@@ -8,5 +8,6 @@ Error : discard the constant qualifier is prohibited, left operand mutability le
     ┃     ╋                  ^
     ┗━━━━━┻━ 
 
+
 ymir1: fatal error: 
 compilation terminated.

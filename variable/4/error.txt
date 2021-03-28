@@ -8,5 +8,6 @@ Error : declaration of x shadows another declaration
     ┃     ╋         ^
     ┗━━━━━┻━ 
 
+
 ymir1: fatal error: 
 compilation terminated.

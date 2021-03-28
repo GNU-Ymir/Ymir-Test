@@ -7,6 +7,7 @@ Error : discard the constant qualifier is prohibited, left operand mutability le
     ┃  4  ┃     let dmut x = alias "hello !";
     ┃     ╋                  ^^^^^
     ┗━━━━━┻━ 
+
 Error : undefined symbol x
  --> error.yr:(5,5)
  5  ┃     x [0] = 'H'; // Well done

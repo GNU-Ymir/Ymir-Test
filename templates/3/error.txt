@@ -10,5 +10,6 @@ Error : the call operator is not defined for type foo (T)(_ : [[c32]] = [])-> vo
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 
 
+
 ymir1: fatal error: 
 compilation terminated.

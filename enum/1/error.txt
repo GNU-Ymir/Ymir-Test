@@ -11,5 +11,6 @@ Error : the call operator is not defined for type main::bar and {mut [c32]}
     ┃     ┗━━━━━━ 
     ┗━━━━━┻━ 
 
+
 ymir1: fatal error: 
 compilation terminated.

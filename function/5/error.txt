@@ -8,5 +8,6 @@ Error : incompatible types i32 and void
     ┃     ╋ ^
     ┗━━━━━┻━ 
 
+
 ymir1: fatal error: 
 compilation terminated.
