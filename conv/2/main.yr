@@ -1,0 +1,17 @@
+import std::conv;
+
+def main ()
+    throws &AssertError, &CastFailure
+{
+    assert (("12").to!i32 () == 12);
+    assert (("-12").to!i32 () == -12);
+    assert (("12").to!u32 () == 12u32);
+    assert (("123456789").to!u64 () == 123456789u64);
+    assert (("-123456789").to!i64 () == -123456789i64);
+
+    assert (("12"s8).to!i32 () == 12);
+    assert (("-12"s8).to!i32 () == -12);
+    assert (("12"s8).to!u32 () == 12u32);
+    assert (("123456789"s8).to!u64 () == 123456789u64);
+    assert (("-123456789"s8).to!i64 () == -123456789i64);
+}
