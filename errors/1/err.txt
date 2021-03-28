@@ -1,0 +1,8 @@
+Error : undefined sub symbol foo for element {std::io::print (c : c8)-> void, std::io::print (c : c32)-> void, ..., std::io::print (s : [c32])-> void} x 28
+ --> main.yr:(4,10)
+ 4  ┃     print::foo ();
+    ╋          ^^^^^
+
+
+ymir1: fatal error: 
+compilation terminated.

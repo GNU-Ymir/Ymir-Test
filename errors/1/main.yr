@@ -1,0 +1,5 @@
+import std::io;
+
+def main () {
+    print::foo ();
+}
