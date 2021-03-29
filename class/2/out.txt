@@ -1,0 +1,5 @@
+main::Baz()
+Destruct of Baz
+Destruct of Bar
+Destruct of Foo
+=============

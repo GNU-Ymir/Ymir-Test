@@ -1,0 +1,42 @@
+import std::io;
+
+class Foo {
+    pub self () {}
+    
+    __dtor (mut self) {
+        println ("Destruct of Foo");
+        println ("=============");
+    }
+}
+
+class Bar over Foo {
+    pub self () {}
+
+    __dtor (mut self) {
+        println ("Destruct of Bar");
+    }
+}
+
+pub class Baz over Bar {
+    pub self () {}
+    
+    __dtor (mut self) {
+        println ("Destruct of Baz");
+    }
+    
+    impl Printable;
+}
+
+extern (C) def GC_gcollect ();
+
+def foo () {
+    let x = Baz::new ();
+    println (x);
+}
+
+def main () {
+    {
+        foo ();
+    }
+    GC_gcollect ();
+}

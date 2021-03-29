@@ -1,8 +1,8 @@
-Error : the call operator is not defined for type foo (T)(_ : [[c32]] = [])-> void and {}
+Error : the call operator is not defined for foo {T}(_ : [[c32]] = [])-> void and {}
  --> main.yr:(4,9)
  4  ┃     foo ();
     ╋         ^^
-    ┃ Note : candidate foo --> main.yr:(1,5) : foo (T)(_ : [[c32]] = [])-> void
+    ┃ Note : candidate foo --> main.yr:(1,5) : foo {T}(_ : [[c32]] = [])-> void
     ┃     ┃ Error : unresolved template
     ┃     ┃  --> main.yr:(1,10)
     ┃     ┃  1  ┃ def foo <T> (_ : [[c32]] = []) {}

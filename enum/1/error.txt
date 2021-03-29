@@ -1,4 +1,4 @@
-Error : the call operator is not defined for type main::bar and {mut [c32]}
+Error : the call operator is not defined for main::bar and {mut [c32]}
  --> main.yr:(28,9)
 28  ┃     bar ("Mon")
     ╋         ^     ^
