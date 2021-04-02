@@ -1,1 +1,18 @@
+Error : undefined operator + for types i32 and f64
+ --> main.yr:(4,7)
+ 4  ┃     a + 2.3
+    ╋       ^
 
+Error : undefined operator + for types i32 and f64
+ --> main.yr:(8,11)
+ 8  ┃     a [0] + 2.3
+    ╋           ^
+
+Error : undefined operator + for types i32 and f32
+ --> main.yr:(12,7)
+12  ┃     a + b
+    ╋       ^
+
+
+ymir1: fatal error: 
+compilation terminated.
