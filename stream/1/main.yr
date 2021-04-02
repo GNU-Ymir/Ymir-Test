@@ -1,0 +1,15 @@
+import std::io;
+import std::stream;
+
+
+def main () {
+    let dmut str = StringStream::new ();
+    str:.write ("Salut ", 9, " ", 2.3, " {\n");
+    str:.entabing ();
+    for i in 0 .. 10 {
+        str:.write (i, "\n");
+    }
+    str:.detabing ();
+    str:.write ("}");
+    println (str);
+}

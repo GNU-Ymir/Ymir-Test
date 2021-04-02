@@ -67,6 +67,12 @@ class ColoredLogger(logging.Logger):
         
     
 
+def diff (a : str, b : str):
+    for i in range (0, min (len (a), len (b))):
+        if (a [i] != b [i]):
+            return "At : " + str (i) + " (" + str (a [:i+1]) + ":[" + str (a [i]) + "]) (" + str (b [:i]) + ":" + str (b [i]) + ")"
+    return "Diff len"
+        
 def checkStdout (yml: dict, text : str, cwd : str):    
     if (type (yml) is dict) :
         with open (cwd + "/" + yml["file"]) as stream:
@@ -113,6 +119,7 @@ def parseTest (path : str):
                 logging.Logger.error ("Test failed " + path);
                 logging.Logger.error ("Expected compile out : [" + txt + "]")
                 logging.Logger.error ("Got : [" + compile_out + "]")
+                logging.Logger.error ("Diff : [" + diff (compile_out, txt) + "]")
                 failed = True                    
 
             test_compile_err = ""
@@ -125,6 +132,7 @@ def parseTest (path : str):
                 logging.Logger.error ("Test failed " + path);
                 logging.Logger.error ("Expected compile err : [" + txt + "]")
                 logging.Logger.error ("Got : [" + compile_err + "]")
+                logging.Logger.error ("Diff : [" + diff (compile_err, txt) + "]")
                 failed = True                
                 
             if ("run" in yamlContent):
@@ -152,6 +160,7 @@ def parseTest (path : str):
                     logging.Logger.error ("Test failed " + path);
                     logging.Logger.error ("Expected stdout : [" + txt + "]")
                     logging.Logger.error ("Got : [" + output + "]")
+                    logging.Logger.error ("Diff : [" + diff (output, txt) + "]")
 
                     failed = True
 
@@ -164,6 +173,7 @@ def parseTest (path : str):
                     logging.Logger.error ("Test failed " + path);
                     logging.Logger.error ("Expected stderr : [" + txt + "]")
                     logging.Logger.error ("Got : [" + err + "]")
+                    logging.Logger.error ("Diff : [" + diff (err, txt) + "]")
                     failed = True
 
             if ("clean" in yamlContent):
@@ -220,7 +230,7 @@ def main (args: Any):
     if (args.test != None):
         try : 
             parseTest (args.test)
-        except :
+        except:
             logging.Logger.error ("Test failed " + args.test);
     else :
         parsePlaybook (args.playbook)

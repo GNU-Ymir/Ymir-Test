@@ -1,0 +1,13 @@
+
+
+def foo {T of i32} (a : T) -> T {
+    a + 2.3
+}
+
+def bar {T of [U], U of i32} (a : T)-> T {
+    a [0] + 2.3
+}
+
+def baz {x : [c32] = "+"} (a : i32, b : f32) -> i32 {
+    a + b
+}

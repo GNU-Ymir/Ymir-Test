@@ -1,0 +1,15 @@
+import std::io, std::conv;
+import std::concurrency::process;
+
+def main () {
+    let dmut proc = SubProcess::run ("sort"s8, []);
+
+    for i in 1 .. 10 {
+        proc:.stdin ():.write ((10 - i).to![c8] ());
+        proc:.stdin ():.write ("\n"s8);
+    }
+        
+    proc:.stdin ():.close ();
+    println (proc:.wait ());
+    print (proc:.stdout ():.read ());
+}

@@ -18,3 +18,5 @@ sub-playbooks:
   - class/playbook.yml
   - args/playbook.yml
   - errors/playbook.yml
+  - stream/playbook.yml
+  - process/playbook.yml
