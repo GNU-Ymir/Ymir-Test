@@ -1,0 +1,6 @@
+mod foo;
+import std::io;
+
+pub def foo () {
+    println ("foo");
+}

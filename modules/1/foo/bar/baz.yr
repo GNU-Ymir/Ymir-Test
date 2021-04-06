@@ -1,0 +1,6 @@
+mod foo::bar::baz;
+import std::io;
+
+pub def baz () {
+    println ("baz");
+}

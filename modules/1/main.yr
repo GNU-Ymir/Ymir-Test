@@ -1,0 +1,17 @@
+import foo::bar;
+import foo;
+import foo::bar::baz;
+
+def main () {
+    foo ();
+    foo::foo ();
+
+    bar ();
+    bar::bar ();
+    foo::bar::bar ();
+
+    baz ();
+    baz::baz ();
+    bar::baz::baz ();
+    foo::bar::baz::baz ();
+}

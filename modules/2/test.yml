@@ -1,0 +1,4 @@
+compile:
+  - gyc main.yr baz.yr
+run: ./a.out
+clean: rm a.out

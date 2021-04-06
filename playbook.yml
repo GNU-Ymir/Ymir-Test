@@ -20,3 +20,4 @@ sub-playbooks:
   - errors/playbook.yml
   - stream/playbook.yml
   - process/playbook.yml
+  - modules/playbook.yml
