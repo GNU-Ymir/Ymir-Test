@@ -10,7 +10,7 @@ class X {
     
     pub self (i : i32, f : f64) with _i = i, _f = f {}
     
-    impl Serializable {
+    impl std::config::conv::Serializable {
         pub over serialize (self)-> &Config {
             let dmut d = Dict::new ();
             d:.insert ("Foo", Int::new (self._i));
