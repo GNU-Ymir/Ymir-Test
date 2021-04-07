@@ -1,10 +1,12 @@
 import std::io;
 import std::fs::file;
+import std::fs::errors;
+import std::fs::path;
 
 def main ()
-    throws &FileError, &AssertError
+    throws &FsError, &AssertError
 {
-    let str = with dmut file = File::open ("test.txt") {
+    let str = with dmut file = File::open (Path::new ("test.txt")) {
         file:.readAll ()
     }    
     assert (str == "Hello World!!\n"s8);

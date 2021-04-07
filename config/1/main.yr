@@ -2,10 +2,12 @@ import std::io;
 import std::config::toml;
 import std::config;
 import std::fs::file;
+import std::fs::path;
+import std::fs::errors;
 
 def main ()
 {
-    with dmut f = File::open ("in.toml") {
+    with dmut f = File::open (Path::new ("in.toml")) {
         let str = f:.readAll ();
         let cfg : &Dict = parse (str);
 

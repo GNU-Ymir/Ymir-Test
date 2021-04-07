@@ -1,10 +1,13 @@
 import std::io;
 import std::fs::file;
+import std::fs::path;
+import std::fs::errors;
+import std::fs;
 
 def main ()
-    throws &FileError
+    throws &FsError
 {
-    with dmut file = File::create ("test.txt", write-> true) {
+    with dmut file = File::create (Path::new ("test.txt"), write-> true) {
         file:.write ("Hello World!!\n"s8);
     }
 }

@@ -1,0 +1,16 @@
+mod main;
+
+mod Test {
+
+    pub def foo () {
+        Test::bar ();
+        bar ();
+    }
+
+    def bar () { }
+
+}
+
+def main () {
+    Test::foo ();
+}

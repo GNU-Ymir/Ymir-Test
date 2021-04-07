@@ -1,10 +1,11 @@
 import std::config::toml;
 import std::fs::file;
+import std::fs::path;
 import std::io;
 import std::conv;
 
 def main () {    
-    with dmut file = File::open ("in.toml") {
+    with dmut file = File::open (Path::new ("in.toml")) {
         let config = file:.readAll ().parse ();
         println (config);
     } catch {

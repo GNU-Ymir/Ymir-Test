@@ -1,0 +1,23 @@
+Creation : ====================== 
+.
+	| out.txt
+	| main.yr
+	| test
+	| 	| file.txt
+	| a.out
+	| test.yml
+
+================================= 
+Deletion : ====================== 
+.
+	| out.txt
+	| main.yr
+	| a.out
+	| test.yml
+
+================================= 
+.:
+a.out
+main.yr
+out.txt
+test.yml
