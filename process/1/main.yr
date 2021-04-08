@@ -9,7 +9,7 @@ def main () {
         proc:.stdin ():.write ("\n"s8);
     }
         
-    proc:.stdin ():.close ();
+    proc:.stdin ():.dispose ();
     println (proc:.wait ());
     print (proc:.stdout ():.read ());
 }

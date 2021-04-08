@@ -1,6 +1,6 @@
-usage: [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
+usage [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
 Missing argument 'N' of type '[int... ]'
-usage: [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
+usage [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
 
 positional arguments : 
 	      N	list of integers to process
@@ -14,7 +14,7 @@ optional arguments :
 	-v, --verbose	prints the intermediate operations
 	-o, --output	does nothing
 
-usage: [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
+usage [--h] [--sum] [--v] [--o str] --useless int [ int... ](N) 
 Missing argument 'useless' of type 'int'
 2
 6
