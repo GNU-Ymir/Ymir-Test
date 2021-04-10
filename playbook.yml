@@ -21,3 +21,4 @@ sub-playbooks:
   - stream/playbook.yml
   - process/playbook.yml
   - modules/playbook.yml
+  - time/playbook.yml

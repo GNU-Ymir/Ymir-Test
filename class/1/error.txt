@@ -21,14 +21,18 @@ Error : when validating main::X
  --> main.yr:(10,7)
 10  ┃ class X {
     ╋       ^
-    ┃ Note : 
-    ┃  --> main.yr:(12,14)
-    ┃ 12  ┃     let _y : &Z;
-    ┃     ╋              ^
-    ┃     ┃ Error : the type main::Z is not complete due to previous errors
-    ┃     ┃  --> main.yr:(3,7)
-    ┃     ┃  3  ┃ class Z {
-    ┃     ┃     ╋       ^
+    ┃ Error : infinite construction loop
+    ┃  --> main.yr:(4,26)
+    ┃  4  ┃     let _y : &X = X::new ();
+    ┃     ╋                          ^
+    ┃     ┃ Note : self ()-> mut &(mut main::X)
+    ┃     ┃  --> main.yr:(14,34)
+    ┃     ┃ 14  ┃     pub self () with _y = Z::new () {
+    ┃     ┃     ╋                                  ^
+    ┃     ┃ Note : self ()-> mut &(mut main::Z)
+    ┃     ┃  --> main.yr:(4,26)
+    ┃     ┃  4  ┃     let _y : &X = X::new ();
+    ┃     ┃     ╋                          ^
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 
 
