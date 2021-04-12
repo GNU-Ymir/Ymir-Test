@@ -1,0 +1,26 @@
+import std::io;    
+
+def foo (a : bool)-> mut (mut [i32])? {
+    alias if (a) {
+        ([12])?
+    } else {
+        (dmut ([i32])?)::__err__
+    }
+}
+
+
+def main ()
+    throws &OutOfArray
+{
+    let a : ([i32])? = foo (true);
+    match ref a {
+        Ok (ref dmut cfg : _) => {
+            cfg = [1, 2];
+            cfg [0] = 9;
+        }
+    }
+    
+    let dmut b = foo (true);
+    
+    println (a);
+} 

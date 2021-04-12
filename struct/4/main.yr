@@ -1,0 +1,22 @@
+import std::io;
+
+class Z {
+    pub let mut x = 1;
+    pub self (x : i32) with x = x {}
+}
+
+struct
+| mut a : &Z
+ -> X;
+    
+def foo (a : X)-> mut X {
+    a
+}
+
+def main ()
+{
+    let a = X (Z::new (1));
+    let mut b = a;
+    b.a = Z::new (98);
+    println (a.a.x, " ", b.a.x);
+} 

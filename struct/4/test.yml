@@ -1,0 +1,8 @@
+compile:
+  - gyc main.yr -o main1
+  - gyc main_error.yr -o main2
+run: ./main1
+stdout: "1 98\n"
+compile_err:
+  file: error.txt
+clean: rm main1

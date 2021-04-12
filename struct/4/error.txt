@@ -1,0 +1,8 @@
+Error : left operand of type i32 is immutable
+ --> main_error.yr:(20,8)
+20  ┃     b.a.x = 98;
+    ╋        ^
+
+
+ymir1: fatal error: 
+compilation terminated.

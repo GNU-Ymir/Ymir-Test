@@ -1,0 +1,8 @@
+compile:
+  - gyc main.yr -o main
+  - gyc main_error.yr -o main_error
+run: ./main
+stdout: "Ok([9, 2])\nOk([48, 3])\n"
+clean: rm main
+compile_err:
+  file: error.txt
