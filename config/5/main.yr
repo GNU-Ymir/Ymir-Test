@@ -1,0 +1,35 @@
+import std::io;    
+import std::config::conv;
+import std::config::toml, std::fs::_;
+import std::config;
+
+class Z {
+    let x : i32;
+    
+    pub self (_ : &Config) with x = 0 {
+
+    }
+    pub self () with x = 1 {}
+    impl Printable;
+    
+}
+
+struct
+| mut a : i32
+| dmut z : &Z
+ -> X;
+
+/**
+ * Main function
+ */
+def main ()
+{
+    with dmut f = File::open (Path::new ("test.toml")) {
+        let mut x = toml::parse (f:.readAll ()).to!(X) ();
+        x.a = 8;
+        x.z = Z::new ();
+        println (x);
+    } catch {
+        _ => {}
+    }
+} 
