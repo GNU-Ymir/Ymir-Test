@@ -1,0 +1,56 @@
+import std::io;
+import std::time::_;
+
+trait Test {
+    pub def truc (self) {
+        println ("Test");
+    }
+}
+
+
+class A {
+    
+    pub self () {}
+    pub def opEquals (self, _ : &A) -> bool {
+        true
+    }
+    
+    impl Test;
+    
+}
+
+class C over A {
+    pub self () {}
+    pub def foo (self, _ : bool, b : &B!{&C} = { B!{&C}::new () }) {
+        println ("In second foo");
+        b.bar ();
+    }
+}
+
+class B {T impl Test} {
+       
+    pub self () {
+        println ("B");
+    }
+
+    cte if (__pragma!compile ({
+        let a = T::new ();
+        a.opEquals (a)
+    })) {
+        
+        pub def bar (self)-> &B {
+            println ("ici");
+            B::new ()
+        }
+    }
+    
+}
+
+/**
+ * Main function
+ */
+def main ()
+{
+    let a = C::new ();
+    a.foo (false);
+} 

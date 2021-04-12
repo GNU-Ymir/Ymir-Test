@@ -1,0 +1,31 @@
+import std::io;
+
+class Z {
+    pub let mut x = 1;
+    pub self () {}
+
+    impl Copiable {
+        pub over deepCopy (self)-> dmut &Z {
+            let dmut r = Z::new ();
+            r.x = self.x;
+            alias r
+        }
+    }
+}
+
+struct
+| dmut a : &Z
+ -> X;
+    
+def foo (a : X)-> mut X {
+    a
+}
+
+def main ()
+{
+    let a = X (Z::new ());
+    let mut b = foo (a);
+    let mut c = a;
+    b.a.x = 98;
+    println (a.a.x, " ", b.a.x);
+} 
