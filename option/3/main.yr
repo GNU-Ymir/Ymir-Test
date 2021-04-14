@@ -1,0 +1,32 @@
+import std::io;    
+
+class Z {
+    let x : i32 ;
+    
+    pub self (x : i32) with x = x {}
+    impl Printable;
+    
+}
+
+struct
+| mut a : i32
+| dmut z : &Z
+ -> X;
+
+def test (a : bool)-> mut (mut X)? {
+     alias if (a) {
+        let mut x = X (12, Z::new (23));
+        (alias x)?
+    } else {
+        (dmut (X)?)::__err__
+    }
+}
+
+/**
+ * Main function
+ */
+def main ()
+{
+    let dmut a = test (true);
+    println (a);
+} 

@@ -2,17 +2,24 @@ import std::io;
 import std::time::_;
 
 trait Test {
-    pub def truc (self) {
-        println ("Test");
+    pub def baz (self) {
+        println (self::typeinfo.name, " baz");
     }
 }
 
-
 class A {
     
-    pub self () {}
+    pub self () {
+        println ("new A");
+    }
+    
     pub def opEquals (self, _ : &A) -> bool {
         true
+    }
+
+    pub def foo (self, b : &B!{&A} = { B!{&A}::new () }) {
+        println ("A foo");
+        b.bar ();
     }
     
     impl Test;
@@ -20,9 +27,12 @@ class A {
 }
 
 class C over A {
-    pub self () {}
+    pub self () {
+        println ("new C");
+    }
+    
     pub def foo (self, _ : bool, b : &B!{&C} = { B!{&C}::new () }) {
-        println ("In second foo");
+        println ("C foo");
         b.bar ();
     }
 }
@@ -30,16 +40,14 @@ class C over A {
 class B {T impl Test} {
        
     pub self () {
-        println ("B");
+        println ("new B");
     }
 
-    cte if (__pragma!compile ({
-        let a = T::new ();
-        a.opEquals (a)
-    })) {
-        
+    cte if (__pragma!operator ("==", T, T)) {        
         pub def bar (self)-> &B {
-            println ("ici");
+            println ("B bar");
+            let z = T::new ();
+            z.baz ();
             B::new ()
         }
     }
@@ -51,6 +59,12 @@ class B {T impl Test} {
  */
 def main ()
 {
-    let a = C::new ();
-    a.foo (false);
+    let a = A::new ();
+    a.foo ();
+
+    println ("=====");
+    
+    let c = C::new ();
+    c.foo (false);
+    
 } 

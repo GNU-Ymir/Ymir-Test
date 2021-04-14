@@ -1,0 +1,12 @@
+import std::io;
+
+def foo () -> [i32] {
+    println ("Call foo");
+    [1, 2, 3, 4]
+}
+
+def main () {
+    for i in foo () {
+        println (i);
+    }
+}

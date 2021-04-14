@@ -1,0 +1,23 @@
+import std::io;
+
+def foo ()-> i32 {
+    println ("in foo");
+    12
+}
+
+class X {
+
+    let a = foo ();
+
+    pub self (a : i32) with a = a {}
+
+    pub self () {}
+
+    impl Printable;
+}
+
+def main () {
+    let a = X::new ();
+    let b = X::new (23);
+    println (a, " ", b);
+}

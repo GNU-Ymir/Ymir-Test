@@ -1,0 +1,17 @@
+new A
+new B
+A foo
+B bar
+new A
+main::A baz
+new B
+=====
+new A
+new C
+new B
+C foo
+B bar
+new A
+new C
+main::C baz
+new B
