@@ -24,7 +24,7 @@ def main (args : [[c8]]) {
             let mut res = f.N [0];
             for i in f.N[1u64..$] {
                 if (f.verbose) println (res, " + ", i, " = ", res + i);
-                res += i
+                res += i;
             }
             println (res);
         } else {

@@ -1,24 +1,26 @@
 sub-playbooks:
-  - hello_world/playbook.yml
+  - args/playbook.yml
   - basic_types/playbook.yml
-  - variable/playbook.yml
-  - files/playbook.yml
-  - templates/playbook.yml
-  - option/playbook.yml
-  - function/playbook.yml
-  - loops/playbook.yml
-  - mutability/playbook.yml
-  - struct/playbook.yml
-  - enum/playbook.yml
-  - match/playbook.yml
-  - tokenizer/playbook.yml
+  - class/playbook.yml
   - config/playbook.yml
   - conv/playbook.yml
-  - monade/playbook.yml
-  - class/playbook.yml
-  - args/playbook.yml
+  - enum/playbook.yml
   - errors/playbook.yml
-  - stream/playbook.yml
-  - process/playbook.yml
+  - files/playbook.yml
+  - function/playbook.yml
+  - global/playbook.yml
+  - hello_world/playbook.yml
+  - loops/playbook.yml
+  - match/playbook.yml
   - modules/playbook.yml
+  - monade/playbook.yml
+  - mutability/playbook.yml
+  - option/playbook.yml
+  - pragma/playbook.yml
+  - process/playbook.yml
+  - stream/playbook.yml
+  - struct/playbook.yml
+  - templates/playbook.yml
   - time/playbook.yml
+  - tokenizer/playbook.yml
+  - variable/playbook.yml

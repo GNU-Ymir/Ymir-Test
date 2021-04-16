@@ -1,0 +1,14 @@
+# I am not sure of this test, it depends on the linkage process
+# The idea is to show that the behavior is predictible but not ideal
+compile:
+  - gyc main.yr foo.yr bar.yr -o fst
+  - gyc foo.yr bar.yr main.yr -o scd
+  - gyc bar.yr foo.yr main.yr -o thd
+run:
+  - ./fst
+  - ./scd
+  - ./thd
+stdout:
+  file: out.txt
+clean: rm ./fst ./scd ./thd
+  

@@ -1,0 +1,5 @@
+mod foo;
+
+import std::io;
+
+pub static __A__ = { println ("__A__"); 90 }

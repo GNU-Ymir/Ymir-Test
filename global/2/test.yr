@@ -1,0 +1,6 @@
+mod test;
+
+import std::io;
+
+pub static __A__ = { println ("__A__"); 2 }
+static __B__ = { println ("__B__"); 2 }

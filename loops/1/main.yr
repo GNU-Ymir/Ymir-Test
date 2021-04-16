@@ -1,10 +1,11 @@
 import std::io
 
 def main () {
-	let mut i = 0;
-	let x = while i < 10 {
-		i += 1	// the value of the while loop will be equal to 'i' at the last iteration	
-	};
-	
-	println ("X is : ", x);
+    let mut i = 0;
+    let x = loop  {
+        i += 1;	// the value of the while loop will be equal to 'i' at the last iteration	
+        if (i >= 10) break {i}
+    };
+    
+    println ("X is : ", x);
 }

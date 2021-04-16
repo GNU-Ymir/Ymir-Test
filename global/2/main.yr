@@ -1,0 +1,6 @@
+import std::io;
+import test;
+
+def main () {
+    println (__A__);
+}

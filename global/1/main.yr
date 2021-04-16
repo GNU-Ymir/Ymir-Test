@@ -1,0 +1,16 @@
+mod main;
+
+import std::io;
+
+static __glob__ = { println ("before foo"); foo () }
+
+def foo ()-> [i32] {
+    println ("in foo");
+    [1, 2, 3]
+}
+
+def main () {
+    println ("in main");
+    println (__glob__);    
+}
+

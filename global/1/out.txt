@@ -1,0 +1,4 @@
+before foo
+in foo
+in main
+[1, 2, 3]

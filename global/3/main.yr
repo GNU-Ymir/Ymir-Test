@@ -1,0 +1,12 @@
+mod main;
+
+import foo;
+import std::io;
+
+static __D__ = foo ();
+
+pub def foo () -> i32 __A__ // some cheating to avoid compiler error
+
+def main () {
+    println (__D__);
+}
