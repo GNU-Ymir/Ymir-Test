@@ -1,0 +1,11 @@
+
+class @final X {Z : usize} {
+    pub self () {}
+    pub def if (T::arity == Z) set {T...} (self, _ : T) {}    
+}
+
+
+def main () {
+    let x = X!{3us}::new ();
+    x.set (1, 2, 3);
+}

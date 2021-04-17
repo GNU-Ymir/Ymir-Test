@@ -22,14 +22,14 @@ def main (args : [[c8]]) {
         let f = x.parse (args);
         if (f.sum) {
             let mut res = f.N [0];
-            for i in f.N[1u64..$] {
+            for i in f.N[1us..$] {
                 if (f.verbose) println (res, " + ", i, " = ", res + i);
                 res += i;
             }
             println (res);
         } else {
             let mut res = f.N [0];
-            for i in f.N [1u64..$] {
+            for i in f.N [1us..$] {
                 if (f.verbose) println (res, " < ", i, " = ", if (res < i) i else res);
                 if (i > res) res = i;
             }

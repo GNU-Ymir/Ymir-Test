@@ -1,0 +1,6 @@
+compile:
+  - gyc bottles99.yr
+compile_out:
+  file: bottles99-out.txt
+run: ./a.out
+clean: rm a.out

@@ -1,0 +1,6 @@
+print string
+print wstring
+يطبع الترميز الموحد
+يطبع الترميز الموحد
+foo_str
+foo_wstr

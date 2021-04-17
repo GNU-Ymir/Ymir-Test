@@ -1,0 +1,7 @@
+compile:
+  - gyc arabic_letters.yr
+run: ./a.out
+compile_out:
+  file: arabic_out.txt
+clean: rm a.out
+  

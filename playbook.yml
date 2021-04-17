@@ -24,3 +24,4 @@ sub-playbooks:
   - time/playbook.yml
   - tokenizer/playbook.yml
   - variable/playbook.yml
+  - compilable/playbook.yml

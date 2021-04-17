@@ -1,0 +1,3 @@
+compile:
+  - gyc templ_size.yr
+clean: rm a.out

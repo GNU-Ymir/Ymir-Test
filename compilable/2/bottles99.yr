@@ -1,0 +1,42 @@
+mod bottles99;
+
+import std::io;
+
+aka decimalDigit{n : usize} = cte ( "0123456789"s8 [n .. n + 1us]);
+
+aka itoa {n : usize} = cte if (n < 10us) {
+    cte decimalDigit!{n}
+} else {
+    cte (itoa!{n / 10us} ~ itoa!{n % 10us})
+}
+
+
+aka showHowMany {n : usize, where : [c8], needCapital : bool} = cte {
+    cte if (n > 1us) {
+        cte itoa!{n} ~ " bottles of beer"s8 ~ where ~ "\n"s8
+    } else cte if (n == 1us) {
+        cte "1 bottle of beer"s8 ~ where ~ "\n"s8
+    } else cte if (needCapital) {
+        cte "No more bottles of beer"s8 ~ where ~ "\n"s8
+    } else {
+        cte "no more bottles of beer"s8 ~ where ~ "\n"s8
+    }
+}
+
+aka beer {maxbeers : usize, n : usize} = 
+    cte if (n > 0us) {
+    cte showHowMany!{n, " on the wall,"s8, true} ~
+        showHowMany!{n, "."s8, false} ~
+        "Take one down and pass it around, \n"s8 ~
+        showHowMany!{n - 1us, " on the wall."s8, false} ~
+        "\n"s8 ~ beer!{maxbeers, n - 1us}
+} else {
+    cte showHowMany!{n, " on the wall,"s8, true} ~
+        showHowMany!{n, "."s8, false} ~
+        "Go to the store and buy some more, \n"s8 ~
+        showHowMany!{maxbeers, " on the wall."s8, false}
+}    
+
+def main () {    
+    __pragma!msg (beer!{99us, 99us});
+}

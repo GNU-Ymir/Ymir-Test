@@ -1,0 +1,10 @@
+class Foo {
+    pub self (){}
+
+    pub def bar (self, _ : typeof (self)) {}
+}
+
+def main () {
+    let f = Foo::new ();
+    f.bar (f);
+}
