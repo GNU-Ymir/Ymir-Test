@@ -1,0 +1,22 @@
+import std::io;
+import std::any;
+import std::concurrency::thread;
+
+def foo (th : Thread) {
+    let msg = th.pipe.read ();
+    match msg {
+        x : &Some!{i32} => {
+            println ("Ping : ", x);
+            th.pipe.write ("Message Received");
+            th.pipe.write (x.unwrap () + 19);
+        }
+    }
+}
+
+def main () {
+    let th = spawn (&foo);
+    th.pipe.write (23);
+    println ("Pong : \n\t", th.pipe.read ());
+    println ("\t", th.pipe.read ());
+    th.join ();
+}

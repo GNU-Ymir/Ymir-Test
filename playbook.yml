@@ -25,3 +25,6 @@ sub-playbooks:
   - tokenizer/playbook.yml
   - variable/playbook.yml
   - compilable/playbook.yml
+  - thread/playbook.yml
+  - exception/playbook.yml
+  - network/playbook.yml

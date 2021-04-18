@@ -1,0 +1,46 @@
+Error : the exception &(fail_compile::E2) might be thrown but is not caught
+ --> fail_compile.yr:(20,13)
+20  ┃         foo (false);
+    ╋             ^
+    ┃ Note : 
+    ┃  --> fail_compile.yr:(21,7)
+    ┃ 21  ┃     } catch {
+    ┃     ╋       ^^^^^
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.
+Error : the function fail_compile2::foo might throw an exception of type &(fail_compile2::E1), but that is not declared in its prototype
+ --> fail_compile2.yr:(11,5)
+11  ┃ def foo (x : bool)
+    ╋     ^^^
+    ┃ Note : 
+    ┃  --> fail_compile2.yr:(14,12)
+    ┃ 14  ┃     if (x) throw E1::new ();
+    ┃     ╋            ^^^^^
+    ┗━━━━━┻━ 
+
+Error : the function fail_compile2::foo might throw an exception of type &(fail_compile2::E2), but that is not declared in its prototype
+ --> fail_compile2.yr:(11,5)
+11  ┃ def foo (x : bool)
+    ╋     ^^^
+    ┃ Note : 
+    ┃  --> fail_compile2.yr:(15,5)
+    ┃ 15  ┃     throw E2::new ();
+    ┃     ╋     ^^^^^
+    ┗━━━━━┻━ 
+
+Error : the function fail_compile2::foo prototype informs about a possible throw of an exception of type &(core::exception::Exception), but this is not true
+ --> fail_compile2.yr:(11,5)
+11  ┃ def foo (x : bool)
+    ╋     ^^^
+    ┃ Note : 
+    ┃  --> fail_compile2.yr:(12,12)
+    ┃ 12  ┃     throws &Exception
+    ┃     ╋            ^
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.

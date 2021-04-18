@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+run: ./a.out
+stdout: "New Client connected\nHello !!\n"
+clean: rm a.out

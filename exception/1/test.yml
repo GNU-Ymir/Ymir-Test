@@ -1,0 +1,9 @@
+compile:
+  - gyc success.yr
+  - gyc fail_compile.yr
+  - gyc fail_compile2.yr
+compile_err:
+  file: error.txt
+run: ./a.out
+stdout: "Caught E2\n"
+clean: rm a.out

@@ -1,0 +1,16 @@
+
+class E1 over Exception {
+    pub let msg = "E1";
+    pub self () {}
+}
+
+class E2 over Exception {
+    pub self () {}
+}
+
+def foo (x : bool)
+    throws &Exception
+{
+    if (x) throw E1::new ();
+    throw E2::new ();
+}

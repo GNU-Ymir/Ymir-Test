@@ -84,7 +84,8 @@ def checkStdout (yml: dict, text : str, cwd : str):
 def parseTest (path : str):    
     with open (path) as stream :
         try :
-            logging.Logger.info ("Running test : " + path)
+            FORMAT = "[\033[31m{0!s}\033[0m]" 
+            logging.Logger.info ("Running test : " + FORMAT.format (path))
             cwd = os.path.dirname (path)
             yamlContent = yaml.load (stream, Loader=yaml.FullLoader)
             output = ""
@@ -202,8 +203,9 @@ def parsePlaybook (path : str):
                     except :
                         logging.Logger.error ("Test failed " + str (cwd + "/" + i));
             if "sub-playbooks" in yamlContent :
-                for i in yamlContent ["sub-playbooks"] :
-                    logging.Logger.info ("Running sub playbook : " + str (i))
+                FORMAT = "[\033[34m{0!s}\033[0m]" 
+                for i in yamlContent ["sub-playbooks"] :                    
+                    logging.Logger.info ("Running sub playbook : " + FORMAT.format (str (i)))
                     parsePlaybook (cwd + "/" + i)
         except yaml.YAMLError as exc :
             print (exc)
