@@ -7,7 +7,7 @@ extern (C) def usleep (nb: i32);
 mod client {
 
     pub def connect () {
-        let dmut client = TcpStream::connect (SockAddrV4::new (Ipv4::LOCALHOST, 4000u16));
+        let dmut client = TcpStream::connect (SockAddrV4::new (Ipv4::LOCALHOST, 8001u16));
         println (client:.rawReceive!{c8} (8us)); // recv of a [c8], of size 8
         client:.close ();
     } catch {
@@ -25,7 +25,7 @@ mod server {
     }
 
     pub def start () {
-        let dmut server = TcpListener::listen (SockAddrV4::new (Ipv4::LOCALHOST, 4000u16));
+        let dmut server = TcpListener::listen (SockAddrV4::new (Ipv4::LOCALHOST, 8001u16));
         {
             let dmut client = server:.accept ();
             println ("New Client connected");
