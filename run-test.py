@@ -10,6 +10,7 @@ import re
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
+NB_TESTS = 0
 #The background is set with 40 plus the number of the color, and the foreground with 30
 
 #These are the sequences need to get colored ouput
@@ -81,11 +82,12 @@ def checkStdout (yml: dict, text : str, cwd : str):
     else :
         return (yml == text, yml)
 
-def parseTest (path : str):    
+def parseTest (path : str):
+    global NB_TESTS
     with open (path) as stream :
         try :
             FORMAT = "[\033[31m{0!s}\033[0m]" 
-            logging.Logger.info ("Running test : " + FORMAT.format (path))
+            logging.Logger.info ("Running test " + str (NB_TESTS + 1) + " : " + FORMAT.format (path))
             cwd = os.path.dirname (path)
             yamlContent = yaml.load (stream, Loader=yaml.FullLoader)
             output = ""
@@ -182,10 +184,12 @@ def parseTest (path : str):
                 r = subprocess.run (run, cwd=cwd)
 
             if not failed:
-                logging.Logger.success ("Test succeed " + path);
-                
+                logging.Logger.success ("Test succeed " + str (NB_TESTS + 1) + " " + path);
+            
         except yaml.YAMLError as exc :
             logging.Logger.error ("Test failed " + i);
+            
+        NB_TESTS += 1
     
 
     
