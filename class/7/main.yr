@@ -1,0 +1,10 @@
+import std::io
+
+class Foo { pub self () {} impl Printable; }
+class Bar over Foo { pub self () {} impl Printable; }
+    
+def main () {
+    let a = [Bar::new ()];
+    let dmut b : [&Foo] = alias a;
+    println (b);
+}
