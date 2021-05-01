@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+run: ./a.out
+stdout: "[main::Bar()]\n"
+clean: rm a.out

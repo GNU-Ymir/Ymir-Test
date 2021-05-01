@@ -1,0 +1,8 @@
+compile:
+  - gyc main.yr
+  - gyc error.yr
+compile_err:
+  file: error.txt
+run: ./a.out
+stdout: "bar\nbar\nfoo\n"
+clean: rm a.out

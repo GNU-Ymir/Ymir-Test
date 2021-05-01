@@ -1,0 +1,27 @@
+import std::io;
+
+
+class Foo {
+    pub self () {}
+    impl Printable;
+}
+
+class Bar over Foo {
+    pub self () {}
+    impl Printable;
+}
+
+def foo ()-> [&Foo] {
+    [Bar::new ()]
+}
+
+def bar ()-> [&Bar] {
+    [Bar::new ()]
+}
+
+def main () {
+    let mut x = foo ();
+    x = bar ();
+
+    println (x);
+}

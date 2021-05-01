@@ -1,0 +1,49 @@
+import std::io;
+
+class Foo {
+    pub self () {}
+}
+
+class Bar over Foo {
+    pub self () {
+    }
+}
+
+def foo ()-> &Foo {
+    Bar::new ()
+}
+
+def bar ()-> &Bar {
+    Bar::new ()
+}
+
+def baz ()-> &Foo {
+    Foo::new ()
+}
+
+def main () {
+
+    match bar () {
+        Bar () => {
+            println ("bar");
+        }
+    }
+    
+    match foo () {
+        Bar () => {
+            println ("bar");
+        }
+        Foo () => {
+            println ("foo");
+        }
+    }
+
+    match baz () {
+        Bar () => {
+            println ("bar");
+        }
+        Foo () => {
+            println ("foo");
+        }
+    }
+}

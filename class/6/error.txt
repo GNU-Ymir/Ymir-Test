@@ -1,0 +1,17 @@
+Error : incompatible types &(error::Bar) and &(error::Foo)
+ --> error.yr:(22,15)
+22  ┃     match bar () {
+    ╋               ^
+    ┃ Note : 
+    ┃  --> error.yr:(26,9)
+    ┃ 26  ┃         Foo () => {
+    ┃     ╋         ^^^
+    ┃ Note : in pattern
+    ┃  --> error.yr:(22,15)
+    ┃ 22  ┃     match bar () {
+    ┃     ╋               ^
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.
