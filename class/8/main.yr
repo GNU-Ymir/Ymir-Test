@@ -1,0 +1,12 @@
+
+class Foo {
+    pub self () {}
+}
+
+class Bar over Foo {
+    pub self () {}
+}
+
+def main () {
+    let _ : &Bar = Foo::new ();
+}

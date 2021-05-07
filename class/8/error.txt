@@ -1,0 +1,8 @@
+Error : incompatible types &(main::Bar) and mut &(mut main::Foo)
+ --> main.yr:(11,9)
+11  ┃     let _ : &Bar = Foo::new ();
+    ╋         ^
+
+
+ymir1: fatal error: 
+compilation terminated.

@@ -1,0 +1,13 @@
+Error : incompatible types ([[void]],) and mut (mut [mut [c32]],)
+ --> main.yr:(17,26)
+17  ┃ def bad ()-> ([[void]],) {
+    ╋                          ^
+    ┃ Note : 
+    ┃  --> main.yr:(18,5)
+    ┃ 18  ┃     ([""],)
+    ┃     ╋     ^
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.
