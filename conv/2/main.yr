@@ -57,4 +57,8 @@ def main ()
 
     // hexa
     assert (("0xff").to!{u32, "x"} () == 255u32);
+    assert (("0o7777").to!{u32, "o"} () == 4095u32);
+    assert (("0b1001").to!{u32, "b"} () == 9u32);
+    assert (("-1.23e-01").to!{f64} () == -0.123);
+    assert (("0X1.BC70A3D70A3D7P+6").to!f64 () == 111.11000);
 }

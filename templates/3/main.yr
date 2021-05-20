@@ -1,6 +1,6 @@
-def foo <T> (_ : [[c32]] = []) {}
+def foo {T} (_ : [[c32]] = []) {}
 
 def main () {
     foo ();
-    foo!<i32> ();
+    foo!{i32} ();
 }

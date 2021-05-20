@@ -28,3 +28,4 @@ sub-playbooks:
   - thread/playbook.yml
   - exception/playbook.yml
   - network/playbook.yml
+  - format/playbook.yml

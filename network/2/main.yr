@@ -9,7 +9,7 @@ class X {
     pub self (i : i32, a : [i32], c : [c8]) with i = i, a = a, c = c {}
 
     impl Packable;
-    impl Printable;
+    impl Streamable;
 }
 
 class Y over X {
@@ -20,7 +20,7 @@ class Y over X {
     pub self (j : i32, x : &X) with super (2, [3, 4, 5], "bar"s8), j = j, x = x {}
 
     impl Packable;
-    impl Printable;    
+    impl Streamable;    
 }
 
 
@@ -29,7 +29,7 @@ def foo () -> [u8] {
 }
 
 def main ()
-    throws &UnpackError
+    // throws &UnpackError
 {
     let packet = foo ();
     println (packet);
@@ -39,4 +39,8 @@ def main ()
         }
     }
     
+} catch {
+    x : _ => {
+        println (x, " ", x.getStackTrace ());
+    }
 }

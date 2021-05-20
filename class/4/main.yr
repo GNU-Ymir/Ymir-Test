@@ -13,7 +13,7 @@ class X {
 
     pub self () {}
 
-    impl Printable;
+    impl Streamable;
 }
 
 def main () {

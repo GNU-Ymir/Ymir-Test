@@ -1,0 +1,19 @@
+import std::format;
+import std::io;
+
+def main ()
+{
+    let f = format ("{{{:=^*.*e}}"s8, 20, 3, 314.0);
+    assert (f == "{=====3.140e+02======}"s8);
+    
+    let f2 = format ("{1:+<*x} {0}"s8, 10, 255u32);
+    assert (f2 == "0xff+++++ 10"s8);
+    
+    let f3 = format ("{1:->10b} {0}"s8, "foo", 4u32); 
+    assert (f3 == "----0b100 foo"s8);
+    
+    let f4 = format ("{} and {}"s8, 1, true);
+    assert (f4 == "1 and true"s8);    
+} catch {
+    x : _ => println (x);
+}

@@ -24,14 +24,16 @@ pub class Baz over Bar {
         println ("Destruct of Baz");
     }
     
-    impl Printable;
+    impl Streamable;
 }
 
 extern (C) def GC_gcollect ();
 
 def foo () {
-    let x = Baz::new ();
-    println (x);
+    for _ in 0 .. 10 {
+        let x = Baz::new ();
+        println (x);
+    }
 }
 
 def main () {

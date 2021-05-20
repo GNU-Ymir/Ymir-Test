@@ -1,7 +1,7 @@
 import std::io
 
-class Foo { pub self () {} impl Printable; }
-class Bar over Foo { pub self () {} impl Printable; }
+class Foo { pub self () {} impl Streamable; }
+class Bar over Foo { pub self () {} impl Streamable; }
     
 def main () {
     let a = [Bar::new ()];

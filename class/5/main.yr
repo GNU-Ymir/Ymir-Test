@@ -3,12 +3,12 @@ import std::io;
 
 class Foo {
     pub self () {}
-    impl Printable;
+    impl Streamable;
 }
 
 class Bar over Foo {
     pub self () {}
-    impl Printable;
+    impl Streamable;
 }
 
 def foo ()-> [&Foo] {

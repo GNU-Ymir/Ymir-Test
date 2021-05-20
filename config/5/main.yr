@@ -10,7 +10,7 @@ class Z {
 
     }
     pub self () with x = 1 {}
-    impl Printable;
+    impl Streamable;
     
 }
 

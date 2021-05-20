@@ -71,7 +71,7 @@ class ColoredLogger(logging.Logger):
 def diff (a : str, b : str):
     for i in range (0, min (len (a), len (b))):
         if (a [i] != b [i]):
-            return "At : " + str (i) + " (" + str (a [:i+1]) + ":[" + str (a [i]) + "]) (" + str (b [:i]) + ":" + str (b [i]) + ")"
+            return "At : " + str (i) + " (" + str (a [:i+1]) + ":[" + str (a [i]) + "](" + str (ord (a[i])) + ")) (" + str (b [:i]) + ":[" + str (b [i]) + "](" + str (ord (b[i])) + "))"
     return "Diff len"
         
 def checkStdout (yml: dict, text : str, cwd : str):    
@@ -151,7 +151,7 @@ def parseTest (path : str):
                         r = subprocess.run (run, cwd=cwd, capture_output=True)
                         output = output + ansi_escape.sub('', (r.stdout.decode("utf-8")))
                         err = err + ansi_escape.sub('', (r.stderr.decode ("utf-8")))
-                except :
+                except Exception :
                     failed = True
                     
                 test_stdout = ""
@@ -204,7 +204,7 @@ def parsePlaybook (path : str):
                 for i in yamlContent["tests"] :
                     try: 
                         parseTest (cwd + "/" + i)
-                    except :
+                    except Exception :
                         logging.Logger.error ("Test failed " + str (cwd + "/" + i));
             if "sub-playbooks" in yamlContent :
                 FORMAT = "[\033[34m{0!s}\033[0m]" 
@@ -236,7 +236,7 @@ def main (args: Any):
     if (args.test != None):
         try : 
             parseTest (args.test)
-        except:
+        except Exception :
             logging.Logger.error ("Test failed " + args.test);
     else :
         parsePlaybook (args.playbook)

@@ -23,7 +23,7 @@ class Z {
         }
     }
 
-    impl std::io::Printable;
+    impl Streamable;
 }
 
 def foo {T of [c32]} ()-> [c32] {

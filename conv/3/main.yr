@@ -1,0 +1,18 @@
+import std::conv;
+
+def main ()
+    throws &AssertError
+{
+    assert ((123).to![c32] () == "123");
+    assert ((123u32).to!{[c32], "x"} () == "0x7b");
+    assert ((123u32).to!{[c32], "b"} () == "0b1111011");
+    assert ((123u32).to!{[c32], "o"} () == "0o173");
+
+    assert ((123).to![c8] () == "123"s8);
+    assert ((123u32).to!{[c8], "x"} () == "0x7b"s8);
+    assert ((123u32).to!{[c8], "b"} () == "0b1111011"s8);
+    assert ((123u32).to!{[c8], "o"} () == "0o173"s8);
+
+    assert ((123.0).to!{[c32], "e"} (prec-> 9u32) == "1.230000000e+02");
+    assert ((123.0).to!{[c8], "e"} (prec-> 9u32) == "1.230000000e+02"s8);
+}

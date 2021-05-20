@@ -5,7 +5,7 @@ Error : the call operator is not defined for foo {T}(_ : [[c32]] = [])-> void an
     ┃ Note : candidate foo --> main.yr:(1,5) : foo {T}(_ : [[c32]] = [])-> void
     ┃     ┃ Error : unresolved template
     ┃     ┃  --> main.yr:(1,10)
-    ┃     ┃  1  ┃ def foo <T> (_ : [[c32]] = []) {}
+    ┃     ┃  1  ┃ def foo {T} (_ : [[c32]] = []) {}
     ┃     ┃     ╋          ^
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 

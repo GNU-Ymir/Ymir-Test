@@ -9,7 +9,7 @@ mod client {
     pub def connect () {
         let dmut client = TcpStream::connect (SockAddrV4::new (Ipv4::LOCALHOST, 8001u16));
         println (client:.rawReceive!{c8} (8us)); // recv of a [c8], of size 8
-        client:.close ();
+        client:.dispose ();
     } catch {
         x : _ => {
             println ("Client TCP error : ", x);
@@ -20,7 +20,9 @@ mod client {
 
 mod server {
 
-    pub def greetClient (dmut client : &TcpStream) {
+    pub def greetClient (dmut client : &TcpStream)
+        throws &TcpError
+    {
         client:.rawSend ("Hello !!"s8);
     }
 
@@ -30,9 +32,9 @@ mod server {
             let dmut client = server:.accept ();
             println ("New Client connected");
             greetClient (alias client);
-            client:.close ();
+            client:.dispose ();
         }
-        server:.close ();
+        server:.dispose ();
     } catch {
         x : _ => {
             println ("Server TCP error : ", x);            

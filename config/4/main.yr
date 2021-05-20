@@ -19,7 +19,7 @@ class X {
         }
     }
 
-    impl Printable;
+    impl Streamable;
 }
 
 struct
