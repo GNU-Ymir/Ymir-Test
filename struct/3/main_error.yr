@@ -4,13 +4,7 @@ class Z {
     pub let mut x = 1;
     pub self () {}
 
-    impl Copiable {
-        pub over deepCopy (self)-> dmut &Z {
-            let dmut r = Z::new ();
-            r.x = self.x;
-            alias r
-        }
-    }
+    impl Copiable;
 }
 
 struct

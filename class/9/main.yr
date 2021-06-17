@@ -1,0 +1,53 @@
+import std::io;
+
+class A {
+    let dmut a = [1, 2, 3];
+    
+    pub self () {}
+
+    pub def modify (mut self) {
+        self.a [0] += 9;
+    } catch {
+        _ => {}
+    }
+    
+    impl Copiable, Streamable;
+}
+
+class Y {
+    pub self () {
+    }
+
+    impl Streamable, Copiable;
+}
+
+
+class X over A {
+    let mut x = 98;
+    let truc = Y::new ();
+    
+    pub self () {}
+
+    pub over modify (mut self) {
+        self::super:.modify ();
+        self.x += 1;
+    }
+    
+    impl Copiable, Streamable;
+}
+
+
+
+def main () {
+    let dmut x = X::new ();
+    let a = dcopy x;
+    x:.modify ();
+    let b = dcopy x;
+    println (a);
+    println (x);
+    println (b);
+    x:.modify ();
+    println (a);
+    println (x);
+    println (b);
+}

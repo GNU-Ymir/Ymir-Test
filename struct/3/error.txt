@@ -1,28 +1,28 @@
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
- --> main_error.yr:(20,25)
-20  ┃ def foo (a : X)-> mut X {
+ --> main_error.yr:(14,25)
+14  ┃ def foo (a : X)-> mut X {
     ╋                         ^
     ┃ Note : implicit alias of type main_error::X is not allowed, it will implicitly discard constant qualifier
-    ┃  --> main_error.yr:(21,5)
-    ┃ 21  ┃     a
+    ┃  --> main_error.yr:(15,5)
+    ┃ 15  ┃     a
     ┃     ╋     ^
     ┃ Note : implicit alias of type mut &(main_error::Z) is not allowed, it will implicitly discard constant qualifier
-    ┃  --> main_error.yr:(17,8)
-    ┃ 17  ┃ | dmut a : &Z
+    ┃  --> main_error.yr:(11,8)
+    ┃ 11  ┃ | dmut a : &Z
     ┃     ╋        ^
     ┗━━━━━┻━ 
 
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
- --> main_error.yr:(28,13)
-28  ┃     let mut c = a;
+ --> main_error.yr:(22,13)
+22  ┃     let mut c = a;
     ╋             ^
     ┃ Note : implicit alias of type main_error::X is not allowed, it will implicitly discard constant qualifier
-    ┃  --> main_error.yr:(28,17)
-    ┃ 28  ┃     let mut c = a;
+    ┃  --> main_error.yr:(22,17)
+    ┃ 22  ┃     let mut c = a;
     ┃     ╋                 ^
     ┃ Note : implicit alias of type mut &(main_error::Z) is not allowed, it will implicitly discard constant qualifier
-    ┃  --> main_error.yr:(17,8)
-    ┃ 17  ┃ | dmut a : &Z
+    ┃  --> main_error.yr:(11,8)
+    ┃ 11  ┃ | dmut a : &Z
     ┃     ╋        ^
     ┗━━━━━┻━ 
 

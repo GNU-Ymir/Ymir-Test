@@ -1,0 +1,6 @@
+main::X([1, 2, 3], 98, main::Y())
+main::X([10, 2, 3], 99, main::Y())
+main::X([10, 2, 3], 99, main::Y())
+main::X([1, 2, 3], 98, main::Y())
+main::X([19, 2, 3], 100, main::Y())
+main::X([10, 2, 3], 99, main::Y())

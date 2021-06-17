@@ -1,0 +1,8 @@
+compile:
+  - gyc main.yr
+  - gyc main_error.yr
+run: ./a.out
+compile_err:
+  file: error.txt
+stdout:
+  file: out.txt
