@@ -2,18 +2,23 @@ Error : when validating main::Z
  --> main.yr:(3,7)
  3  ┃ class Z {
     ╋       ^
-    ┃ Error : infinite construction loop
-    ┃  --> main.yr:(14,34)
-    ┃ 14  ┃     pub self () with _y = Z::new () {
-    ┃     ╋                                  ^
-    ┃     ┃ Note : self ()-> mut &(mut main::Z)
-    ┃     ┃  --> main.yr:(4,26)
-    ┃     ┃  4  ┃     let _y : &X = X::new ();
-    ┃     ┃     ╋                          ^
-    ┃     ┃ Note : self ()-> mut &(mut main::X)
+    ┃ Note : when validating main::Z::self
+    ┃  --> main.yr:(6,9)
+    ┃  6  ┃     pub self () {}
+    ┃     ╋         ^^^^
+    ┃     ┃ Error : infinite construction loop
     ┃     ┃  --> main.yr:(14,34)
     ┃     ┃ 14  ┃     pub self () with _y = Z::new () {
     ┃     ┃     ╋                                  ^
+    ┃     ┃     ┃ Note : self ()-> mut &(mut main::Z)
+    ┃     ┃     ┃  --> main.yr:(4,26)
+    ┃     ┃     ┃  4  ┃     let _y : &X = X::new ();
+    ┃     ┃     ┃     ╋                          ^
+    ┃     ┃     ┃ Note : self ()-> mut &(mut main::X)
+    ┃     ┃     ┃  --> main.yr:(14,34)
+    ┃     ┃     ┃ 14  ┃     pub self () with _y = Z::new () {
+    ┃     ┃     ┃     ╋                                  ^
+    ┃     ┃     ┗━━━━━┻━ 
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 
 
@@ -21,18 +26,23 @@ Error : when validating main::X
  --> main.yr:(10,7)
 10  ┃ class X {
     ╋       ^
-    ┃ Error : infinite construction loop
-    ┃  --> main.yr:(4,26)
-    ┃  4  ┃     let _y : &X = X::new ();
-    ┃     ╋                          ^
-    ┃     ┃ Note : self ()-> mut &(mut main::X)
-    ┃     ┃  --> main.yr:(14,34)
-    ┃     ┃ 14  ┃     pub self () with _y = Z::new () {
-    ┃     ┃     ╋                                  ^
-    ┃     ┃ Note : self ()-> mut &(mut main::Z)
+    ┃ Note : when validating main::X::self
+    ┃  --> main.yr:(14,9)
+    ┃ 14  ┃     pub self () with _y = Z::new () {
+    ┃     ╋         ^^^^
+    ┃     ┃ Error : infinite construction loop
     ┃     ┃  --> main.yr:(4,26)
     ┃     ┃  4  ┃     let _y : &X = X::new ();
     ┃     ┃     ╋                          ^
+    ┃     ┃     ┃ Note : self ()-> mut &(mut main::X)
+    ┃     ┃     ┃  --> main.yr:(14,34)
+    ┃     ┃     ┃ 14  ┃     pub self () with _y = Z::new () {
+    ┃     ┃     ┃     ╋                                  ^
+    ┃     ┃     ┃ Note : self ()-> mut &(mut main::Z)
+    ┃     ┃     ┃  --> main.yr:(4,26)
+    ┃     ┃     ┃  4  ┃     let _y : &X = X::new ();
+    ┃     ┃     ┃     ╋                          ^
+    ┃     ┃     ┗━━━━━┻━ 
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 
 
