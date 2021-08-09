@@ -1,0 +1,20 @@
+import std::io;
+
+class A {
+    pub let i = 0;
+    pub let a : &A;
+    pub let b : &A;
+
+    pub self () with i = 0, a = self, b = self {}    
+    pub self (i : i32) with i = i, a = self, b = A::new () {}
+
+    impl Streamable;    
+    impl Copiable;
+}
+
+
+def main () {
+    let a = A::new (12);
+    let b = dcopy a;
+    println (b);
+}
