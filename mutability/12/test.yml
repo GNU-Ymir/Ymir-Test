@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+out:
+  file: out.txt
+clean: rm a.out

@@ -1,0 +1,22 @@
+import std::io;
+
+class A {
+    
+    let _i : i32;
+    let dmut _a : &A;
+    
+    pub self (i : i32, dmut a : &A) with _a = alias a, _i = i {
+	self._a._a = alias self;
+    }
+    
+    pub self (i : i32) with _a = alias self, _i = i {}
+    
+    impl Copiable, Streamable; // to make A deep copiable
+}
+
+def main () {
+    let dmut a = A::new (1);
+    let dmut _ = A::new (2, alias a);
+    
+    println (a);
+}

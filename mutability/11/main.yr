@@ -1,0 +1,12 @@
+import std::io;
+
+def foo (pure a : [i32]) {
+    println (a);
+}
+
+def main () {
+    let a = [1, 2, 3];
+    let pure b = dcopy a;
+    foo (dcopy a);
+    println (b);
+}
