@@ -1,0 +1,48 @@
+import std::io;
+import std::config;
+import std::fs::file, std::fs::path;
+
+class X {T of dmut V, class V} {
+
+    let dmut _v : V;
+    
+    pub self (dmut a : V) with _v = alias a {}
+
+    pub def foo (mut self)-> dmut V {
+        alias self._v
+    }
+       
+}
+
+class X {T of V, class V} {
+
+    let mut _v : V;
+    
+    pub self (a : V) with _v = a {}
+
+    pub def foo (mut self)-> V {
+        self._v
+    }
+       
+}
+
+class Y {
+    pub self () {
+    }
+
+    pub def foo (mut self) {
+        println ("First");
+    }
+
+    pub def foo (self) {
+        println ("Second");
+    }
+}
+
+
+def main () {
+    let dmut x = X!{&Y}::new (Y::new ());
+    let dmut x2 = X!{dmut &Y}::new (Y::new ());    
+    x:.foo ().foo ();
+    x2:.foo ():.foo ();
+}
