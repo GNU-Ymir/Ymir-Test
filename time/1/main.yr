@@ -8,6 +8,6 @@ def main ()
     assert (instant::now () >= i);
 
     let d = instant::now () - i;
-    let u = Duration::new (w-> 120u64);
+    let u = duration (w-> 120u64);
     assert (d < u);    
 }
