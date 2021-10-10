@@ -1,0 +1,6 @@
+import std::io, std::math;
+
+def main () {
+    println (sqrt (2.0f));
+    println (sqrt (2.0));
+}
