@@ -1,0 +1,24 @@
+import std::io;
+
+class X {
+    pub self (){}
+
+    pub def foo (mut self) {
+    }
+}
+
+def foo (dmut x : [&X]) {
+    for i in 0us .. x.len {
+        __pragma!trusted ({ x [i]:.foo () });
+    }
+} 
+
+
+def main () {
+    let dmut x = X::new ();
+    
+    let dmut _ = if (true) X::new () else {x}
+    let dmut _ = if (true) x else {X::new ()}
+    foo ([x, X::new ()]);
+    foo ([X::new (), x]);
+}

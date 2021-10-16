@@ -1,0 +1,16 @@
+import std::io;
+
+class A {
+    pub self () {
+        println (self);
+    }
+
+    pub def run (mut self) {}
+
+    impl Streamable;
+}
+
+
+def main () {
+    A::new ():.run (); // gymir commit 757
+}

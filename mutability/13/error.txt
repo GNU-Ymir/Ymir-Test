@@ -1,0 +1,59 @@
+Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+ --> main.yr:(20,14)
+20  ┃     let dmut _ = if (true) X::new () else {x}
+    ╋              ^
+    ┃ Note : implicit alias of type &(main::X) is not allowed, it will implicitly discard constant qualifier
+    ┃  --> main.yr:(20,18)
+    ┃ 20  ┃     let dmut _ = if (true) X::new () else {x}
+    ┃     ╋                  ^^
+    ┗━━━━━┻━ 
+
+Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+ --> main.yr:(21,14)
+21  ┃     let dmut _ = if (true) x else {X::new ()}
+    ╋              ^
+    ┃ Note : implicit alias of type &(main::X) is not allowed, it will implicitly discard constant qualifier
+    ┃  --> main.yr:(21,18)
+    ┃ 21  ┃     let dmut _ = if (true) x else {X::new ()}
+    ┃     ╋                  ^^
+    ┗━━━━━┻━ 
+
+Error : the call operator is not defined for main::foo and {mut [mut &(mut main::X)]}
+ --> main.yr:(22,9)
+22  ┃     foo ([x, X::new ()]);
+    ╋         ^              ^
+    ┃ Note : candidate foo --> main.yr:(10,5) : main::foo (x : mut [mut &(main::X)])-> void
+    ┃     ┃ Error : discard the constant qualifier is prohibited, left operand mutability level is 3 but must be at most 2
+    ┃     ┃  --> main.yr:(22,10)
+    ┃     ┃ 22  ┃     foo ([x, X::new ()]);
+    ┃     ┃     ╋          ^
+    ┃     ┃     ┃ Note : 
+    ┃     ┃     ┃  --> main.yr:(22,10)
+    ┃     ┃     ┃ 22  ┃     foo ([x, X::new ()]);
+    ┃     ┃     ┃     ╋          ^
+    ┃     ┃     ┗━━━━━┻━ 
+    ┃     ┃ Note : for parameter x --> main.yr:(10,15) of main::foo (x : mut [mut &(main::X)])-> void
+    ┃     ┗━━━━━━ 
+    ┗━━━━━┻━ 
+
+Error : the call operator is not defined for main::foo and {mut [mut &(mut main::X)]}
+ --> main.yr:(23,9)
+23  ┃     foo ([X::new (), x]);
+    ╋         ^              ^
+    ┃ Note : candidate foo --> main.yr:(10,5) : main::foo (x : mut [mut &(main::X)])-> void
+    ┃     ┃ Error : discard the constant qualifier is prohibited, left operand mutability level is 3 but must be at most 2
+    ┃     ┃  --> main.yr:(23,10)
+    ┃     ┃ 23  ┃     foo ([X::new (), x]);
+    ┃     ┃     ╋          ^
+    ┃     ┃     ┃ Note : 
+    ┃     ┃     ┃  --> main.yr:(23,10)
+    ┃     ┃     ┃ 23  ┃     foo ([X::new (), x]);
+    ┃     ┃     ┃     ╋          ^
+    ┃     ┃     ┗━━━━━┻━ 
+    ┃     ┃ Note : for parameter x --> main.yr:(10,15) of main::foo (x : mut [mut &(main::X)])-> void
+    ┃     ┗━━━━━━ 
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.
