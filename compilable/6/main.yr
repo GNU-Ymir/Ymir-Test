@@ -1,0 +1,13 @@
+import std::io;
+import std::concurrency::process;
+
+def foo () -> [i32] {
+    println ("In foo");
+    [1, 2, 3]
+}
+
+def main () {
+    println (foo ()[0us .. $ - 1us]); // commit 758
+} catch {
+    _ => {}
+}
