@@ -1,0 +1,11 @@
+import std::algorithm::search;
+
+def main ()
+    throws &AssertError
+{
+    assert (("Hello World!!").startWith ("Hello"));
+    assert (("Hello World!!").endWith ("World!!"));
+
+    assert (!("Hello World!!").startWith ("ello"));
+    assert (!("Hello World!!").endWith ("World!"));
+}
