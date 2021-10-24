@@ -1,0 +1,18 @@
+[FAILURE] In test : main::_1
+core::exception::AssertError ():
+╭  Stack trace :
+╞═ bt ╕ #1 in function core::exception::AssertError::self (...)
+│     ╘═> /home/emile/Documents/ymir/yruntime/midgard/core/exception.yr:49
+╞═ bt ╕ #2 in function core::exception::abort (...)
+│     ╘═> /home/emile/Documents/ymir/yruntime/midgard/core/exception.yr:91
+╞═ bt ╕ #3 in function main::_1
+│     ╘═> /home/emile/Documents/ymir/Ymir-Test/unittest/1/main.yr:3
+╞═ bt ╕ #4 in function _yrt_run_tests
+│     ╘═> /home/emile/Documents/ymir/yruntime/midgard/core/test.yr:16
+╞═ bt ╕ #5 in function __GLOBAL__4main
+│     ╘═> /home/emile/gcc/gcc-install/bin/../lib/gcc/x86_64-pc-linux-gnu/9.3.0/include/ymir/std/collection/vec.yr:460
+╞═ bt ═ #6 in function __libc_csu_init
+╞═ bt ╕ #7
+│     ╘═> /lib/x86_64-linux-gnu/libc.so.6:??
+╞═ bt ═ #8 in function _start
+╰

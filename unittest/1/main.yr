@@ -1,0 +1,13 @@
+import std::io;
+
+__test {
+    assert (foo ());
+}
+
+def foo ()-> bool {
+    false
+}
+
+def main () {
+    println ("Foo : ", foo ());
+}

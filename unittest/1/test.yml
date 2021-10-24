@@ -1,0 +1,12 @@
+compile:
+  - gyc main.yr -o main
+  - gyc main.yr -funittest -g
+run:
+  - ./main
+  - ./a.out
+stdout:
+  file: out.txt
+stderr:
+  file: err.txt
+clean: rm a.out main 
+  
