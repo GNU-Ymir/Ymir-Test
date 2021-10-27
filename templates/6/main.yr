@@ -1,0 +1,36 @@
+import std::io;
+import std::hash;
+import std::conv, std::fs::path;
+import std::collection::map;
+
+
+class A {
+
+    let mut _i = 0;
+    
+    pub self () {}
+
+
+    pub def foo (mut self, i : i32) {
+        self._i = i;
+    }
+
+
+    impl Streamable;
+    
+}
+
+
+def main ()
+    throws &OutOfArray
+{
+    let dmut m = HashMap!{[c8], dmut &A}::new ();
+    let dmut b = HashMap!{[c8], &A}::new ();
+    
+    m:.insert ("test"s8, A::new ());
+    b:.insert ("test"s8, A::new ());
+    
+    (alias m) ["test"s8]:.foo (12);
+    println (m, " ", b);
+}
+

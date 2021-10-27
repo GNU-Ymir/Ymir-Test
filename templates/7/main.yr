@@ -1,0 +1,46 @@
+import std::io;
+import std::hash;
+import std::conv, std::fs::path;
+import std::collection::vec;
+
+
+class A {
+
+    let mut _i = 0;
+    
+    pub self (i : i32 = 0) with _i = i {}
+
+
+    pub def foo (mut self, i : i32) {
+        self._i = i;
+    }
+
+
+    impl Streamable;
+    
+}
+
+
+def main () {
+    let dmut m = Vec!{dmut &A}::new ();
+    let dmut b = Vec!{&A}::new ();
+    
+    m:.push (A::new ());
+    b:.push (A::new ());
+
+    (alias m)[0us] = A::new (i-> 12);
+    
+    println (m, " ", b);
+
+    (alias m)[0us]:.foo (720);
+    
+    println (m, " ", b);
+
+    let dmut r = (alias m)[];
+    r[0]:.foo (78);
+    println (r[0]);
+    
+} catch {
+    _ => println ("ici");
+}
+
