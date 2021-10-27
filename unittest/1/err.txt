@@ -10,7 +10,7 @@ core::exception::AssertError ():
 ╞═ bt ╕ #4 in function _yrt_run_tests
 │     ╘═> /home/emile/Documents/ymir/yruntime/midgard/core/test.yr:16
 ╞═ bt ╕ #5 in function __GLOBAL__4main
-│     ╘═> /home/emile/gcc/gcc-install/bin/../lib/gcc/x86_64-pc-linux-gnu/9.3.0/include/ymir/std/collection/vec.yr:460
+│     ╘═> /home/emile/gcc/gcc-install/bin/../lib/gcc/x86_64-pc-linux-gnu/9.3.0/include/ymir/std/collection/vec.yr:461
 ╞═ bt ═ #6 in function __libc_csu_init
 ╞═ bt ╕ #7
 │     ╘═> /lib/x86_64-linux-gnu/libc.so.6:??
