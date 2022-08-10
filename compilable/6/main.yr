@@ -8,6 +8,4 @@ def foo () -> [i32] {
 
 def main () {
     println (foo ()[0us .. $ - 1us]); // commit 758
-} catch {
-    _ => {}
-}
+} 

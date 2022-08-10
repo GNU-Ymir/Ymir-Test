@@ -1,13 +1,13 @@
 Error : when validating main_error::X
- --> main_error.yr:(25,7)
-25  ┃ class X over A {
+ --> main_error.yr:(23,7)
+23  ┃ class X over A {
     ╋       ^
     ┃ Note : when validating core::duplication::Copiable::deepCopy
-    ┃  --> /home/emile/gcc/gcc-install/bin/../lib/gcc/x86_64-pc-linux-gnu/9.3.0/include/ymir/core/duplication.yr:(96,17)
+    ┃  --> /usr/lib/gcc/x86_64-linux-gnu/9/include/ymir/core/duplication.yr:(96,17)
     ┃ 96  ┃         pub def deepCopy (self)-> dmut &Object {
     ┃     ╋                 ^^^^^^^^
     ┃     ┃ Error : assertion failed : cannot create a default copier for type main_error::X, due to not copiable field 'truc' of type main_error::Y
-    ┃     ┃  --> /home/emile/gcc/gcc-install/bin/../lib/gcc/x86_64-pc-linux-gnu/9.3.0/include/ymir/core/duplication.yr:(109,33)
+    ┃     ┃  --> /usr/lib/gcc/x86_64-linux-gnu/9/include/ymir/core/duplication.yr:(109,33)
     ┃     ┃ 109 ┃                             cte assert (false, "cannot create a default copier for ty[...]f ((__pragma!local_tupleof (self)).i)::typeid);
     ┃     ┃     ╋                                 ^^^^^^
     ┃     ┗━━━━━┻━ 

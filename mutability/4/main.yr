@@ -1,5 +1,5 @@
 def main ()
-    throws &OutOfArray, &AssertError
+    throws &AssertError
 {
     let mut x : [mut i32] = [1, 2, 3];
     let ref mut y : [mut i32] = ref x;

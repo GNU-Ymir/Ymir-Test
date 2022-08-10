@@ -1,7 +1,7 @@
 import std::io;
 
 def main () 
-    throws &OutOfArray, &AssertError
+    throws &AssertError
 {
     let dmut x = copy "hello !";
     x [0] = 'H'; // Well done

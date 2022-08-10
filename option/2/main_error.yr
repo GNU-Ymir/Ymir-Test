@@ -9,9 +9,7 @@ def foo (a : bool)-> mut (mut [i32])? {
 }
 
 
-def main ()
-    throws &OutOfArray
-{
+def main () {
     let a : ([i32])? = foo (true);
     match ref a {
         Ok (ref dmut cfg : _) => {

@@ -7,8 +7,6 @@ class A {
 
     pub def modify (mut self) {
         self.a [0] += 9;
-    } catch {
-        _ => {}
     }
     
     impl Copiable, Streamable;

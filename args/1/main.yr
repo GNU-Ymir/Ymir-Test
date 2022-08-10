@@ -42,10 +42,7 @@ def main (args : [[c8]]) {
         }
         _ : &HelpRequired => {
             println (x.usage ());
-        }
-        err: _ => {
-            println (err);
-        }
+        }        
     }
 
 }

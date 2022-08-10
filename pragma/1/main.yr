@@ -53,8 +53,7 @@ def foo {T impl Fooable} () -> dmut T {
 }
 
 def foo {struct T} ()-> T
-    throws &SegFault, &OutOfArray
-{
+    throws &SegFault {
     let dmut r = [0u8 ; new sizeof (T)];
     cte for i in 0us .. (__pragma!field_offsets (T)).len {
         let offset = (__pragma!field_offsets (T)) [i];
@@ -72,7 +71,7 @@ extern (C) def printf (s : &c8, ...);
 
 
 def main ()
-    throws &SegFault, &OutOfArray
+    throws &SegFault
 {
     println ((__pragma!field_offsets (X)), " ", sizeof (X));
     println (foo!X ());

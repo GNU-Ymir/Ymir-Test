@@ -12,9 +12,7 @@ struct
 | z : i32
  -> Z;
 
-def main ()
-    throws &OutOfArray
-{
+def main () {
     let i = i32::__max__;
     println (i);
     println (X::members [0]);

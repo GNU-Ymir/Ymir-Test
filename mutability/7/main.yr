@@ -3,16 +3,14 @@ import std::io
 /**
  * The function foo will be allowed to modify the internal values of y
  */
-def foo (mut y : [mut i32])
-    throws &OutOfArray
-{
+def foo (mut y : [mut i32]) {
     y [0] = y [1];
     y = [8, 3, 4]; // has no impact on the x of main,
     // y is a reference to the data borrowed not on the variable x itself
 }
 
 def main ()
-    throws &OutOfArray, &AssertError
+    throws &AssertError
 {
     let dmut x = [1, 2, 3];
     foo (alias x);

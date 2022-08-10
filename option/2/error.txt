@@ -1,24 +1,24 @@
 Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 0
- --> main_error.yr:(17,22)
-17  ┃         Ok (ref dmut cfg : _) => {
+ --> main_error.yr:(15,22)
+15  ┃         Ok (ref dmut cfg : _) => {
     ╋                      ^^^
     ┃ Note : 
-    ┃  --> main_error.yr:(17,9)
-    ┃ 17  ┃         Ok (ref dmut cfg : _) => {
+    ┃  --> main_error.yr:(15,9)
+    ┃ 15  ┃         Ok (ref dmut cfg : _) => {
     ┃     ╋         ^^
     ┃ Note : in pattern
-    ┃  --> main_error.yr:(17,22)
-    ┃ 17  ┃         Ok (ref dmut cfg : _) => {
+    ┃  --> main_error.yr:(15,22)
+    ┃ 15  ┃         Ok (ref dmut cfg : _) => {
     ┃     ╋                      ^^^
     ┗━━━━━┻━ 
 
 Error : discard the constant qualifier is prohibited, left operand mutability level is 3 but must be at most 2
- --> main_error.yr:(23,14)
-23  ┃     let dmut b = foo (true);
+ --> main_error.yr:(21,14)
+21  ┃     let dmut b = foo (true);
     ╋              ^
     ┃ Note : implicit alias of type mut (mut [i32])? is not allowed, it will implicitly discard constant qualifier
-    ┃  --> main_error.yr:(23,22)
-    ┃ 23  ┃     let dmut b = foo (true);
+    ┃  --> main_error.yr:(21,22)
+    ┃ 21  ┃     let dmut b = foo (true);
     ┃     ╋                      ^
     ┗━━━━━┻━ 
 
