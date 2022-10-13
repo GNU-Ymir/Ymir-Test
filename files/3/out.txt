@@ -1,23 +1,53 @@
-Creation : ====================== 
+Creation : ======================
 .
-	| out.txt
-	| main.yr
-	| test
-	| 	| file.txt
-	| a.out
-	| test.yml
+        | F : ./a.exe
+        | F : ./main.yr
+        | F : ./out.txt
+        | D : ./test
+        |       | F : ./test/file.txt
+        | F : ./test.yml
+        | D : ./testCopy
+        |       | F : ./testCopy/file.txt
+        |       | D : ./testCopy/truc
+        |       |       | F : ./testCopy/truc/machin
 
-================================= 
-Deletion : ====================== 
+=================================
+Copy : ==========================
 .
-	| out.txt
-	| main.yr
-	| a.out
-	| test.yml
+        | F : ./a.exe
+        | F : ./main.yr
+        | F : ./out.txt
+        | D : ./test
+        |       | F : ./test/file.txt
+        | F : ./test.yml
+        | D : ./testCopy
+        |       | F : ./testCopy/file.txt
+        |       | D : ./testCopy/truc
+        |       |       | F : ./testCopy/truc/machin
+        | D : ./testCopy2
+        |       | F : ./testCopy2/file.txt
+        |       | D : ./testCopy2/truc
+        |       |       | F : ./testCopy2/truc/machin
 
-================================= 
+=================================
+Deletion : ======================
+.
+        | F : ./a.exe
+        | F : ./main.yr
+        | F : ./out.txt
+        | F : ./test.yml
+        | D : ./testCopy
+        |       | F : ./testCopy/file.txt
+        |       | D : ./testCopy/truc
+        |       |       | F : ./testCopy/truc/machin
+
+=================================
 .:
-a.out
-main.yr
-out.txt
-test.yml
+a.exe  main.yr  out.txt  test.yml  testCopy
+
+./testCopy:
+file.txt  truc
+
+./testCopy/truc:
+machin
+

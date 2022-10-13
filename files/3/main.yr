@@ -2,7 +2,7 @@ import std::io;
 import std::fs;
 import std::fs::path;
 import std::fs::iteration;
-import std::stream;
+import std::stream, std::env;
 
 
 def tree (path : &Path) -> [c8] {
@@ -21,29 +21,35 @@ def tree (path : &Path) -> [c8] {
 def tree (dmut stream : &StringStream, dir : &DirEntry) {
     for e in dir {
         match e {
-            f : &FileEntry => { stream:.write (f.getPath ().toStr (), "\n"); }
+            f : &FileEntry => { stream:.write ("F : ", f.getPath ().toStr (), "\n"); }
             d : &DirEntry => {
-                stream:.write (d.getPath ().toStr (), "\n");
+                stream:.write ("D : ", d.getPath ().toStr (), "\n");
                 stream:.entabing (txt-> "\t| "s8);
                 tree (alias stream, d);
                 stream:.detabing ();                
             }
+            f : &FsEntry => { stream:.write ("E : ", f.getPath ().toStr (), "\n"); }
         }
     }
 }
 
 def main ()
-{
-    createDir (Path::new ("./test"));
-    createFile (Path::new ("./test/file.txt"));
+{   
+    createDir (Path::new ("./test"s8, sep-> '/'c8));
+    createFile (Path::new ("./test/file.txt"s8, sep-> '/'c8));
     println ("Creation : ====================== ");
+    println (tree (Path::new (".")));    
+    println ("================================= ");
+    copyDir (Path::new ("./testCopy"), Path::new ("./testCopy2"), recursive-> true, create-> true);
+    println ("Copy : ========================== ");
     println (tree (Path::new (".")));
     println ("================================= ");
     removeDir (Path::new ("./test"), recursive-> true);
+    removeDir (Path::new ("./testCopy2"), recursive-> true);
     println ("Deletion : ====================== ");
     println (tree (Path::new (".")));
     println ("================================= ");
-} catch {
+}  catch {
     x : _ => {
         println (x);
     }
