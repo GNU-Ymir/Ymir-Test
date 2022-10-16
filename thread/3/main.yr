@@ -1,0 +1,42 @@
+import std::io;
+import std::any;
+import std::concurrency::thread;
+import std::time::dur;
+
+class X {
+
+    let mut _i = 0;
+    let mut _inModif = false;
+    
+    pub self () {}
+
+    pub def foo (mut self, i : i32) {
+        if (self._inModif) __pragma!panic ();
+        self._inModif = true;        
+        self._i = i + 1;
+        sleep (dur::duration (ms-> 1u64));
+        self._inModif = false;        
+    }
+}
+
+static dmut x = X::new ();
+
+def foo (_ : Thread) {
+    for i in 0 .. 10 {
+        atomic x {
+            x:.foo (i);
+        }
+        sleep (dur::duration (ms-> 1u64));
+    }
+}
+
+def main () {
+    let th = spawn (&foo);
+    for i in 0 .. 10 {
+        atomic x {
+            x:.foo (i);
+        }
+        sleep (dur::duration (ms-> 1u64));
+    }
+    th.join ();
+}
