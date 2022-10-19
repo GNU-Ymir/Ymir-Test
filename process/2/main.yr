@@ -1,0 +1,10 @@
+import std::io, std::conv;
+import std::concurrency::process;
+import std::fs::path;
+
+def main () {
+    let dmut proc = SubProcess::run ("ls"s8, ["-la"s8], cwd-> Path::new ("dir"s8));
+    
+    println (proc:.wait ());
+    print (proc:.stdout ():.read ());
+}

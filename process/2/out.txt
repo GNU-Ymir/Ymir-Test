@@ -1,0 +1,6 @@
+0
+total 0
+drwxr-xr-x 1 ecado ecado 0 Oct 19 11:43 .
+drwxr-xr-x 1 ecado ecado 0 Oct 19 11:42 ..
+-rw-r--r-- 1 ecado ecado 0 Oct 19 11:43 bar
+-rw-r--r-- 1 ecado ecado 0 Oct 19 11:43 foo
