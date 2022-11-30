@@ -1,14 +1,14 @@
 import std::io;
-import std::any;
+import std::box;
 import std::concurrency::thread;
 
 def foo (th : Thread) {
     let msg = th.pipe.read ();
     match msg {
-        x : &Some!{i32} => {
+        Box!{i32} (value-> x : _) => {
             println ("Ping : ", x);
             th.pipe.write ("Message Received");
-            th.pipe.write (x.unwrap () + 19);
+            th.pipe.write (x + 19);
         }
     }
 }
@@ -16,7 +16,15 @@ def foo (th : Thread) {
 def main () {
     let th = spawn (&foo);
     th.pipe.write (23);
-    println ("Pong : \n\t", th.pipe.read ());
-    println ("\t", th.pipe.read ());
+    let msg = th.pipe.read ();
+    let val = th.pipe.read ();
+    match msg {
+        Box!{[c32]} (value-> x : _) =>
+            println ("Pong : \n\t", x);
+    }
+    match val {
+        Box!{i32}(value-> x : _) => 
+            println ("\t", x);
+    }
     th.join ();
 }
