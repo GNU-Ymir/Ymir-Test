@@ -19,7 +19,7 @@ def bar (day : Day) {
 }
 
 def main () {
-    // the internal type Day is of type [c32], so it can be implicitely casted into [c32]
+    // // the internal type Day is of type [c32], so it can be implicitely casted into [c32]
     foo (Day::MONDAY);
     
     bar (Day::MONDAY);

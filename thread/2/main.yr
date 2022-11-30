@@ -11,10 +11,10 @@ def foo () -> i32 {
    
 
 def main ()
-    throws &AssertError, &CastFailure
+    throws &AssertError
 {
     let f = future (&foo);
     let z = foo ();
     
-    assert (f.wait ().unwrap () == z);
+    assert (f.wait () == z);
 }

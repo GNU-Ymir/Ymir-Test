@@ -1,0 +1,58 @@
+import std::io; // for println
+import std::concurrency::actor, std::conv;
+import std::concurrency::future;
+import std::box;
+
+
+class MyActor over Actor {
+
+    pub self (dmut sys : &ActorSystem, name : [c8])
+        with super (alias sys, name)
+    {}
+    
+    pub over receive (mut self, msg : &Object) {
+        match (msg) {
+            Box!{i32} (value-> i : i32) => {
+                println (self._name, " received a i32 : ", i);
+            }
+            Box!{[c32]} (value-> s : [c32]) => {
+                println (self._name, " received a s32 : ", s);
+            }
+            _ : &PoisonPill => {
+                self:.exit ();
+                self._sys:.terminate ();
+            }
+        }
+    }
+}
+
+
+def foo (port : u16)-> &Future!{void} {
+    future (move || => {
+        {
+            let dmut sys = ActorSystem::new ();
+            let dmut ref_ = sys:.remoteActor ("Remote"s8, SockAddrV4::new (Ipv4::LOCALHOST, port));
+            
+            ref_:.send (1989);
+            ref_:.send ("Hi !!");
+            ref_:.send (PoisonPill::new ());
+            
+            sys:.terminate ();
+        } catch {
+            _ => {}
+        }
+    })
+}
+
+def main ()
+    throws &TcpError
+{    
+    let dmut sys = ActorSystem::new ();
+    MyActor::new (alias sys, "Remote"s8);
+    
+    let client = foo (sys.getPort ());
+
+    
+    sys:.join ();
+    client.wait ();
+}

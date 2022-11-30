@@ -1,0 +1,26 @@
+import std::io;
+
+import std::conv; // for to
+import std::concurrency::future;
+
+def computePi (prec : i32)-> f64 {
+    let mut res = 0.0;
+    let n = prec.to!f64 ();
+    for i in 0 .. prec {
+        res += (4.0 / n) / ( 1.0 + (( to!f64 (i) - 0.5 ) * (1.0 / n)) * (( to!f64 (i) - 0.5 ) * (1.0 / n)));
+    }
+    res     
+}
+
+def foo ()-> &Future!i32 {
+    future (|| {
+        println ("1 : ", computePi (i32::max / 100));
+        42
+    })
+}
+
+def main () throws &AssertError {
+    let x = foo ();
+    println ("2 : ", computePi (i32::max / 1000));
+    assert (x.wait () == 42);
+}

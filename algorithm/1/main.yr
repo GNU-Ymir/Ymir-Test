@@ -1,4 +1,4 @@
-import std::algorithm::search;
+import std::algorithm::searching;
 
 def main ()
     throws &AssertError

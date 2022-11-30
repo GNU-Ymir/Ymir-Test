@@ -44,3 +44,7 @@ Destruct of Baz
 Destruct of Bar
 Destruct of Foo
 =============
+Destruct of Baz
+Destruct of Bar
+Destruct of Foo
+=============
