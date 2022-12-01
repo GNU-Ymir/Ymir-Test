@@ -1,0 +1,29 @@
+import std::config::_;
+import std::io;
+
+class A {
+    let _value : i32;
+    
+    pub self (c : &Config) 
+        with _value = (c["value"].to!{i32} ()?).getOr (0) + 8
+    {}
+
+    impl Serializable {
+        pub over serialize (self)-> &Config {
+            let i = self._value;
+            json#{ "value" : i }
+        }
+    }
+}
+
+
+def main ()
+    throws &ConfigError, &AssertError
+{
+    let j = json#{ "value" : 89 };
+    let a = j.to!{&A} ();  // Deserialize
+
+    let t = toml::dump (a.to!{&Config} ()); // Serialize
+
+    assert (t == "value = 97\n");
+}

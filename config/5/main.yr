@@ -1,7 +1,6 @@
 import std::io;    
-import std::config::conv;
-import std::config::toml, std::fs::_;
-import std::config;
+import std::config::_;
+import std::fs::_;
 
 class Z {
     let x : i32;

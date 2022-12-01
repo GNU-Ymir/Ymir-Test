@@ -1,0 +1,6 @@
+
+[fst]
+foo = {bar = "baz"}
+scd = [1, "inner", 
+       2.000000, 3]
+

@@ -1,6 +1,4 @@
 import std::io;
-import std::config;
-import std::fs::file, std::fs::path;
 
 class X {T of dmut V, class V} {
 

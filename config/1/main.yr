@@ -1,6 +1,5 @@
 import std::io;
-import std::config::toml;
-import std::config;
+import std::config::_;
 import std::fs::file;
 import std::fs::path;
 import std::fs::errors;
@@ -9,7 +8,7 @@ def main ()
 {
     with dmut f = File::open (Path::new ("in.toml")) {
         let str = f:.readAll ();
-        let cfg : &Dict = parse (str);
+        let cfg : &Dict = toml::parse (str);
 
         // Amélioration, Config surcharge par défault les operateur d'accés,
         // Il throw OutOfArray, si jamais ça n'a pas de sens sur le sous type (par exemple Int)

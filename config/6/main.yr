@@ -1,0 +1,24 @@
+import std::io;
+import std::config::_;
+import std::conv;
+
+def main ()
+    throws &CastFailure, &AssertError
+{
+    let j = json#{
+        "fst" : {
+            "foo" : {"bar" : "baz"},
+            "scd" : [1, "inner", 2.0f, 3]
+        }
+    };
+
+
+    let ival = j["fst"]["scd"][0].to!{i32} ()?;
+    let fval = j["fst"]["scd"][2].to!{f32} ()?;
+    let sval = j["fst"]["foo"]["bar"].(config::conv::to)!{[c32]} ()?;
+    
+    assert (ival.unwrap () == 1 && fval.unwrap () == 2.0f && sval.unwrap () == "baz");
+    
+    let t = j.(toml::dump) ();
+    println (t);
+}
