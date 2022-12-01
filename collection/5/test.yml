@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "{12=>main::A(98), 24=>main::A(42)}\n24=> main::A(42)\n"
+clean: rm a.out

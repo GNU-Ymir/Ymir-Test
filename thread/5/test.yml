@@ -1,0 +1,5 @@
+compile:
+  - gyc main.yr
+run: ./a.out
+stdout: "This lambda function is running in a thread\nWaiting the pipe from another thread\nReceived kill message : 9\nACK\n"
+clean: rm a.out

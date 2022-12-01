@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "8 : 0\n1 : 1\n2 : 2\n{a::b::c}\n{1::2::3}\n{z::a::b}\n"
+clean: rm a.out

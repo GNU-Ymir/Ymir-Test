@@ -1,0 +1,74 @@
+import std::collection::set;
+import std::io, std::hash;
+
+class X {
+   
+   let _x : i32;
+   
+   pub self (x : i32) with _x = x {}
+
+   /*
+     Provides a way of comparing instances of X
+    */
+   pub def opEquals (self, o : &X)-> bool {
+       self._x == o._x
+   }
+  
+   impl std::hash::Hashable;
+   impl std::stream::Streamable; // for println
+}
+
+
+def main ()
+    throws &AssertError
+{
+    let dmut set = HashSet!([c32])::new ();
+
+    set:.insert ("foo"); 
+    set:.insert ("foo"); // Does nothing the value is already inserted
+    set:.insert ("bar");
+
+    // HashSet can be used with the opContain operator
+    if "baz" !in set {
+        println ("Set does not contain baz");
+    }
+
+    assert (set.len () == 2us);
+    assert ("foo" in set);
+    
+    // Values can be removed from the set 
+    set:.remove ("foo");
+    assert ("foo" !in set);
+
+    // HashSet are iterable
+    for elem in set {
+        println (elem); // there is only bar left in the set
+    }
+
+    // Set are streamable
+    println (set);
+
+    // One can transform a set into a slice by using the operator []
+    let slc = set[];  
+    println (slc);
+
+    let dmut xs = HashSet!{&X}::new ();
+
+    xs:.insert (X::new (12));
+    xs:.insert (X::new (12)); // does nothing, the same value of X was already inserted
+
+    println (xs);
+
+    for elem in xs {
+        println (elem);
+    }
+
+    assert (xs[] == [X::new (12)]);
+    assert (set[] == ["bar"]);
+    
+    assert (X::new (12) in xs);
+    xs:.clear ();
+    set:.clear ();
+
+    assert (xs.isEmpty () && set.isEmpty ());
+}

@@ -1,0 +1,38 @@
+import std::io; // for println
+import std::collection::list;
+
+def main ()
+    throws &AssertError, &OutOfArray
+{
+    // Creates a list by using the class constructor
+    let dmut l = List!{i32}::new ();
+    l:.push (1);
+    l:.push (2);
+    l:.pushFront (8);
+
+    // List are iterable, v is the value contained in the list, and i is the index of the iteration
+    for v, i in l { 
+        println (v, " : ", i); // 8 : 0,  1 : 1,  2 : 2
+    }
+
+    // Or by using the macro 
+    let dmut m = list#['a', 'b', 'c'];
+    println (m); // {a::b::c}
+
+    let dmut z = list#{(1)::(2)::(3)};
+    println (z);
+
+    assert (m:.pop () == 'c');
+    assert (m.len () == 2us);
+    assert (m[$ - 1us] == 'b');
+
+    m:.pushFront ('z');
+    assert (m.len () == 3us);
+    assert (m[0us] == 'z');
+    println (m);
+
+    assert (m:.popFront () == 'z');
+    assert (m == list#['a', 'b']);
+
+    assert ((list#[1])[] == [1]);
+}

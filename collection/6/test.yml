@@ -1,0 +1,6 @@
+compile:
+  - gyc main.yr
+run:
+  - ./a.out
+stdout: "Set does not contain baz\nbar\n{bar}\n[bar]\n{main::X(12)}\nmain::X(12)\n"
+clean: rm a.out

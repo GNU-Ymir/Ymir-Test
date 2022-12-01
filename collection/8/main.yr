@@ -1,0 +1,53 @@
+import std::collection::vec;
+import std::io;
+
+class A {
+    pub let mut i : i32;
+    pub self (i : i32) with i = i {}
+
+    pub def opEquals (self, o : &A)-> bool {
+        self.i == o.i
+    }
+    
+    impl Streamable;
+    impl Copiable;
+}
+
+def main ()
+    throws &AssertError, &OutOfArray
+{
+
+    let dmut x = Vec!{dmut &A}::new ();
+    x:.push (A::new (1));
+    x:.push (A::new (2));
+    x:.push (A::new (3));
+
+    assert (x[] == [A::new (1), A::new (2), A::new (3)]);
+    assert (x[$ - 1us] == A::new (3));
+
+    assert (x:.pop () == A::new (3));
+    assert (x.len () == 2us);
+    x:.remove (0u64);
+    assert (x.len () == 1us && x[0] == A::new (2));
+
+
+    let dmut a = (alias x)[0us];
+    a.i = 98;
+    assert (x[0us] == A::new (98));
+
+    for i, j in x {
+        println (j, " : ", i);
+    }
+
+    assert (x == [A::new (98)]);
+    assert (x[] == [A::new (98)]);
+    assert (x == x);
+
+    x:.push (A::new (1));
+    x:.push (A::new (8));
+    assert (x[1us .. $] == [A::new (1), A::new (8)]);
+
+    let dmut slc = (alias x)[1us .. $];
+    slc[$ - 1us].i = 11;
+    assert (x[$ - 1us] == A::new (11));
+}

@@ -1,0 +1,12 @@
+import std::collection::_;
+import std::io;
+
+def main ()
+    throws &OutOfArray, &AssertError
+{
+    let v = vec#[1, 2, 3];
+    assert (v[$ - 1us] == 3);
+
+    let l = list#{1, 2, 3};
+    assert (l[$ - 1us] == 3);
+}

@@ -1,0 +1,45 @@
+import std::io;
+import std::collection::vec;
+import std::hash;
+
+def main ()
+    throws &AssertError, &OutOfArray
+{
+    let dmut v = Vec!{i32}::new ();
+    v:.push (1);
+    v:.push (2);
+
+    assert (v.len () == 2us);
+    assert (v[0] == 1);
+
+    (alias v)[0] = 42;
+    assert (v[0] == 42);
+
+    match v:.pop ()? {
+        Ok (2) => {}
+        _ => { assert (false); }
+    }
+
+    for i, j in v {
+        println ("value : ", i, ", index : ", j); 
+    }
+
+    v:.push (7);
+    assert (v == vec#[42, 7]);
+
+    let dmut z = dcopy v;
+    z:.push (4);
+    assert (v == [42, 7] && z == [42, 7, 4]);
+
+    // It is hashable 
+    import std::hash;
+    assert (hash (v) != hash (z));
+
+    // and it is sequence
+    assert (v.len () == 2us && v[0] == 42 && v[$ - 1us] == 7);
+    assert (v == v);
+
+    v:.push (89);
+    v:.push (78);
+    assert (v[0us .. 2us] == [42, 7]);
+}

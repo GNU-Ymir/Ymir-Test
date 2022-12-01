@@ -1,0 +1,6 @@
+main::A(8)
+main::A(1)
+main::A(89)
+{main::A(8)::main::A(1)}
+Ok(main::A(8))
+main::A(89)

@@ -1,0 +1,54 @@
+import std::io; // for println
+import std::collection::list;
+
+class A {
+    pub let mut i : i32;
+    pub self (i : i32) with i = i {}
+
+    pub def opEquals (self, o : &A)-> bool {
+        self.i == o.i
+    }
+    
+    impl Streamable;
+    impl Copiable;
+}
+
+def main ()
+    throws &OutOfArray, &AssertError
+{
+    // by using the keyword dmut, template specialization is made to select the mutable version of list
+    //                  |         otherwise immutable version is always selected
+    //                  |
+    //                 vvv
+    let dmut l = List!{dmut &A}::new ();
+
+    l:.push (A::new (1));
+    l:.push (A::new (2));
+
+    let dmut x = A::new (8);
+    l:.pushFront (alias x); // the insertion must use a mutable version of the value
+
+    let dmut z = l:.back ();
+
+    match ref z {
+        Ok (dmut a : &A) => {
+            a.i = 89;
+        }
+    }
+
+    for i in l {
+        println (i); // A(8) A(1) A(89) 
+    }
+
+    let dmut f = l:.front ();
+    let dmut b = l:.pop ();
+
+
+    println (l); // {A(8), A(1)}
+    println (f); // Ok(A(8)}
+    println (b); // A(89)
+   
+    assert (l == dcopy l);
+    assert (l[] == [A::new (8), A::new (1)]);
+    assert (l[$ - 1us] == A::new (1));
+}

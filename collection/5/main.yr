@@ -1,0 +1,65 @@
+import std::io;
+import std::collection::map;
+
+
+class A {
+    pub let mut i : i32;
+    pub self (i : i32) with i = i {}
+    
+    pub def opEquals (self, o : &A)-> bool {
+        self.i == o.i
+    }
+    
+    impl Streamable;
+    impl Copiable;    
+}
+
+def main ()
+    throws &AssertError, &OutOfArray
+{
+    let dmut x = A::new (42);
+
+    // by using the keyword dmut, template specialization is made to select the mutable version of map
+    //                          |       otherwise immutable version is always selected
+    //                          |
+    //                         vvv
+    let dmut m = HashMap!{i32, dmut &A}::new ();
+
+
+    m:.insert (12, A::new (10)); 
+    m:.insert (24, alias x); // the insertion must use a mutable version of the value
+
+    let dmut r = m:.find (12); // retreive mutable the associated value 
+    match ref r {
+        Ok (dmut z : _) => { z.i = 98; } // if found we can modify it
+        Err () => { } // no value found
+    }
+
+    println (m); // {12=>main::A(98), 24=>main::A(42)}
+
+    let tuples = m[];
+    assert (tuples[0].0 == 12 && tuples[0].1 == A::new (98));
+
+    match m.find (12) {
+        Ok (A (i-> 98)) => {}
+        _ => { assert (false); }
+    }
+
+    match m[12] {
+        A (i-> 98) => {}
+        _ => { assert (false); }
+    }
+
+    assert (12 in m && 67 !in m);
+    m:.remove (12);
+
+    assert (12 !in m);
+    assert (m.len () == 1us);
+
+    for i, j in m {
+        println (i, "=> ", j);
+    }
+    
+    m:.clear ();
+    assert (m.isEmpty());
+}

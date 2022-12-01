@@ -1,0 +1,53 @@
+import std::io; // for println
+import std::conv, std::box;
+import std::concurrency::thread;
+
+def main () {
+    let th = spawn (|th| {
+        println ("This lambda function is running in a thread");
+        loop {
+            match th.pipe.read () {
+                // When the thread receive the value 9 it stops itself 
+                // this is just an example, nothing related to the value 9
+                Box!{i32} (value-> 9) => {  
+                    println ("Received kill message : 9"); 
+                    break {}
+                }
+                // Any other values are printed to stdout
+                x : _ => println ("Received a message : ", x);
+            }
+        }
+    });
+
+    // Using the ThreadPipe of the thread to communicate with it
+    // Every thread has its own ThreadPipe
+    th.pipe.write ("Send a message to the thread from main thread");
+
+    let th2 = spawn (|th| => {
+        println ("Waiting the pipe from another thread");
+        match th.pipe.read () {
+            otherTh : &ThreadPipe => {
+                // // Sending the kill message to the first thread
+                otherTh.write (9);
+
+                // Pipes can be used in both ways
+                th.pipe.write ("ACK"s8); 
+            }
+        }
+    });
+
+    // Send the pipe of the first thread to the second thread, so they can communicate
+    th2.pipe.write (th.pipe);
+
+    // Waiting fot the end of the first thread
+    th.join ();
+
+
+    // Waiting for the acknolegment of the second thread
+    match th2.pipe.read () {
+        Box!{[c8]}(value-> msg : _) => println (msg);
+    }
+    
+    // Waiting for the end of the second thread
+    th2.join ();
+}

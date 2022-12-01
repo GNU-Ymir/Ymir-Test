@@ -30,4 +30,5 @@ sub-playbooks:
   - network/playbook.yml
   - format/playbook.yml
   - algorithm/playbook.yml
-  - unittest/playbook.yml
+  - collection/playbook.yml
+#  - unittest/playbook.yml

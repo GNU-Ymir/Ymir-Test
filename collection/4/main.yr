@@ -1,0 +1,49 @@
+import std::io; // for println
+import std::collection::map;
+
+def main ()
+    throws &AssertError, &OutOfArray
+{
+    // Create a hash map using the constructor of the class
+    let dmut x = HashMap!{[c32], i32}::new ();
+    x:.insert ("foo", 12);
+    x:.insert ("bar", 32);
+    assert (x ["foo"] == 12 && x ["bar"] == 32);
+
+    // Or by using the map macro
+    let dmut m = hmap#{"foo" => 78.0f, "bar" => 125.0f};
+    println (m); // {bar=>125.000000, foo=>78.000000}
+
+    let tuples = m[];
+    assert (tuples[0].0 == "bar" && tuples[0].1 == 125.0);
+
+    match x.find ("foo") {
+        Ok (12) => {}
+        _ => { assert (false); }
+    }
+
+    match x["foo"] {
+        12 => {}
+        _ => { assert (false); }
+    }
+
+    assert ("foo" in m && "foo" in x);
+    x:.remove ("foo");
+
+    assert ("foo" !in x);
+    
+    (alias x)["foo"] = 98;
+    assert ("foo" in x);
+    match x["foo"] {
+        98 => {}
+        _ => { assert (false); }
+    }
+
+    x:.clear ();
+    assert (x.isEmpty () && !m.isEmpty ());
+    assert (m.len () == 2us);
+
+    for i, j in m {
+        println (i, "=> ", j);
+    }
+}
