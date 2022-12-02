@@ -1,0 +1,11 @@
+import std::io;
+
+def main () {
+    
+    match 'r' {
+        'a' ... 'z' => { // commit 793
+            println ("here");
+        }
+    }
+    
+}

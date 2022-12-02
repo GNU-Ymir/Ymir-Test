@@ -1,0 +1,67 @@
+import std::io; // for println
+import std::stream; // for Streamable
+import std::conv;
+
+class A {
+    let i : i32;
+
+    pub self (i : i32) with i = i {}
+
+    impl Streamable;
+}
+
+def main () {
+    let str_i = (89).to![c8] (); // transform a int into a [c8]
+    let str_f = (128.983f).to![c32] (); // transform a float into a [c32]
+
+    // float conversion is not quite exact due to float encoding
+    // but the prec parameter allows the adjust the precision
+    // By the default the prec is set to 6
+    let str_f2 =  (128.983f).to![c32] (prec-> 12u32); // with 12 number after the decimal point
+
+    println (str_i); // 89    
+    println (str_f); // 128.983
+    println (str_f2); // 128.983001708984
+
+    let str_hex = (7686u32).to!{[c8], "x"} (); // using hexadecimal form
+    let str_bit = (87192u32).to!{[c8], "b"} (); // using binary form
+    let str_oc = (234u32).to!{[c8], "o"} (); // using octal form
+    let str_19 = (10943).to!{[c8], 19us} (); // using arbitrary base
+    let str_d_sci = (18293.0).to!{[c32], "e"} (prec-> 2u32); // using scientific notation, default precision is 6
+    
+    println (str_hex); // "0x1e06"
+    println (str_bit); // "0b10101010010011000"
+    println (str_oc);  // "0o352"
+    println (str_19); // 1b5i, maximum base is 36 (10 digits + 26 letters)
+    println (str_d_sci); // 1.83e+04
+
+    let float_s = "78.9872".to!f32 ()?; // transform a string into a f32
+    let i_s = "1452".to!i32 ()?; // transform a string into a i32
+    let h_s = "0xff".to!{u32, "x"} ()?; // transform a string from hex form to u32
+    let o_s = "0o128".to!{u32, "o"} ()?; // transform a string from octal form to u32
+    let b_s = "0b101101".to!{u32, "b"} ()?; // transform a string from binary form to u32
+    let arb_s = "189bz".to!{i32, 36us} ()?; // using arbitrary base (maximum being 36)
+
+    // conversion from string might fail and throw CastFailure
+    println (float_s); // Ok (78.987198), float conversion is not quite exact due to float encoding system
+    println (i_s); // Ok (1452)
+    println (h_s); // Ok (255)
+    println (o_s); // Ok (88)
+    println (b_s); // Ok (45)
+    println (arb_s); // Ok (2064959)
+
+    let f_i = (898172.0989178f).to!i32 (); // float to int 
+    let i_f = f_i.to!f32 (); // int to float
+
+    println (f_i); // 898172
+    println (i_f); // 898172.000000
+
+    let str_a = A::new (76).to![c8] (); // streamable class are convertible to string [c8] and [c32]
+    println (str_a); // A(76)
+
+    let decoded = ("Hello world, Καλημέρα κόσμε, コンニチハ"s8).to![c32] (); // convert utf8 to utf32
+    let encoded = decoded.to![c8] (); // convert utf32 into utf8
+
+    println (decoded.len, " ", decoded); // 34 Hello world, Καλημέρα κόσμε, コンニチハ
+    println (encoded.len, " ", encoded); // 59 Hello world, Καλημέρα κόσμε, コンニチハ
+}

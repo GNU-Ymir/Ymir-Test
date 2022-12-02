@@ -1,5 +1,4 @@
 import std::io;
-import std::concurrency::process;
 
 def foo () -> [i32] {
     println ("In foo");
