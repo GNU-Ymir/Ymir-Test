@@ -2,3 +2,4 @@ tests:
   - read/test.yml
   - write/test.yml
 #  - 3/test.yml
+  - 4/test.yml

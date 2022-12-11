@@ -1,0 +1,274 @@
+import std::io;
+import std::conv;
+import std::fs::_;
+
+
+def main ()
+    throws &AssertError
+{
+
+    {
+        // Path are created from string, containing a path
+        let p = Path::new ("./some/dir"s8);
+
+        // A custom separator can be used 
+        let c = Path::new (".\\some\\windows\\dir\\"s8, sep-> "\\"s8);
+        let m = Path::new ("std::fs::path"s8, sep-> "::"s8);
+        
+        assert (c.parts () == ["."s8, "some"s8, "windows"s8, "dir"s8]);
+        assert (m.parts () == ["std"s8, "fs"s8, "path"s8]);
+
+        // append a sub element to a path
+        let fp = p.push ("some_file.txt"s8);
+
+        assert (fp.file () == "some_file.txt"s8 && fp.parts () == ["."s8, "some"s8, "dir"s8, "some_file.txt"s8]);
+
+        // path can be translated to string
+        assert (m.toStr () == "std/fs/path"s8);
+        
+        // Or by using a custom separator
+        assert (m.toStr (sep-> "::"s8) == "std::fs::path"s8);
+    }
+
+    {
+        let mut path = Path::new ("/foo/test.txt"s8);
+
+        // using the standard separator '/'
+        assert (path.toStr () == "/foo/test.txt"s8);
+
+        // Or using a custom separator '!'
+        assert (path.toStr (sep-> "!"s8) == "!foo!test.txt"s8);
+    }
+
+    {
+        
+        let p = Path::new ("/some/root/dir"s8);
+        let p2 = Path::new ("/"s8);
+
+        assert (p != p2 && p == p2.push ("some/root/dir"s8));
+    }
+    
+    {        
+        let mut path = Path::new ("/"s8);
+        path = path.push ("foo/bar/"s8);
+        path = path.push ("test.txt"s8)
+            assert (path.toStr () == "/foo/bar/test.txt"s8);
+
+        // Example of inconsistent separators, that create no problem for the class
+        // but has to be kept in mind by the user
+        let mut ipath = Path::new ("std::fs::path"s8, sep-> "::"s8);
+        ipath = ipath.push ("some::dir/some::file"s8, sep-> "/"s8);
+
+        assert (ipath.parts () == ["std"s8, "fs"s8, "path"s8, "some::dir"s8, "some::file"s8]);
+    }
+
+    {        
+        let mut path = Path::new ("/"s8);
+        path = path.push ("foo/bar/");
+        path = path.push ("test.txt")
+            assert (path.toStr () == "/foo/bar/test.txt"s8); // path is always encoded in utf8
+
+        // Example of inconsistent separators, that create no problem for the class
+        // but has to be kept in mind by the user
+        let mut ipath = Path::new ("std::fs::path"s8, sep-> "::"s8);
+        ipath = ipath.push ("some::dir/some::file", sep-> "/");
+
+        assert (ipath.parts () == ["std"s8, "fs"s8, "path"s8, "some::dir"s8, "some::file"s8]);
+    }
+
+    {        
+        let mut path = Path::new ("/"s8);
+
+        //  Pushing sub directories to the path (the last '/' is useless, and will be omitted)
+        path = path.push (Path::new ("foo/bar/"s8));
+
+        // append a filename to the path (the fact that it is a filename is up to the user)
+        path = path.push (Path::new ("test.txt"s8));
+
+        assert (path.toStr () == "/foo/bar/test.txt"s8);
+    }
+
+    {
+        // Create an absolute path 
+        let abs = Path::new ("/some/absolute/dir/test.txt"s8);     
+
+        // Because path is absolute the first element of parts is an empty string
+        assert (abs.parts () == [""s8, "some"s8, "absolute"s8, "dir"s8, "test.txt"s8]);
+
+        // Create a relative path
+        let rel = Path::new ("./some/relative/dir/test.txt"s8);
+
+        // It is a relative path, it does not contain an empty string at first index of parts
+        assert (rel.parts () == ["."s8, "some"s8, "relative"s8, "dir"s8, "test.txt"s8]);
+    }
+
+    {
+        import std::env;
+        
+        let abs = Path::new ("/some/absolute/dir"s8);
+        let rel = Path::new ("./some/relative/dir"s8);
+
+        assert (abs.isAbsolute () && !rel.isAbsolute ());
+
+        // One can create an absolute path from a relative path using std::env::currentDir ()
+        let absFromRel = env::currentDir ().push (rel);
+        assert (absFromRel.isAbsolute ()); 
+    }
+
+    {        
+        let root = Path::new ("/"s8);
+        let cwd = Path::new ("."s8);
+
+        // The only way to get an empty Path is to create it from a path containing only one element
+        let empty1 = root.parent ();
+        let empty2 = cwd.parent ();
+
+        assert (empty1.isEmpty () && empty2.isEmpty ());
+
+        // root is not empty, it contains one empty component 
+        assert (!cwd.isEmpty () && !root.isEmpty ());
+
+        // Empty means it really contains nothing
+        assert (empty1.toStr () == ""s8 && empty1.parts () == []);
+
+        // Empty path can still be used to create valid pathes
+        let notEmpty = empty1.push ("."s8);
+        assert (!notEmpty.isEmpty () && notEmpty == cwd);
+    }
+    
+    {
+        let path = Path::new ("/foo/bar/baz.txt"s8);
+
+        // Parent remove the last component of a path
+        let parent = path.parent ();
+
+        assert (parent.toStr () == "/foo/bar"s8);
+
+        // A root path has an empty parent directory (empty does not mean root, it means empty)
+        let root = Path::new ("/"s8);
+        assert (root.parent ().toStr () == ""s8 && root.parent ().isEmpty ());
+    }
+    
+    {        
+        let path = Path::new ("/foo/bar/baz.txt"s8);
+
+        // The filename is the last component of a path
+        assert (path.file () == "baz.txt"s8);
+
+        // In case of empty path the file is simply empty
+        let empty = Path::new ("/"s8).parent ();     
+        assert (empty.file () == ""s8);
+    }
+
+    {
+
+        let path = Path::new ("/foo/bar/baz.txt"s8);
+
+        // root dir is defined by an empty part string at first index
+        assert (path.root () == ""s8); 
+
+        let path2 = Path::new ("foo/bar"s8);
+        assert (path2.root () == "foo"s8);
+
+        // Empty path root is undefined, but for convinience it just return an empty string
+        let empty = Path::new ("/"s8).parent ();
+        assert (empty.root () == ""s8);
+    }
+
+    {
+        let path = Path::new ("/foo/bar/baz.txt"s8);
+
+        // Remove the .txt extension
+        assert (path.stripExtension ().file () == "baz"s8);
+
+        let path2 = Path::new ("/foo/bar/baz.tar.gz"s8);
+
+        // Remove the .gz extension an keep the .tar one
+        assert (path2.stripExtension ().file () == "baz.tar"s8);
+
+        let path3 = Path::new ("/foo/bar/baz"s8);
+
+        // Path has no extension, so it does nothing
+        assert (path3.stripExtension ().file () == "baz"s8);
+
+        let path4 = Path::new ("/foo/bar/baz::txt"s8);
+
+        // Using a custom token as extension delimiter, to remove ::txt extension
+        assert (path4.stripExtension (sep-> "::"s8).file () == "baz"s8);
+    }
+
+    {
+        let path = Path::new ("/foo/bar/baz.txt"s8);
+        assert (path.extension () == "txt"s8);
+
+        let path2 = Path::new ("/foo/bar/baz.tar.gz"s8);
+        assert (path2.extension () == "gz"s8);
+
+        // If path has no extension, simply return an empty string
+        let path3 = Path::new ("/foo/bar/baz"s8);
+        assert (path3.extension () == ""s8);
+
+        // A custom extension separator can be used
+        let path4 = Path::new ("/foo/bar/baz::txt"s8);
+        assert (path4.extension (sep-> "::"s8) == "txt"s8); 
+    }
+
+    {
+        let path = Path::new ("/foo/bar/baz"s8).addExtension ("txt"s8);
+        assert (path.file () == "baz.txt"s8);
+
+        let path2 = Path::new ("/foo/bar/baz.tar"s8).addExtension ("gz"s8);
+        assert (path2.file () == "baz.tar.gz"s8);
+
+        // empty path are not empty after adding an extension to them
+        let empty = Path::new (""s8).parent ().addExtension ("empty"s8);
+        assert (empty.file  () == ".empty"s8);
+    }
+
+    {        
+        let root = Path::new ("/foo/bar"s8);
+        let subPath = Path::new ("/foo/bar/baz/file.txt"s8);
+
+        let cwd = Path::new ("./"s8);
+        let relativePath = subPath.removePrefix (root);     
+
+        // Create a new relative path from "./"
+        assert (cwd.push (relativePath).toStr () == "./baz/file.txt"s8);
+    }
+
+    {
+        let root = Path::new ("/some/absolute/path"s8);
+        let abs = Path::new ("/some/absolute/path/with/some/dirs"s8);
+        let rel = Path::new ("./some/relative/dir"s8);
+
+        assert (root.isPrefix (abs) && !root.isPrefix (rel));
+
+        // A path is a prefix of itself
+        assert (root.isPrefix (root) && rel.isPrefix (rel));
+    }
+
+    {       
+        let p = Path::new ("/path/to/somewhere"s8);
+        let d = Path::new ("path/to/somewhere"s8);
+
+        assert (p.removeRoot ().toStr () == "path/to/somewhere"s8);
+        assert (d.removeRoot ().toStr () == "to/somewhere"s8);
+    }
+
+    {
+        let abs1 = Path::new ("/some/absolute/path/leading/to/dir/1"s8);
+        let abs2 = Path::new ("/some/absolute/path/with/other/dirs"s8);
+        
+        assert (abs1.commonPrefix (abs2) == Path::new ("/some/absolute/path"s8)); 
+
+        // This is a commutative operation
+        assert (abs1.commonPrefix (abs2) == abs2.commonPrefix (abs1));
+        
+        assert (abs1.commonPrefix (abs2).isPrefix (abs1));
+
+        let root = Path::new ("/"s8);
+        let cwd = Path::new ("."s8);
+        assert (root.commonPrefix (cwd).isEmpty ());
+        assert (root.commonPrefix (cwd).isPrefix (root));        
+    }
+}
