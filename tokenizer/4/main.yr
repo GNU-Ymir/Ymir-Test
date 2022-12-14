@@ -1,0 +1,39 @@
+import std::syntax::lexer;
+import std::io;
+
+
+def main ()
+    throws &AssertError
+{
+    /*
+    Try to read x + y
+    @returns: true if succeeded, false otherwise
+     */
+    def tryReadingAdd (dmut lex : &Lexer!c32)-> bool {
+        let (x, _, _) = lex:.next ();
+        let (add, _, _) = lex:.next ();
+        let (y, _, _) = lex:.next ();
+        
+        return x == "x" && add == "+" && y == "y";
+    }
+
+    let dmut lex = Lexer::new ("x + z, u", tokens-> ["+", " ", ","], skips-> [" "]);
+    let save = lex.getContent ();
+    if (!tryReadingAdd (alias lex)) {
+        println ("Failed to read addition, restoring content");
+
+        // The cursor of the lexer was moved in tryReadingAdd
+        let (comma, _, _) = lex:.next ();
+        assert (comma == ",");
+        
+        // So we restore it
+        lex:.setContent (save);
+    }
+
+    // continue the reading of the lexer
+    // If tryReadingAdd was successful, the cursor will be after "x + y"
+    // But because it wasn't successful it is like nothing was read
+
+    let (str, _, _) = lex:.next ();
+    assert (str == "x");
+}

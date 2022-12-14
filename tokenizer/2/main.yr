@@ -1,0 +1,58 @@
+import std::io;
+import std::syntax::lexer;
+
+
+enum
+| RPAR = "("
+| LPAR = ")"
+| LCRO = "["
+| RCRO = "]"
+| SPACE = " "
+| DARROW = "=>"
+| EQUAL = "="
+| ADD = "+"
+| ADD_EQ = "+="
+| LACC = "{"
+| RACC = "}"
+| SEMI_COLON = ";"
+| COMA = ","
+ -> Tokens;
+
+aka content = str#{
+    
+    // Some line comment above
+    (x, y) => {
+        let i = x;
+        x += 2;
+        y = y + 3;
+        
+        /**
+         * Some comments multiline comment
+         * With 5 useless lines
+         *
+         *
+         *
+         */
+
+        return 8 + x + y;
+    }
+    
+};
+
+
+
+
+def main ()
+{
+    let dmut lex = Lexer::new (content,
+                               tokens-> Tokens::members,
+                               comments-> [("/*", "*/"), ("//", "\n")]);
+
+    
+    loop {
+        let (n, l, c) = lex:.next ();
+        if (l == 0us) break {}
+        
+        println ("[", n, "] @", l, ":", c);
+    }
+}

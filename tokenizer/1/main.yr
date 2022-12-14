@@ -1,5 +1,5 @@
 import std::io;
-import std::tokenizer;
+import std::syntax::tokenizer;
 
 
 enum

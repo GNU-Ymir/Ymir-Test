@@ -1,0 +1,38 @@
+import std::syntax::lexer;
+import std::io;
+
+def main ()
+    throws &AssertError
+{
+    
+    let content = str#{a = "a string with spaces in it"};
+    
+    let dmut lex = Lexer::new (content, tokens-> [" ", "=", "\""], skips-> [" "]);
+    let (a, _, _) = lex:.next (); // read 'a'
+    let (eq, _, _) = lex:.next (); // read '=' token
+    let (qut, _, _) = lex:.next (); // read '"' token
+    
+    a;
+    eq;
+    qut;
+    
+    lex:.doSkip (false);
+    let mut str_content = "";
+    let mut i = 0;
+    loop {
+        let (tok, _, _) = lex:.next ();
+
+        i += 1;
+        
+        if (tok == "\"") break {}        
+        else str_content = str_content ~ tok;      
+    }
+
+    
+    // Because skip was disable, ' ' token was not skiped and is present in the string
+    assert (str_content == "a string with spaces in it");
+
+    // Warning, it still split the string, so the loop above iterates 12 times (6 words + 5 spaces + 1 quote)
+    assert (i == 12);
+
+}

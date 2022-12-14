@@ -1,0 +1,58 @@
+import std::io;
+import std::syntax::lexer;
+
+
+enum
+| RPAR = "("s8
+| LPAR = ")"s8
+| LCRO = "["s8
+| RCRO = "]"s8
+| SPACE = " "s8
+| DARROW = "=>"s8
+| EQUAL = "="s8
+| ADD = "+"s8
+| ADD_EQ = "+="s8
+| LACC = "{"s8
+| RACC = "}"s8
+| SEMI_COLON = ";"s8
+| COMA = ","s8
+ -> Tokens;
+
+aka content = str8#{
+    
+    // Some line comment above
+    (x, y) => {
+        let i = x;
+        x += 2;
+        y = y + 3;
+        
+        /**
+         * Some comments multiline comment
+         * With 5 useless lines
+         *
+         *
+         *
+         */
+
+        return 8 + x + y;
+    }
+    
+};
+
+
+
+
+def main ()
+{
+    let dmut lex = Lexer::new (content,
+                               tokens-> Tokens::members,
+                               comments-> [("/*"s8, "*/"s8), ("//"s8, "\n"s8)]);
+
+    
+    loop {
+        let (n, l, c) = lex:.next ();
+        if (l == 0us) break {}
+        
+        println ("[", n, "] @", l, ":", c);
+    }
+}

@@ -1,0 +1,39 @@
+import std::syntax::lexer;
+
+
+def main ()
+    throws &AssertError
+{
+    let content = str#{a = "# not ignored !"};
+
+    let dmut lex = Lexer::new (content, tokens-> [" ", "=", "\""], skips-> [" "], comments-> [("#", "\n")]);
+    let (a, _, _) = lex:.next (); // read 'a'
+    let (eq, _, _) = lex:.next (); // read '=' token
+    let (qut, _, _) = lex:.next (); // read '"' token
+
+    a;
+    eq;
+    qut;
+    
+    lex:.doSkip (false);
+    lex:.doComments (false);
+    
+    let mut str_content = "";
+    let mut i = 0;
+    loop {
+        let (tok, _, _) = lex:.next (); 
+        i += 1;
+
+        if (tok == "\"") break {}
+        else str_content = str_content ~ tok;      
+    }
+
+    // Because skip was disable, space token was not skipped and is present in the string
+    assert (str_content == "# not ignored !");
+
+    // Warning, it still split the content
+    // so the loop above iterates 8 times (4 words + 3 spaces + 1 closing quote)
+    assert (i == 8);
+
+    lex:.doComments (true); // future comments will be ignored
+}

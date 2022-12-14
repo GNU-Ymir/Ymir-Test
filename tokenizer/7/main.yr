@@ -1,0 +1,13 @@
+import std::syntax::lexer;
+
+
+def main ()
+    throws &AssertError
+{
+    let dmut lex = Lexer::new ("text to read");
+
+    assert (lex:.next ()._0 == "text");
+    assert (lex:.clear () == " to read");
+    assert (lex:.next ()._0 == "");
+    assert (lex.isEof ());
+}
