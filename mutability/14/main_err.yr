@@ -1,0 +1,16 @@
+import std::io;
+
+class A {
+    pub let mut i = 0;
+    pub self (){}
+
+    impl Streamable;
+}
+
+
+def main () {
+    let mut x : [mut &A] = [A::new (), A::new ()];
+    for _, dmut ref j in x {
+        j = A::new ();
+    }    
+} 

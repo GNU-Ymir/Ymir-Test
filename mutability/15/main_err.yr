@@ -1,0 +1,14 @@
+import std::io;
+
+
+def main () {
+    let mut a : mut (mut [i32], i32)= ([1, 2, 3], 12);
+
+    match ref a {
+        dmut x : ([i32], i32) => {            
+            x.0[0] = 9;
+        }
+    }
+
+    println ((a, ));
+} 

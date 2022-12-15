@@ -45,7 +45,7 @@ def foo (port : u16)-> &Future!{void} {
 }
 
 def main ()
-    throws &TcpError
+    // throws &TcpError
 {    
     let dmut sys = ActorSystem::new ();
     MyActor::new (alias sys, "Remote"s8);
@@ -55,4 +55,6 @@ def main ()
     
     sys:.join ();
     client.wait ();
+} catch {
+    t : &TcpError => println (t);
 }

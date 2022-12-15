@@ -1,1 +1,21 @@
+Error : the call operator is not defined for main_error::foo and {[i32]}
+ --> main_error.yr:(20,9)
+20  ┃     foo (c);
+    ╋         ^ ^
+    ┃ Note : candidate foo --> main_error.yr:(3,5) : main_error::foo (a : pure [i32])-> void
+    ┃     ┃ Error : discard the constant qualifier is prohibited
+    ┃     ┃  --> main_error.yr:(20,10)
+    ┃     ┃ 20  ┃     foo (c);
+    ┃     ┃     ╋          ^
+    ┃     ┃     ┃ Note : implicit pure of type [i32] is not allowed, it will implicitly discard constant qualifier
+    ┃     ┃     ┃  --> main_error.yr:(20,10)
+    ┃     ┃     ┃ 20  ┃     foo (c);
+    ┃     ┃     ┃     ╋          ^
+    ┃     ┃     ┗━━━━━┻━ 
+    ┃     ┃ Note : for parameter a --> main_error.yr:(3,15) of main_error::foo (a : pure [i32])-> void
+    ┃     ┗━━━━━━ 
+    ┗━━━━━┻━ 
 
+
+ymir1: fatal error: 
+compilation terminated.

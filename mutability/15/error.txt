@@ -1,0 +1,27 @@
+Error : discard the constant qualifier is prohibited
+ --> main_err.yr:(8,14)
+ 8  ┃         dmut x : ([i32], i32) => {            
+    ╋              ^
+    ┃ Note : 
+    ┃  --> main_err.yr:(7,15)
+    ┃  7  ┃     match ref a {
+    ┃     ╋               ^
+    ┃     ┃ Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+    ┃     ┃  --> main_err.yr:(8,19)
+    ┃     ┃  8  ┃         dmut x : ([i32], i32) => {            
+    ┃     ┃     ╋                   ^
+    ┃     ┃     ┃ Note : 
+    ┃     ┃     ┃  --> main_err.yr:(5,26)
+    ┃     ┃     ┃  5  ┃     let mut a : mut (mut [i32], i32)= ([1, 2, 3], 12);
+    ┃     ┃     ┃     ╋                          ^
+    ┃     ┃     ┗━━━━━┻━ 
+    ┃     ┗━━━━━┻━ 
+    ┃ Note : in pattern
+    ┃  --> main_err.yr:(8,14)
+    ┃  8  ┃         dmut x : ([i32], i32) => {            
+    ┃     ╋              ^
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.

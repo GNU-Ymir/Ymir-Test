@@ -12,3 +12,5 @@ tests:
   - 11/test.yml
   - 12/test.yml
   - 13/test.yml
+  - 14/test.yml
+  - 15/test.yml

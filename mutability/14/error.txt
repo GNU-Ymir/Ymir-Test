@@ -1,0 +1,8 @@
+Error : discard the constant qualifier is prohibited, left operand mutability level is 2 but must be at most 1
+ --> main_err.yr:(13,21)
+13  ┃     for _, dmut ref j in x {
+    ╋                     ^    ^
+
+
+ymir1: fatal error: 
+compilation terminated.

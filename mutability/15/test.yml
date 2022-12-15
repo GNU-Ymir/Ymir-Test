@@ -1,8 +1,9 @@
 compile:
   - gyc main.yr
-  - gyc main_error.yr
-out:
-  file: out.txt
+  - gyc main_err.yr
+run: ./a.out
 compile_err:
   file: error.txt
+stdout:
+  file: out.txt
 clean: rm a.out

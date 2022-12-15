@@ -9,8 +9,15 @@ def bar () -> pure [i32] {
     return dcopy [1, 2, 3];
 }
 
+def baz (a : [i32]) {
+    println (a);
+}
+
 
 def main () {
     let pure b = bar ();
+    let c = bar ();
+    foo (c);
+    baz (c);
     println (b);
 }

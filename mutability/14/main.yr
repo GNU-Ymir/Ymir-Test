@@ -1,0 +1,26 @@
+import std::io;
+
+class A {
+    pub let mut i = 0;
+    pub self (){}
+
+    impl Streamable;
+}
+
+
+def main () {
+    let dmut x : [mut &A] = [A::new (), A::new ()];
+    for i, dmut ref j in x {
+        j.i = cast!i32 (i);
+    }
+    
+    println (x);
+
+
+    let dmut z : [i32 ; 4] = [0 ; 4];
+    for dmut ref y in z {
+        y = 89;
+    }
+
+    println (z);
+} 
