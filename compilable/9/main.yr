@@ -1,0 +1,21 @@
+import std::io;
+
+
+/**
+ * Commit 796
+ */
+def foo ()-> [i32 ; 4u32] {
+    let dmut r = [0 ; 4];
+    r[0] = 9;
+    r[1] = 12;
+    for i in 2 .. 4 {
+        r[i] = i;
+    }
+
+    return r;
+}
+
+
+def main () {
+    println (foo ()[][0us .. $]); 
+}
