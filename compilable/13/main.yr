@@ -1,0 +1,18 @@
+import std::stream;
+import std::io; // for println
+import std::time::dur;
+
+def main ()
+    throws &AssertError
+{
+    let d = duration (d-> 6u64, h-> 23u64, m-> 59u64, s-> 59u64, ms-> 999u64, us-> 999u64);
+    let y = dur::millis (300) - dur::seconds (2);
+
+    let x = dur::seconds (1) / 60;
+    let z = (d + dur::micros(1));
+    println (x.to![c8] ());    
+    println (y.to![c8] ());
+    println (z.micros (all-> true));
+    
+    assert (x > y && z > y && x < z);    
+}

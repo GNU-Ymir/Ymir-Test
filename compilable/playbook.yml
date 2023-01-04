@@ -9,3 +9,6 @@ tests:
   - 8/test.yml
   - 9/test.yml
   - 10/test.yml
+  - 11/test.yml
+  - 12/test.yml
+  - 13/test.yml

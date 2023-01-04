@@ -1,0 +1,31 @@
+import std::io;
+
+
+class A {
+
+    let mut _i : [&A] = [];
+
+    pub self () {
+        self._i = self._i ~ [self];
+    }
+
+    pub def verifRecurse (self) {
+        __pragma!trusted ({
+            assert (self is self._i[0]);
+        });
+    }
+    
+    impl Streamable;
+    impl Copiable;
+}
+
+
+def main () {
+    let a = A::new ();
+    let b = dcopy a;
+
+    a.verifRecurse ();
+    b.verifRecurse ();
+    
+    println (a, " ", b);
+}
