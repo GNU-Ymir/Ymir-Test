@@ -1,0 +1,36 @@
+import std::io;
+import std::time::_;
+import std::concurrency::signal;
+
+
+def foo (x : i32, y : i32) {
+    sleep (dur::millis (30u64));
+    
+    println ("Foo called with ", x, " ", y);
+}
+
+
+def main () {
+    let dmut sig = Signal!{i32, i32}::new ();
+
+    // Connecting the foo function to the signal
+    sig:.connect (&foo);
+
+    let i = 42;
+    sig:.connect (move |x, y| => {
+        println ("Lambda called : ", x, " ", y, " ", i);
+    });
+
+    // Call all the functions connected to the signal
+    // Functions are called inside a future, and are awaited by the emit function
+    sig.emit (1, 2);
+
+    // Emit the signal in 
+    sig.emitSync (4, 5);
+    
+    // Disconnecting the foo function
+    sig:.disconnect (&foo);
+
+    // Calling only the lambda function this time
+    sig.emit (3, 4);
+}

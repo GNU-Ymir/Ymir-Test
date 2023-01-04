@@ -1,0 +1,70 @@
+import std::io;
+import std::reflect;
+
+
+trait MyTrait {
+
+    pub def bidule (self, i : i32) {
+        println ("In bidule : ", i);
+    }
+    
+}
+
+class A {
+
+    let mut _i = 0;
+    
+    pub self () {}
+
+    pub def foo (self) {
+        println ("It's an A ! ", self._i);
+    }   
+
+    pub def bar (self, i : i32) {
+        println ("It's an A, with : ", self._i, " ", i);
+    }
+
+    pub def baz (mut self, i : i32) -> i32 {
+        self._i = i;
+        i + 87
+    }
+
+    pub def baz (mut self) {
+        println ("Reseting");
+        self._i = 0;
+    }
+    
+    impl Streamable;
+    impl MyTrait;
+}
+
+def bar () {
+    println ("Bar");
+}
+
+def bar (i : i32) {
+    println ("Bar : ", i);
+}
+
+def main () {
+    let dmut obj = factory ("main::A"s8);
+    match ref obj {
+        dmut a : &A => {
+            println (a:.callMethodMutable!{i32} ("baz"s8, 89));
+            a.callMethod!{void} ("foo"s8);
+            a:.callMethodMutable!{void} ("baz"s8);
+            a.callMethod!{void} ("bar"s8, 129);
+
+            a.callImpl!{void} ("main::MyTrait::bidule"s8, 879);
+        }
+    }
+
+    call!{void} ("main::bar"s8);
+    call!{void} ("main::bar"s8, 78);
+
+    
+    
+} catch {
+    err : _ => println (err);
+}
+

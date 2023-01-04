@@ -1,0 +1,5 @@
+Lambda called : 1 2 42
+Foo called with 1 2
+Foo called with 4 5
+Lambda called : 4 5 42
+Lambda called : 3 4 42

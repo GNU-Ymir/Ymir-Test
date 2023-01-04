@@ -1,0 +1,14 @@
+import std::io;
+
+
+def bar {T...} (a : T) {
+    let d = move || { // gymir commit 800 (move inside template where forgotten)
+        println ((a,));// (a,) instead of just a, to make sure is it is considered a tuple by println func
+    };
+
+    d ();
+}
+
+def main () {
+    bar (1, 2, 3, 4);
+}

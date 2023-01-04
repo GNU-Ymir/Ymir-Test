@@ -31,4 +31,5 @@ sub-playbooks:
   - format/playbook.yml
   - algorithm/playbook.yml
   - collection/playbook.yml
+  - reflect/playbook.yml
 #  - unittest/playbook.yml
