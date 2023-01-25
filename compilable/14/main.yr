@@ -1,0 +1,13 @@
+mod main;
+
+// Commit 802
+class S {T} over S {
+    pub self () {
+
+    }
+}
+
+
+def main () {
+    S!{i32}::new ();
+}
