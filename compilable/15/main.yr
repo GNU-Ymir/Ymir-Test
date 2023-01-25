@@ -1,0 +1,20 @@
+mod main;
+import std::io;
+
+
+def bar ()-> [i32] {
+    println ("bar");
+    [1, 2, 3]
+}
+
+def foo () {
+    // before commit 803, this did not work when using -O3 flag
+    for i in bar () {
+        println (i);
+    }
+
+}
+
+def main () {
+    foo ();
+}
