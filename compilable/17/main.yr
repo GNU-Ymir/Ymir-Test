@@ -1,0 +1,21 @@
+mod main;
+import std::io;
+
+def main ()
+    throws &SegFault
+{
+    let dmut x = [9u32, 8u32, 10u32];
+    let dmut z = alias x.ptr;
+    
+    z[1] = 76u32;
+
+    for i in 0us .. x.len {
+        if (i != 0us) print (", ");
+
+        // Commit 805, opIndex is usable on pointers
+        print (z[i]);
+    }
+
+    
+    println ();
+}

@@ -78,7 +78,13 @@ def checkStdout (yml: dict, text : str, cwd : str):
     if (type (yml) is dict) :
         with open (cwd + "/" + yml["file"]) as stream:
             txt = stream.read ()
-            return (txt == text, txt)
+            if ("start-only" in yml and yml["start-only"]) :
+                if len (txt) >= len (text) :
+                    return (txt[:len (text)] == text, txt)
+                else:
+                    return (False, txt)
+            else :
+                return (txt == text, txt)
     else :
         return (yml == text, yml)
 

@@ -1,0 +1,43 @@
+mod main;
+import std::io;
+
+
+def foo (ref dmut a : [i32 ; 4]) {
+    a[0] = 9;
+    a[1] = 891;
+
+    // Commit 804, range access on simple array
+    for ref mut i in (alias a[2us .. $]) {
+        i = 76;
+    }
+}
+
+
+def foo (dmut b : [i32]) {
+    b[0] = 98;
+    b[1] = 78;
+    for j, ref mut i in (alias b[2us .. $]) {
+        i = cast!i32 (j) + 9;
+    }
+}
+
+def foo (dyn : ..i32) {    
+    let dmut x = dcopy ("test on strings"s8)[0us .. $ - 12us];
+    x [0] = 'y'c8;
+    x [1] = 'e'c8;
+    x [2] = 's'c8;
+
+    // commit 804, range access on string can be done with none cte range
+    let mut z = ("with dyn range"s8) [dyn];
+    
+    println ("(", x, ")", "[", z, "]");
+}
+
+def main () {
+    let dmut a = [0 ; 4];
+    let dmut b = [1, 2, 3, 4];
+    foo (ref a);
+    foo (alias b);
+    foo (0 .. 4);
+    println (a, " ", b);
+}

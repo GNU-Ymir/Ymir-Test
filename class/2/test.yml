@@ -4,4 +4,8 @@ run:
   - ./a.out
 stdout:
   file: out.txt
+  # start only, because the number of destruct can vary from a GC implem to another
+  # Or even from an exec to another, after all there is no guarantee that dtor will ever be executed
+  # We just check that it is called when the object is removed by the GC
+  start-only: true 
 clean: rm a.out
