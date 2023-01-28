@@ -1,0 +1,16 @@
+mod main;
+import std::io;
+
+// Commit 807
+class A over B {
+
+    pub self () {
+    }
+
+}
+
+class B over A {
+    pub self () {}
+}
+    
+def main () {}

@@ -1,0 +1,8 @@
+compile:
+  - gyc main.yr
+  - gyc success.yr
+run: ./a.out
+compile_err:
+  file: error.txt
+stdout: "foo\nsuccess::A(i32)::A()\n"
+clean: rm a.out

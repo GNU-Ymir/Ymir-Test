@@ -1,0 +1,5 @@
+mod foo;
+
+pub struct
+| a : i32
+ -> A;

@@ -1,0 +1,34 @@
+import std::io;
+
+
+class A {
+
+    pub self () {
+    }
+
+    pub def foo (self) {
+        println ("foo");
+    }
+    
+    impl Streamable;
+    
+}
+
+
+class A {T} over A {
+    
+    pub self () {        
+    }
+
+    impl Streamable;
+    
+}
+
+    
+def main () {
+
+    let a = A!{i32}::new ();
+    a.foo ();
+    println (a);
+
+}

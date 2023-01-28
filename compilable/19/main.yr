@@ -1,0 +1,10 @@
+import foo;
+import bar;
+
+class B over A {
+    pub self () {}
+}
+
+def main () {
+    B::new ();
+}

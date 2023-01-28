@@ -1,0 +1,27 @@
+Error : when validating main::A
+ --> main.yr:(5,7)
+ 5  ┃ class A over B {
+    ╋       ^
+    ┃ Error : recursive inheritence, the current class is an ancestor of its ancestor
+    ┃  --> main.yr:(5,7)
+    ┃  5  ┃ class A over B {
+    ┃     ╋       ^
+    ┃     ┃ Note : 
+    ┃     ┃  --> main.yr:(12,7)
+    ┃     ┃ 12  ┃ class B over A {
+    ┃     ┃     ╋       ^
+    ┃     ┃ Note : 
+    ┃     ┃  --> main.yr:(5,7)
+    ┃     ┃  5  ┃ class A over B {
+    ┃     ┃     ╋       ^
+    ┃     ┗━━━━━┻━ 
+    ┗━━━━━┻━ 
+
+Error : the type main::A is not complete due to previous errors
+ --> main.yr:(5,7)
+ 5  ┃ class A over B {
+    ╋       ^
+
+
+ymir1: fatal error: 
+compilation terminated.

@@ -11,10 +11,20 @@ Note :
     ┃     ┃ 12  ┃     S!{i32}::new ();
     ┃     ┃     ╋      ^
     ┃     ┃ Note : S --> main.yr:(4,7) -> S
-    ┃     ┃ Error : the base of a class must be a class, not a {S {T}, class main::S(i32)::S} x 2
-    ┃     ┃  --> main.yr:(4,18)
+    ┃     ┃ Error : when validating main::S(i32)::S
+    ┃     ┃  --> main.yr:(4,7)
     ┃     ┃  4  ┃ class S {T} over S {
-    ┃     ┃     ╋                  ^
+    ┃     ┃     ╋       ^
+    ┃     ┃     ┃ Error : recursive inheritence, the current class is an ancestor of its ancestor
+    ┃     ┃     ┃  --> main.yr:(4,7)
+    ┃     ┃     ┃  4  ┃ class S {T} over S {
+    ┃     ┃     ┃     ╋       ^
+    ┃     ┃     ┃     ┃ Note : 
+    ┃     ┃     ┃     ┃  --> main.yr:(4,7)
+    ┃     ┃     ┃     ┃  4  ┃ class S {T} over S {
+    ┃     ┃     ┃     ┃     ╋       ^
+    ┃     ┃     ┃     ┗━━━━━┻━ 
+    ┃     ┃     ┗━━━━━┻━ 
     ┃     ┗━━━━━┻━ 
     ┗━━━━━┻━ 
 
