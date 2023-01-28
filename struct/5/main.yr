@@ -1,0 +1,9 @@
+import std::io;
+
+struct 
+| a : i32 
+ -> A;
+
+def main () {
+    A (b-> 12);
+}

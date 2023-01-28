@@ -1,0 +1,19 @@
+Error : the call operator is not defined for main::A and {i32}
+ --> main.yr:(8,7)
+ 8  ┃     A (b-> 12);
+    ╋       ^      ^
+    ┃ Note : candidate A --> main.yr:(5,5) : main::A
+    ┃     ┃ Error : field main::A (let a : i32) of struct a has no default value
+    ┃     ┃  --> main.yr:(4,3)
+    ┃     ┃  4  ┃ | a : i32 
+    ┃     ┃     ╋   ^
+    ┃     ┃ Error : struct main::A (let a : i32) has no field named b
+    ┃     ┃  --> main.yr:(8,8)
+    ┃     ┃  8  ┃     A (b-> 12);
+    ┃     ┃     ╋        ^
+    ┃     ┗━━━━━┻━ 
+    ┗━━━━━┻━ 
+
+
+ymir1: fatal error: 
+compilation terminated.
